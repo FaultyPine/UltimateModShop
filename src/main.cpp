@@ -1,28 +1,52 @@
-#include "console.h"
-#include "utils.hpp"
+/*
+    Copyright 2020-2021 natinusala
+    Copyright 2019 p-sam
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
+        http://www.apache.org/licenses/LICENSE-2.0
 
-const std::string console_status = "\n" RED "X" RESET " to launch smash" MAGENTA "\t\t\t\tUltimateModShop Ver. " + std::string(APP_VERSION) + WHITE "\t\t\t\t\t" RED "+" RESET " to exit" RESET;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
-int main(int argc, char** argv) {
+#include "utils.h"
+#include "main_activity.h"
 
-    console_init();
-    console_set_status(console_status.c_str());
-    socketInitializeDefault();
-    curl_global_init(CURL_GLOBAL_DEFAULT);
+int main(int argc, char* argv[])
+{
+    //init();
+    // Set log level
+#ifndef __SWITCH__
+    brls::Logger::setLogLevel(brls::LogLevel::DEBUG);
+#endif
 
-    
-    while (appletMainLoop()) {
-        consoleClear();
-        hidScanInput();
-
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        
-        consoleUpdate(NULL);
+    // Init the app and i18n
+    if (!brls::Application::init())
+    {
+        brls::Logger::error("Unable to init Borealis application");
+        return EXIT_FAILURE;
     }
-    console_exit();
-    curl_global_cleanup();
-    socketExit();
-    return 0;
+
+    brls::Application::createWindow("UltimateModShop");
+
+    // Have the application register an action on every activity that will quit when you press BUTTON_START
+    brls::Application::setGlobalQuit(true);
+    brls::Application::setGlobalFPSToggle(true);
+
+    //std::vector<gb::GbSubmission> page_1 = gb::GetNewSubmissions();
+
+    // Create and push the main activity to the stack
+    brls::Application::pushActivity(new MainActivity());
+
+    // Run the app
+    while (brls::Application::mainLoop());
+
+    // Exit
+    return EXIT_SUCCESS;
 }
