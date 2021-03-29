@@ -1,0 +1,23 @@
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    alignItems="center">
+
+    <brls:Button
+        width="100%"
+        height="100%"
+        id="submission_button"
+        style="bordered"
+        text=""
+    />
+
+    <brls:Rectangle
+        width="80%"
+        height="80%"
+        grow="1.0"
+        color="#FA0000"
+    />
+
+
+</brls:Box>

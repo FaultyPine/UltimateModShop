@@ -39,13 +39,13 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	UltimateModShop
 BUILD		:=	build.nx
-SOURCES		:=	demo
+SOURCES		:=	src
 DATA		:=	data
 ICON		:=	resources/icon/icon.jpg
-INCLUDES	:=	demo
+INCLUDES	:=	src
 
 APP_TITLE	:=	UltimateModShop
-APP_AUTHOR	:=	natinusala/PiNE
+APP_AUTHOR	:=	PiNE / natinusala
 APP_VERSION	:=	0.0
 
 ROMFS				:=	resources

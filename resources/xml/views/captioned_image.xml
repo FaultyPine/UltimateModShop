@@ -9,13 +9,15 @@
         width="auto"
         height="auto"
         focusable="true"
-        marginBottom="20px" />
+        marginBottom="20px" 
+    />
 
     <brls:Label
         id="label"
         width="auto"
         height="auto"
         textAlign="center"
-        textColor="@theme/captioned_image/caption" />
+        textColor="@theme/captioned_image/caption" 
+    />
 
 </brls:Box>

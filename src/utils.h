@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <time.h>
+#include <regex>
 #include "curl.h"
 
 using json = nlohmann::json;
@@ -23,32 +25,9 @@ using json = nlohmann::json;
 #define START_BREAKABLE do {
 #define END_BREAKABLE   } while (false);
 
-#define APP_VERSION "0.0.0"
+static constexpr char* APP_VERSION = "0.0.0";
 
 
-namespace gb {
-    static constexpr char* GB_API_URL = "https://api.gamebanana.com/";
-    static constexpr char* GB_SMASH_GAMEID = "6498";
+std::string replaceAll(std::string str, const std::string &from, const std::string &to);
 
-    const std::vector<char*> AllowedItemTypes = {
-        "Effect",
-        "Gamefile",
-        "Gui",
-        "GuiCategory",
-        "Map",
-        "Model",
-        "Project",
-        "Skin",
-        "Sound",
-        "Texture",
-    };
-
-    struct GbSubmission {
-        std::string name;
-        std::string itemid;
-        std::string itemtype;
-    };
-
-    std::vector<GbSubmission> GetNewSubmissions();
-
-}
+std::string EpochToHumanReadable(ulong since_epoch);

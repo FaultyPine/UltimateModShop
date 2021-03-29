@@ -1,0 +1,37 @@
+<brls:Box
+        width="60%"
+        axis="row"
+        marginBottom="600"
+        marginLeft="250"
+        direction="leftToRight"
+        justifyContent="spaceBetween"
+        alignItems="spaceBetween"
+        borderThickness="3"
+        borderColor="#0000FF">
+
+
+    <brls:Label
+        width="auto"
+        height="auto"
+        text="Label1"
+        fontSize="20"
+        marginLeft="5"
+        marginBottom="40" />
+
+    <brls:Label
+        width="auto"
+        height="auto"
+        text="Label2"
+        fontSize="20"
+        marginBottom="40" />
+
+    <brls:Label
+        width="auto"
+        height="auto"
+        text="Label3"
+        fontSize="20"
+        marginBottom="40" />
+
+
+
+    </brls:Box>

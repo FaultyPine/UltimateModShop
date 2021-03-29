@@ -43,8 +43,6 @@ int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, d
     return 0; 
 }
 
-CURLcode curl::curl_init() { curl_global_init(CURL_GLOBAL_DEFAULT); }
-
 /// 'path' is a relative path to wherever the project is being run from.
 CURLcode curl::DownloadFile(std::string url, std::string path) {
     CURL_builder curl;

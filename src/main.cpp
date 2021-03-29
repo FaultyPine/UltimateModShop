@@ -17,10 +17,13 @@
 
 #include "utils.h"
 #include "main_activity.h"
+#include "components_tab.h"
+#include "submission_node.h"
+#include "top_bar.h"
+#include "gb.h"
 
 int main(int argc, char* argv[])
 {
-    //init();
     // Set log level
 #ifndef __SWITCH__
     brls::Logger::setLogLevel(brls::LogLevel::DEBUG);
@@ -33,19 +36,27 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
+    brls::Application::setCommonFooter(std::string("Ver. ") + APP_VERSION);
     brls::Application::createWindow("UltimateModShop");
 
     // Have the application register an action on every activity that will quit when you press BUTTON_START
     brls::Application::setGlobalQuit(true);
-    brls::Application::setGlobalFPSToggle(true);
 
-    //std::vector<gb::GbSubmission> page_1 = gb::GetNewSubmissions();
+    // Register custom views (including tabs, which are views)
+    brls::Application::registerXMLView("SubmissionNode", SubmissionNode::create);
+    brls::Application::registerXMLView("TopBar", TopBar::create);
+    brls::Application::registerXMLView("ComponentsTab", ComponentsTab::create);
+
+    brls::getLightTheme().addColor("captioned_image/caption", nvgRGB(2, 176, 183));
+    brls::getDarkTheme().addColor("captioned_image/caption", nvgRGB(51, 186, 227));
+
+    gb_test();
 
     // Create and push the main activity to the stack
-    brls::Application::pushActivity(new MainActivity());
+    brls::Application::pushActivity(new MainActivity(), brls::TransitionAnimation::SLIDE_RIGHT);
 
     // Run the app
-    while (brls::Application::mainLoop());
+    while (brls::Application::mainLoop()) ;
 
     // Exit
     return EXIT_SUCCESS;

@@ -19,7 +19,7 @@
                 <brls:Label
                     width="auto"
                     height="auto"
-                    text="@i18n/demo/welcome"
+                    text="@i18n/main/welcome"
                     marginBottom="10px" />
 
                 <!-- Buttons -->
@@ -27,7 +27,7 @@
                 <brls:Header
                     width="auto"
                     height="auto"
-                    title="@i18n/demo/components/buttons_header"
+                    title="@i18n/main/components/buttons_header"
                     marginBottom="30px" />
 
                 <brls:Box
@@ -43,14 +43,14 @@
                         style="primary"
                         grow="1.0"
                         marginRight="30px"
-                        text="@i18n/demo/components/button_primary" />
+                        text="@i18n/main/components/button_primary" />
 
                     <brls:Button
                         id="button_highlight"
                         width="auto"
                         height="auto"
                         style="highlight"
-                        text="@i18n/demo/components/button_highlight"
+                        text="@i18n/main/components/button_highlight"
                         focusDown="button_bordered" />
 
                 </brls:Box>
@@ -65,7 +65,7 @@
                         width="33%"
                         height="auto"
                         marginRight="30px"
-                        text="@i18n/demo/components/button_wrapping" />
+                        text="@i18n/main/components/button_wrapping" />
 
                     <brls:Box
                         width="auto"
@@ -80,7 +80,7 @@
                             padding="10px"
                             style="bordered"
                             fontSize="16"
-                            text="@i18n/demo/components/button_bordered"
+                            text="@i18n/main/components/button_bordered"
                             marginBottom="30px" />
 
                         <brls:Button
@@ -89,7 +89,7 @@
                             padding="10px"
                             style="borderless"
                             fontSize="16"
-                            text="@i18n/demo/components/button_borderless" />
+                            text="@i18n/main/components/button_borderless" />
 
                     </brls:Box>
 
@@ -99,13 +99,13 @@
                 <brls:Header
                     width="auto"
                     height="auto"
-                    title="@i18n/demo/components/labels_header"
+                    title="@i18n/main/components/labels_header"
                     marginBottom="30px" />
 
                 <brls:Label
                     width="auto"
                     height="auto"
-                    text="@i18n/demo/components/regular_label"
+                    text="@i18n/main/components/regular_label"
                     marginBottom="30px" />
 
                 <brls:Box
@@ -118,19 +118,19 @@
                     <brls:Label
                         width="30%"
                         height="auto"
-                        text="@i18n/demo/components/label_left"
+                        text="@i18n/main/components/label_left"
                         textAlign="left" />
 
                     <brls:Label
                         width="30%"
                         height="auto"
-                        text="@i18n/demo/components/label_center"
+                        text="@i18n/main/components/label_center"
                         textAlign="center" />
 
                     <brls:Label
                         width="30%"
                         height="auto"
-                        text="@i18n/demo/components/label_right"
+                        text="@i18n/main/components/label_right"
                         textAlign="right" />
 
                 </brls:Box>
@@ -139,8 +139,8 @@
                 <brls:Header
                     width="auto"
                     height="auto"
-                    title="@i18n/demo/components/images_header_title"
-                    subtitle="@i18n/demo/components/images_header_subtitle"
+                    title="@i18n/main/components/images_header_title"
+                    subtitle="@i18n/main/components/images_header_subtitle"
                     marginBottom="30px" />
 
                 <brls:Box
@@ -151,33 +151,11 @@
                     justifyContent="spaceEvenly"
                     marginBottom="30px">
 
-                    <CaptionedImage
-                        width="auto"
-                        height="auto"
-                        imageWidth="76px"
-                        imageHeight="76px"
-                        image="@res/icon/tiles.png"
-                        caption="@i18n/demo/components/images_downscaled" />
+                    <SubmissionNode/>
 
-                    <CaptionedImage
-                        id="image_original"
-                        width="auto"
-                        height="auto"
-                        imageWidth="auto"
-                        imageHeight="auto"
-                        image="@res/icon/tiles.png"
-                        caption="@i18n/demo/components/images_original" />
+                    <SubmissionNode/>
 
-                    <CaptionedImage
-                        id="image_upscaled"
-                        width="auto"
-                        height="auto"
-                        imageWidth="170px"
-                        imageHeight="170px"
-                        maxWidth="170px"
-                        image="@res/icon/tiles.png"
-                        caption="@i18n/demo/components/images_upscaled"
-                        focusDown="image_cropped" />
+                    <SubmissionNode/>
 
                 </brls:Box>
 
@@ -188,25 +166,9 @@
                     alignItems="center"
                     justifyContent="spaceEvenly">
 
-                    <CaptionedImage
-                        width="auto"
-                        height="auto"
-                        imageWidth="400px"
-                        imageHeight="75px"
-                        image="@res/icon/tiles.png"
-                        scalingType="stretch"
-                        caption="@i18n/demo/components/images_stretched" />
+                    <SubmissionNode/>
 
-                    <CaptionedImage
-                        id="image_cropped"
-                        width="auto"
-                        height="auto"
-                        imageWidth="auto"
-                        imageHeight="75px"
-                        image="@res/icon/tiles.png"
-                        scalingType="crop"
-                        caption="@i18n/demo/components/images_cropped"
-                        focusUp="image_upscaled" />
+                    <SubmissionNode/>
 
                 </brls:Box>
 

@@ -5,16 +5,23 @@ project('UltimateModShop', ['c', 'cpp'],
 
 subdir('library')
 
-src_files = files(
-    'src/main.cpp',
-    'src/utils.cpp',
-    'src/curl.cpp',
-    'src/main_activity.cpp'
-)
+#src_files = files(
+#    'src/main.cpp',
+#    'src/utils.cpp',
+#    'src/curl.cpp',
+#    'src/main_activity.cpp',
+
+#    'src/components_tab.cpp',
+#    'src/submission_node.cpp',
+#)
+
+# not supposed to do this... but eh. Gotta reconfigure meson whenever you add a new file
+c = run_command('grabber.sh')
+sources = c.stdout().strip().split('\n')
 
 UltimateModShop = executable(
     'UltimateModShop',
-    [ src_files, borealis_files ],
+    [ sources, borealis_files ],
     dependencies : borealis_dependencies,
     install: true,
     include_directories: [ borealis_include, include_directories('src')],
