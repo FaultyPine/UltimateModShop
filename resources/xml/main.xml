@@ -1,0 +1,12 @@
+<brls:Box
+    width="auto"
+    height="auto"
+    borderThickness="10"
+    backgroundColor="#730505"
+    borderColor="#000000">
+
+
+    <TopBar />
+
+
+</brls:Box>

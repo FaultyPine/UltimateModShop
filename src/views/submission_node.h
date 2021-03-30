@@ -1,14 +1,16 @@
 #pragma once
 
 #include <borealis.hpp>
+#include "gb.h"
 
 class SubmissionNode : public brls::Box
 {
   public:
-    SubmissionNode();
-
-    static brls::View* create();
+    SubmissionNode(gb::GbSubmission* _submission);
     
     private:
+
+    gb::GbSubmission* submission;
+
     bool onSubmissionNodeClicked(brls::View* view);
 };

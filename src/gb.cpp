@@ -27,8 +27,6 @@ gb::GbSubmissions gb::GetNewSubmissions(int page, std::string game) {
     return ret;
 }
 
-/// partial_submission must have itemtype and itemid filled in
-/// appends data from 'fields' to partial_submission's 'submission_data' field
 void gb::GetSubmissionData(gb::GbSubmission* partial_submission, std::vector<gb::GbField> fields) {
     if (partial_submission == nullptr)
         brls::Application::crash("Cannot get submission data from nullptr!");
