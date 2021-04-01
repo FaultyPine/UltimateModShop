@@ -3,16 +3,16 @@
 -->
 
 <brls:Box
-        width="60%"
-        axis="row"
-        marginBottom="650"
-        marginLeft="250"
-        direction="leftToRight"
-        justifyContent="spaceBetween"
-        alignItems="spaceBetween"
-        borderThickness="3"
-        backgroundColor="#C3C3C3"
-        borderColor="#000000">
+    id="top_bar"
+    width="60%"
+    height="10%"
+    axis="row"
+    direction="leftToRight"
+    justifyContent="spaceBetween"
+    alignItems="spaceBetween"
+    borderThickness="3"
+    backgroundColor="#C3C3C3"
+    borderColor="#000000">
 
     <!--  BarItem's get dynamically added in here  -->
 

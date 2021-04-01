@@ -7,6 +7,7 @@ class SubmissionNode : public brls::Box
 {
   public:
     SubmissionNode(gb::GbSubmission* _submission);
+    SubmissionNode();
     
     private:
 

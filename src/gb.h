@@ -6,7 +6,6 @@ namespace gb {
     static const char GB_API_URL[] = "https://api.gamebanana.com/";
     static const char GB_SMASH_GAMEID[] = "6498";
     static const char GB_UNESCAPED_SLASHES_FLAG[] = "JSON_UNESCAPED_SLASHES";
-    static const int NUM_SUBMISSIONS_PER_PAGE = 9;
 
     namespace Endpoints {
         static const char CoreListNew[] = "Core/List/New?";

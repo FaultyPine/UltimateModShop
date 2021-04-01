@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <string>
 #include <time.h>
-#include <regex>
+#include <math.h>
 #include "curl.h"
 
 using json = nlohmann::json;
@@ -27,7 +27,8 @@ using json = nlohmann::json;
 
 static const char APP_VERSION[] = "0.0.0";
 
+void stub();
 
 std::string replaceAll(std::string str, const std::string &from, const std::string &to);
 
-std::string EpochToHumanReadable(ulong since_epoch);
+std::string EpochToHumanReadable(long long since_epoch);

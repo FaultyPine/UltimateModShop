@@ -1188,6 +1188,8 @@ class View
     View* getCustomNavigationRoutePtr(FocusDirection direction);
     std::string getCustomNavigationRouteId(FocusDirection direction);
 
+    std::string getID();
+
     /**
       * Fired when focus is gained.
       */

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.h"
+#include <sys/select.h>
 #include <curl/curl.h>
 
 using json = nlohmann::json;

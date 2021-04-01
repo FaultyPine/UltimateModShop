@@ -17,18 +17,21 @@
 
 #include "utils.h"
 #include "main_activity.h"
-#include "views/submission_node.h"
 #include "views/top_bar/top_bar.h"
-#include "gb.h"
+#include "views/main_window.h"
+//#include "gb.h"
 
 int main(int argc, char* argv[])
 {
-    // Set log level
-#ifndef __SWITCH__
+// init for pc/switch
+#ifdef __SWITCH__
+    // Switch
+    socketInitializeDefault();
+#else 
+    // PC
     brls::Logger::setLogLevel(brls::LogLevel::DEBUG);
 #endif
 
-    // Init the app and i18n
     if (!brls::Application::init())
     {
         brls::Logger::error("Unable to init Borealis application");
@@ -40,17 +43,26 @@ int main(int argc, char* argv[])
     // Have the application register an action on every activity that will quit when you press BUTTON_START
     brls::Application::setGlobalQuit(true);
 
-    // Register custom views (including tabs, which are views)
-    //brls::Application::registerXMLView("SubmissionNode", SubmissionNode::create);
+    // Register custom views
     brls::Application::registerXMLView("TopBar", TopBar::create);
+    brls::Application::registerXMLView("MainWindow", MainWindow::create);
 
     //gb_test();
 
     // Create and push the main activity to the stack
-    brls::Application::pushActivity(new MainActivity(), brls::TransitionAnimation::SLIDE_RIGHT);
+    brls::Application::pushActivity(new MainActivity());
 
     // Run the app
     while (brls::Application::mainLoop()) ;
+
+// exit for pc/switch
+#ifdef __SWITCH__
+    // Switch
+    socketExit();
+#else 
+    // PC
+    
+#endif
 
     // Exit
     return EXIT_SUCCESS;

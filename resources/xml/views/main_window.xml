@@ -1,0 +1,11 @@
+<brls:Box
+    id="main_window"
+    width="100%"
+    height="88%"
+    justifyContent="center"
+    borderThickness="1"
+    borderColor="#ff50a0"
+>
+
+
+</brls:Box>

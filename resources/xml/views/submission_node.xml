@@ -1,23 +1,23 @@
 <brls:Box
-    width="auto"
-    height="auto"
-    axis="column"
-    alignItems="center">
+    id="submission_node_box"
+    width="250"
+    height="150"
+    marginLeft="80"
+    marginRight="80"
+    marginTop="10"
+    alignItems="center"
+    borderThickness="2"
+    borderColor="#1CDB92"
+    focusable="true"
+    >
 
-    <brls:Button
-        width="100%"
-        height="100%"
-        id="submission_button"
-        style="bordered"
-        text=""
-    />
-
-    <brls:Rectangle
-        width="80%"
-        height="80%"
-        grow="1.0"
-        color="#FA0000"
-    />
+    <brls:Image
+        id="submission_image"
+        image="@res/icon/unknown_image.png"
+        width="auto"
+        height="auto"
+        imageAlign="top"
+        marginBottom="20px" />
 
 
 </brls:Box>

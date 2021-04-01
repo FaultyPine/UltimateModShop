@@ -1,12 +1,17 @@
 <brls:Box
+    id="main"
     width="auto"
     height="auto"
+    axis="column"
     borderThickness="10"
     backgroundColor="#730505"
-    borderColor="#000000">
-
+    borderColor="#000000"
+    justifyContent="center"
+    alignItems="center"
+>
 
     <TopBar />
 
+    <MainWindow />
 
 </brls:Box>

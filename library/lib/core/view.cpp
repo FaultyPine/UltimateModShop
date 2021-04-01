@@ -2017,6 +2017,10 @@ View* View::getDefaultFocus()
     return nullptr;
 }
 
+std::string View::getID() {
+    return this->id;
+}
+
 void View::bindXMLDocument(tinyxml2::XMLDocument* document)
 {
     this->boundDocuments.push_back(document);
