@@ -1,8 +1,6 @@
 #pragma once
 
-#include "utils.h"
-#include "views/top_bar/top_bar.h"
-#include "views/main_window.h"
+#include "ums_utils.h"
 
 class MainActivity : public brls::Activity {
     public:

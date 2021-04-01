@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils.h"
+#include "ums_utils.h"
 
 namespace gb {
     static const char GB_API_URL[] = "https://api.gamebanana.com/";

@@ -1,7 +1,5 @@
 #include "top_bar.h"
 
-std::vector<BarItem*> TopBar::Menus;
-
 TopBar::TopBar() {
     this->Menus = { new BarItem("Browse", Browse::create()), new BarItem("Installed"), new BarItem("Settings") };
     this->inflateFromXMLRes("xml/views/top_bar.xml");

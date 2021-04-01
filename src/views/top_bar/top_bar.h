@@ -24,6 +24,6 @@ class TopBar : public brls::Box
     int currently_selected_menu_idx = 0;
 
     /// initialized in constructor
-    static std::vector<BarItem*> Menus; 
+    std::vector<BarItem*> Menus; 
 
 };

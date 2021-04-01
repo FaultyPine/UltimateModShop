@@ -9,3 +9,6 @@ build.nx/
 .vscode
 builddir
 *.dksh
+
+# special-case our github workflow since borealis also comes with one
+!/.github/

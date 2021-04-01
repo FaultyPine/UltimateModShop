@@ -39,10 +39,11 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	UltimateModShop
 BUILD		:=	build.nx
-SOURCES		:=	src
+SRCDIR      :=  src
+SOURCES		:=	$(shell find $(SRCDIR) -type d)
 DATA		:=	data
 ICON		:=	resources/icon/icon.jpg
-INCLUDES	:=	src
+INCLUDES	:=	$(shell find $(SRCDIR) -type d)
 
 APP_TITLE	:=	UltimateModShop
 APP_AUTHOR	:=	PiNE / natinusala
@@ -59,8 +60,8 @@ OUT_SHADERS	:=	shaders
 #---------------------------------------------------------------------------------
 ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
-CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
-			$(ARCH) $(DEFINES)
+CFLAGS	:=	-g -Wall -O3 -ffunction-sections \
+			$(ARCH) $(DEFINES) `curl-config --cflags`
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 
@@ -69,7 +70,7 @@ CXXFLAGS	:= $(CFLAGS) -std=c++1z -O2 -Wno-volatile -w
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx -lcurl
+LIBS	:= -lnx `curl-config --libs`
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

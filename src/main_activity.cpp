@@ -1,5 +1,6 @@
 #include "main_activity.h"
-
+#include "views/top_bar/top_bar.h"
+#include "views/main_window.h"
 
 void MainActivity::onContentAvailable() {
     TopBar* top_bar = (TopBar*)this->getView("top_bar");
