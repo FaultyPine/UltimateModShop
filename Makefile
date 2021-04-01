@@ -132,9 +132,9 @@ ifneq ($(strip $(ROMFS)),)
 	export ROMFS_DEPS := $(foreach file,$(ROMFS_TARGETS),$(CURDIR)/$(file))
 endif
 
-export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
-			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-			-I$(CURDIR)/$(BUILD)
+export INCLUDE	:=	$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+					$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+					-I$(CURDIR)/$(BUILD)
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
