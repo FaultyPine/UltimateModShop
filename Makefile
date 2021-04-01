@@ -40,10 +40,10 @@ include $(DEVKITPRO)/libnx/switch_rules
 TARGET		:=	UltimateModShop
 BUILD		:=	build.nx
 SRCDIR      :=  src
-SOURCES		:=	$(shell find $(SRCDIR) -type d)
+SOURCES		:=	src $(filter-out %.,$(wildcard src/* src/*/* src/*/*/* src/*/*/*/*))
 DATA		:=	data
 ICON		:=	resources/icon/icon.jpg
-INCLUDES	:=	$(shell find $(SRCDIR) -type d)
+INCLUDES	:=	src $(filter-out %.,$(wildcard src/* src/*/* src/*/*/* src/*/*/*/*))
 
 APP_TITLE	:=	UltimateModShop
 APP_AUTHOR	:=	PiNE / natinusala
