@@ -6,6 +6,13 @@
 
 using json = nlohmann::json;
 
+struct MemoryStruct
+{
+  char *memory;
+  size_t size;
+
+  ~MemoryStruct();
+};
 
 namespace curl {
 
@@ -13,4 +20,5 @@ namespace curl {
 
     json DownloadJson(std::string url);
 
+    MemoryStruct DownloadToMem(std::string url);
 }

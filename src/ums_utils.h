@@ -18,6 +18,7 @@
 #include <string>
 #include <time.h>
 #include <math.h>
+#include <thread>
 #include "curl.h"
 
 using json = nlohmann::json;

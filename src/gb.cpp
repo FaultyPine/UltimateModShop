@@ -5,12 +5,13 @@ std::string gb::ConcatFields(std::vector<gb::GbField> fields) {
     for (std::string s : fields) {
         ret.append(s + ",");
     }
-    ret.pop_back();
+    if (ret.size() > 0)
+        ret.pop_back();
     return ret;
 }
 
 gb::GbSubmissions gb::GetNewSubmissions(int page, std::string game) {
-    brls::Logger::debug("Gettings new submissions for Smash...");
+    brls::Logger::debug("Gettings new submissions...");
     std::stringstream url; 
     url << gb::GB_API_URL << gb::Endpoints::CoreListNew << "page=" << std::to_string(page) << "&gameid=" << game;
     json submissions = curl::DownloadJson(url.str());
@@ -28,10 +29,8 @@ gb::GbSubmissions gb::GetNewSubmissions(int page, std::string game) {
 }
 
 void gb::GetSubmissionData(gb::GbSubmission* partial_submission, std::vector<gb::GbField> fields) {
-    if (partial_submission == nullptr)
-        brls::Application::crash("Cannot get submission data from nullptr!");
-    if (partial_submission->itemtype.empty() || partial_submission->itemid.empty()) {
-        brls::Logger::error("Cannot get submission data without 'itemtype' or 'itemid'!");
+    if (partial_submission == nullptr || partial_submission->itemtype.empty() || partial_submission->itemid.empty()) {
+        brls::Application::crash("Invalid args to get submission data!");
         return;
     }
     std::string s_fields = gb::ConcatFields(fields);
@@ -40,20 +39,14 @@ void gb::GetSubmissionData(gb::GbSubmission* partial_submission, std::vector<gb:
         "itemtype=" << partial_submission->itemtype << 
         "&itemid=" << partial_submission->itemid << 
         "&fields=" << s_fields <<
-        "&flags=" << gb::GB_UNESCAPED_SLASHES_FLAG;
+        "&flags=" << gb::GB_UNESCAPED_SLASHES_FLAG <<
+        "&return_object=true";
 
-
+    //brls::Logger::debug("Gb request: {}", url.str());
     json _submission_data = curl::DownloadJson(url.str());
-    partial_submission->submission_data += _submission_data;
-}
-
-
-void gb_test() {
-    gb::GbSubmissions subs = gb::GetNewSubmissions(1);
-    for (size_t i = 0; i < subs.size(); i++) {
-        gb::GbSubmission* sub = subs.at(i);
-        gb::GetSubmissionData(sub, {gb::Fields::Files, gb::Fields::Title});
-        //printf(sub->submission_data.dump(4).c_str());
-        //printf("\n____________\n");
+    if (_submission_data == NULL) {
+        brls::Logger::error("Submission data was NULL! {}", _submission_data.dump(4));
+        return;
     }
+    partial_submission->submission_data += _submission_data;
 }

@@ -9,6 +9,12 @@ class SubmissionNode : public brls::Box
     SubmissionNode(gb::GbSubmission* _submission);
     SubmissionNode();
     
+    void setSubmissionData(gb::GbSubmission* s);
+    gb::GbSubmission* getSubmissionData();
+
+    void onFocusGained() override;
+    void onFocusLost() override;
+
     private:
 
     gb::GbSubmission* submission;

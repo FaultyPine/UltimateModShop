@@ -2,6 +2,10 @@
 
 using json = nlohmann::json;
 
+MemoryStruct::~MemoryStruct() {
+    free(this->memory);
+}
+
 // Credit this curl stuff to Blujay. Thanks dude
 struct  CURL_builder {
     CURL* request;
@@ -31,13 +35,15 @@ struct  CURL_builder {
     CURLcode Perform() { return curl_easy_perform(request); }
 };
 
-size_t jsonWriteCallback(char* to_write, size_t size, size_t byte_count, void* user_data) {
+size_t writeCallback(char* to_write, size_t size, size_t byte_count, void* user_data) {
     *(std::stringstream*)user_data << to_write;
     return size * byte_count;
 }
 
 int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded) {
     int percent_complete = (int)((NowDownloaded/TotalToDownload)*100.0);
+    //if (percent_complete >= 0)
+        //brls::Logger::debug("Downloading... {}%", percent_complete);
 
     // if you don't return 0, the transfer will be aborted
     return 0; 
@@ -86,13 +92,63 @@ json curl::DownloadJson(std::string url) {
         result =
             curl.SetURL(url)
                 .SetOPT(CURLOPT_WRITEDATA, &buffer)
-                .SetOPT(CURLOPT_WRITEFUNCTION, jsonWriteCallback)
+                .SetOPT(CURLOPT_WRITEFUNCTION, writeCallback)
                 .SetOPT(CURLOPT_USERAGENT, "UMS-User")
                 .Perform();
         if (result == CURLE_OK) {
-            try { res = json::parse(buffer.str()); }
-            catch (json::parse_error& e) { brls::Logger::error("Unable to parse json!"); }
+            try {
+                res = json::parse(buffer.str());
+            }
+            catch (json::parse_error& e) {
+                std::string crash_msg = std::string("Unable to parse json!") + std::string(e.what()) + "\n" + buffer.str() + "\n" + url;
+                brls::Application::crash(crash_msg);
+            }
         }
     }
     return res;
+}
+
+static size_t write_memory_callback(void *contents, size_t size, size_t nmemb, void *userdata) // <- userdata is 'chunk' (MemoryStruct)
+{
+  size_t realsize = size * nmemb;
+  struct MemoryStruct *mem = (struct MemoryStruct *)userdata;
+
+  char *ptr = (char*)realloc(mem->memory, mem->size + realsize + 1);
+
+  if (ptr == NULL)
+  {
+      brls::Logger::error("Out of memory!");
+      return 0;
+  }
+ 
+  mem->memory = ptr;
+  memcpy(&(mem->memory[mem->size]), contents, realsize);
+  mem->size += realsize;
+  mem->memory[mem->size] = 0;
+ 
+  return realsize;
+}
+
+MemoryStruct curl::DownloadToMem(std::string url) {
+    CURL_builder curl;
+
+    struct MemoryStruct chunk;
+    chunk.memory = (char*)malloc(1);
+    chunk.size = 0;
+
+    std::vector<std::string> headers;
+        headers.push_back("Accept: application/octet-stream");
+
+    if (curl) {
+        CURLcode result =
+            curl.SetURL(url)
+                .SetOPT(CURLOPT_WRITEDATA, (void *)&chunk)
+                .SetOPT(CURLOPT_WRITEFUNCTION, write_memory_callback)
+                .SetOPT(CURLOPT_USERAGENT, "UMS-User")
+                .Perform();
+        if (result != CURLE_OK) {
+            brls::Logger::error("Failed to download to mem!");
+        }
+    }
+    return chunk;
 }

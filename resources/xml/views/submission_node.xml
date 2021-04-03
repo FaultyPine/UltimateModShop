@@ -1,23 +1,40 @@
 <brls:Box
     id="submission_node_box"
-    width="250"
+    axis="column"
+    width="300"
     height="150"
-    marginLeft="80"
-    marginRight="80"
+    marginRight="60"
+    marginLeft="60"
     marginTop="10"
+    justifyContent="center"
     alignItems="center"
     borderThickness="2"
     borderColor="#1CDB92"
     focusable="true"
     >
 
+
     <brls:Image
         id="submission_image"
         image="@res/icon/unknown_image.png"
         width="auto"
-        height="auto"
+        height="70%"
         imageAlign="top"
-        marginBottom="20px" />
+        scalingType="fit"
+        marginBottom="20px"
+        marginTop="10px"
+        marginRight="20px"
+    />
+
+    <brls:Label
+        id="submission_label"
+        width="auto"
+        height="auto"
+        textColor="#FFFFFF"
+        textAlign="center"
+
+        marginBottom="20px"
+    />
 
 
 </brls:Box>

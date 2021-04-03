@@ -19,3 +19,20 @@ bool SubmissionNode::onSubmissionNodeClicked(brls::View* view)
     brls::Logger::debug("Submission node Clicked");
     return false;
 }
+
+void SubmissionNode::onFocusGained() {
+    Box::onFocusGained();
+    ((brls::Label*)(this->getView("submission_label")))->setTextColor(nvgRGBf(0.0, 0.0, 0.0));
+}
+void SubmissionNode::onFocusLost() {
+    Box::onFocusLost();
+    ((brls::Label*)(this->getView("submission_label")))->setTextColor(nvgRGBf(1.0, 1.0, 1.0));
+}
+
+void SubmissionNode::setSubmissionData(gb::GbSubmission* s) {
+    this->submission = s;
+}
+
+gb::GbSubmission* SubmissionNode::getSubmissionData() {
+    return this->submission;
+}

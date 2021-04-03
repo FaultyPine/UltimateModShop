@@ -19,7 +19,6 @@
 #include "main_activity.h"
 #include "views/top_bar/top_bar.h"
 #include "views/main_window.h"
-//#include "gb.h"
 
 int main(int argc, char* argv[])
 {
@@ -46,8 +45,6 @@ int main(int argc, char* argv[])
     // Register custom views
     brls::Application::registerXMLView("TopBar", TopBar::create);
     brls::Application::registerXMLView("MainWindow", MainWindow::create);
-
-    //gb_test();
 
     // Create and push the main activity to the stack
     brls::Application::pushActivity(new MainActivity());

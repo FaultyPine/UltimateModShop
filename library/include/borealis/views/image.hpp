@@ -76,6 +76,8 @@ class Image : public View
      */
     void setImageFromFile(std::string path);
 
+    void setImageFromMem(unsigned char* data, int size);
+
     /**
      * Sets the scaling type for this image.
      *

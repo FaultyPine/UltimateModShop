@@ -7,8 +7,6 @@ const std::string main_window_initial = R"xml(
     <brls:Box 
         width="100%"
         height="100%"
-        borderThickness="3"
-        borderColor="#00FFB6"
     />
 )xml";
 

@@ -4,7 +4,7 @@
 
 <brls:Box
     id="top_bar"
-    width="60%"
+    width="70%"
     height="10%"
     axis="row"
     direction="leftToRight"
