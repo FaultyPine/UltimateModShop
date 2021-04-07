@@ -14,7 +14,7 @@ And there are some additional compilation instructions at the [borealis wiki](ht
 
 # TODO
 
-- Splash screen while loading initial menu -- on hold since pushing multiple activities to the view stack is borked with the yoga rewrite apparently
+- Splash screen while loading initial menu -- implemented, but thread stuff creates a lotta UB with brls right now, so this is on hold until Tasks are implemented natively.
 
 - framework for fs stuff... pc & switch.
     - detect/install skyline (initial modding setup) -- need to get unzipping working first
