@@ -70,7 +70,7 @@ CXXFLAGS	:= $(CFLAGS) -std=c++1z -O2 -Wno-volatile -w
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx `curl-config --libs`
+LIBS	:= -lnx `curl-config --libs` -lpthread #-lelzip -lminizip
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

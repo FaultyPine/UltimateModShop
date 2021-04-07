@@ -14,6 +14,11 @@ And there are some additional compilation instructions at the [borealis wiki](ht
 
 # TODO
 
-- Splash screen while loading initial menu
-- fix submission label's text
-- 
+- Splash screen while loading initial menu -- on hold since pushing multiple activities to the view stack is borked with the yoga rewrite apparently
+
+- framework for fs stuff... pc & switch.
+    - detect/install skyline (initial modding setup) -- need to get unzipping working first
+    - make clicking on submissions install the mod. Don't worry about making nice ui for it for now,
+        it's fine its just a blocking operation for now
+    - (class?) json for installed mods
+    - 

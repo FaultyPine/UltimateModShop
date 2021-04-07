@@ -12,8 +12,10 @@ class Browse : public brls::Box
     
     static brls::Box* create();
 
+    static void initBrowseMenu(Browse* browse);
+
     private:
     gb::GbSubmissions new_submissions;
 
-    void getNewGbSubmissions();
+    void getNewGbSubmissions(int page);
 };

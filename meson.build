@@ -26,5 +26,5 @@ UltimateModShop = executable(
     install: true,
     include_directories: [ borealis_include, include_directories('src')],
     cpp_args: ['-g', '-O3', '-DBRLS_RESOURCES="./resources/"', '-w' ] + borealis_cpp_args,
-    link_args: [ '-lcurl', ]
+    link_args: [ '-lcurl', '-lpthread', ]#'-lelzip', '-lminizip', ]
 )

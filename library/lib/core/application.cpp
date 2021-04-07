@@ -604,7 +604,7 @@ void Application::pushActivity(Activity* activity, TransitionAnimation animation
     if (!fadeOut)
         activity->show([] { Application::unblockInputs(); }, true, activity->getShowAnimationDuration(animation));
     else
-        activity->setAlpha(0.0f);
+        activity->setAlpha(1.0f);
 
     // Focus
     if (Application::activitiesStack.size() > 0 && Application::currentFocus != nullptr)

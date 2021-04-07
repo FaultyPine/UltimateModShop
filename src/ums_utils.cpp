@@ -22,3 +22,33 @@ std::string EpochToHumanReadable(long long since_epoch) {
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
     return std::string(buf);
 }
+
+// init for switch/pc
+void setup() {
+    /**
+     * init paths
+     * check for skyline (if not, install)
+     */
+    std::string paths[] = {
+        SD_ROOT,
+        UMS_PATH,
+        MODS_PATH,
+        SMASH_PATH,
+        ROMFS_PATH,
+        EXEFS_PATH,
+        SKYLINE_PLUGINS_PATH,
+    };
+    for (std::string path : paths) {
+        if (!std::filesystem::exists(path)) {
+            std::filesystem::create_directories(path);
+        }
+    }
+
+    const std::string skyline_zip_name = "skyline.zip";
+    if (!std::filesystem::exists(std::string(EXEFS_PATH) + "subsdk9") || !std::filesystem::exists(std::string(EXEFS_PATH) + "main.npdm")) {
+        //brls::Logger::debug("Installing skyline...");
+        //curl::DownloadFile(SKYLINE_EXEFS_URL, std::string(SMASH_PATH) + skyline_zip_name);
+        // unzip
+        //std::filesystem::remove(std::string(SMASH_PATH) + skyline_zip_name);
+    }
+}

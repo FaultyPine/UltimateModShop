@@ -2,10 +2,9 @@
     id="submission_node_box"
     axis="column"
     width="300"
-    height="150"
+    height="170"
     marginRight="60"
     marginLeft="60"
-    marginTop="10"
     justifyContent="center"
     alignItems="center"
     borderThickness="2"
@@ -28,11 +27,14 @@
 
     <brls:Label
         id="submission_label"
+        singleLine="false"
         width="auto"
-        height="auto"
+        height="15%"
+        text="???"
         textColor="#FFFFFF"
+        animated="true"
+        autoAnimate="true"
         textAlign="center"
-
         marginBottom="20px"
     />
 

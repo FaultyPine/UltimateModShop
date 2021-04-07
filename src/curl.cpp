@@ -35,8 +35,19 @@ struct  CURL_builder {
     CURLcode Perform() { return curl_easy_perform(request); }
 };
 
+// note to self - fix json files sometimes having "0" at the end.
+//      fixed -> https://stackoverflow.com/questions/43904670/why-is-libcurl-returning-a-0-after-the-json-response-string
+
+// https://curl.se/libcurl/c/CURLOPT_WRITEFUNCTION.html
+//    size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);                      
 size_t writeCallback(char* to_write, size_t size, size_t byte_count, void* user_data) {
-    *(std::stringstream*)user_data << to_write;
+
+    // handle null termination
+    char * responseString = new char[byte_count + 1]();
+    strncpy(responseString, to_write, byte_count);
+    responseString[byte_count] = '\0';
+
+    *(std::stringstream*)user_data << responseString;
     return size * byte_count;
 }
 
@@ -80,13 +91,13 @@ CURLcode curl::DownloadFile(std::string url, std::string path) {
 }
 
 json curl::DownloadJson(std::string url) {
-    json res = NULL;
+    json res;
     std::stringstream buffer;
     CURL_builder curl;
     CURLcode result = CURLE_GOT_NOTHING;
 
     std::vector<std::string> headers;
-        headers.push_back("Accept: application/octet-stream");
+        headers.push_back("Accept: application/json");
 
     if (curl) {
         result =
@@ -97,13 +108,24 @@ json curl::DownloadJson(std::string url) {
                 .Perform();
         if (result == CURLE_OK) {
             try {
-                res = json::parse(buffer.str());
+                std::string buffer_str = buffer.str();
+                if (json::accept(buffer_str))
+                    res = json::parse(buffer_str);
+                else {
+                    brls::Logger::error("Invalid json! {}\n{}", url, buffer_str);
+                }
             }
             catch (json::parse_error& e) {
                 std::string crash_msg = std::string("Unable to parse json!") + std::string(e.what()) + "\n" + buffer.str() + "\n" + url;
                 brls::Application::crash(crash_msg);
             }
         }
+        else {
+            brls::Logger::error("Failed to perform curl operation. CURLcode = {}", curl_easy_strerror(result));
+        }
+    }
+    else {
+        brls::Logger::error("Failed to init curl");
     }
     return res;
 }

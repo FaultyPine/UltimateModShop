@@ -17,6 +17,7 @@
 
 #include "ums_utils.h"
 #include "main_activity.h"
+#include "splash_screen.h"
 #include "views/top_bar/top_bar.h"
 #include "views/main_window.h"
 
@@ -46,11 +47,24 @@ int main(int argc, char* argv[])
     brls::Application::registerXMLView("TopBar", TopBar::create);
     brls::Application::registerXMLView("MainWindow", MainWindow::create);
 
-    // Create and push the main activity to the stack
-    brls::Application::pushActivity(new MainActivity());
+    setup();
 
-    // Run the app
-    while (brls::Application::mainLoop()) ;
+    // OpenGL is a single-threaded state machine, b/c of this, brls is absolutely not thread-safe at the moment and stuff like this makes a lotta undefined behavior.
+    // In the future, brls will be, but for now I'll have to put this splash screen + load in background stuff on the backburner.
+    // I'll definitely want to make some stuff async at some point - loading menus and such (although its pretty damn fast with multicalls so its not a huuuuuge deal).
+
+    //SplashScreen* s = new SplashScreen();
+    //brls::Application::pushActivity(s);
+    //std::thread t([](){
+        MainActivity* m = new MainActivity();
+        brls::Application::pushActivity(m);
+        //brls::Logger::debug("Loaded main activity!");
+    //});
+    //t.detach();
+
+    while (brls::Application::mainLoop()) {
+
+    }
 
 // exit for pc/switch
 #ifdef __SWITCH__

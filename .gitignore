@@ -12,3 +12,4 @@ builddir
 
 # special-case our github workflow since borealis also comes with one
 !/.github/
+pc_tmp/

@@ -18,7 +18,6 @@ namespace gb {
         "Effect",
         "Gamefile",
         "Gui",
-        "GuiCategory",
         "Map",
         "Model",
         "Project",
@@ -51,6 +50,9 @@ namespace gb {
     /// partial_submission must have itemtype and itemid filled in
     /// appends data from 'fields' to partial_submission's 'submission_data' field
     void GetSubmissionData(gb::GbSubmission* partial_submission, std::vector<gb::GbField> fields = {});
+
+    /// Uses multicalls to get submission data on a vector of itemid/itemtypes. Reduces api requests this way
+    void GetSubmissionDataMulticall(gb::GbSubmissions* partial_submissions, std::vector<gb::GbField> fields);
     
     /// Takes list of GbField's and turns it into a single string to be passed into the gb api
     std::string ConcatFields(std::vector<GbField> fields);

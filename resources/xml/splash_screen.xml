@@ -1,0 +1,22 @@
+<brls:Box 
+    id="splash_screen"
+    width="100%"
+    height="100%"
+    axis="column"
+    alignItems="center"
+    borderThickness="15"
+    borderColor="#d72323"
+    backgroundColor="#3a4750"
+>
+
+    <brls:Label
+        text="Ultimate Mod Shop"
+        fontSize="50"
+        textColor="#eeeeee"
+        marginTop="200"
+    />
+
+    
+
+
+</brls:Box>
