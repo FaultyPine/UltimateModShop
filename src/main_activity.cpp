@@ -21,9 +21,9 @@ void MainActivity::onContentAvailable() {
             return true;
         },
         false, brls::Sound::SOUND_CLICK_SIDEBAR);
-    brls::Logger::debug("Main activity content available");
+
 }
 
 MainActivity::MainActivity() {
-    brls::Logger::debug("Main activity ctor");
+    
 }

@@ -16,9 +16,11 @@ And there are some additional compilation instructions at the [borealis wiki](ht
 
 - Splash screen while loading initial menu -- implemented, but thread stuff creates a lotta UB with brls right now, so this is on hold until Tasks are implemented natively.
 
+- genuinely make a tab system. Solve problem of hiding/showing tabs pushing other windows to the side since they never really go away
+
 - framework for fs stuff... pc & switch.
     - detect/install skyline (initial modding setup) -- need to get unzipping working first
-    - make clicking on submissions install the mod. Don't worry about making nice ui for it for now,
-        it's fine its just a blocking operation for now
-    - (class?) json for installed mods
+    - make clicking on submissions install the mod. Don't worry about making nice ui for it,
+        it's fine its just a fully blocking operation for now
+    - start framework for installed mods
     - 

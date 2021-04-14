@@ -20,4 +20,6 @@ class SubmissionNode : public brls::Box
     gb::GbSubmission* submission;
 
     bool onSubmissionNodeClicked(brls::View* view);
+
+    void downloadSubmission();
 };

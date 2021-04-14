@@ -1,0 +1,17 @@
+<brls:Box
+id="installed_box"
+axis="column"
+width="100%"
+height="100%"
+paddingTop="10"
+paddingLeft="10"
+borderThickness="5"
+borderColor="#00FFF3"
+>
+
+    <!-- Add a ScrollingFrame here... doesn't work for some reason rn -->
+
+    
+
+
+</brls:Box>

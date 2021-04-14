@@ -17,6 +17,7 @@ SubmissionNode::SubmissionNode() {
 bool SubmissionNode::onSubmissionNodeClicked(brls::View* view)
 {
     brls::Logger::debug("Submission node Clicked");
+    this->downloadSubmission();
     return false;
 }
 
@@ -35,4 +36,22 @@ void SubmissionNode::setSubmissionData(gb::GbSubmission* s) {
 
 gb::GbSubmission* SubmissionNode::getSubmissionData() {
     return this->submission;
+}
+
+void SubmissionNode::downloadSubmission() {
+    if (this->submission != nullptr && !this->submission->submission_data.empty()) {
+        brls::Logger::debug("Downloading submission...");
+        json sd = this->submission->submission_data;
+        for (json file : sd[gb::Fields::Files]) { // iterate through each uploaded file in the submission
+            brls::Logger::debug("Downloading file. Size = {} bytes", file["_nFilesize"].get<unsigned long>());
+            std::string url = file["_sDownloadUrl"].get<std::string>();
+            std::string path = s(SD_ROOT) + file["_sFile"].get<std::string>();
+            //curl::DownloadFile(url, path);
+        }
+        brls::Logger::debug("Successfully downloaded {}", sd[gb::Fields::Title].get<std::string>());
+        installed_mods->GetMemJsonPtr()->at("Installed") += sd;
+    }
+    else {
+        brls::Logger::debug("Attempted to download submission with invalid data... ignoring...");
+    }
 }

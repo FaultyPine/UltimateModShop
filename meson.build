@@ -5,6 +5,9 @@ project('UltimateModShop', ['c', 'cpp'],
 
 subdir('library')
 
+thread_dep = dependency('threads')
+
+
 #src_files = files(
 #    'src/main.cpp',
 #    'src/utils.cpp',
@@ -22,9 +25,9 @@ sources = c.stdout().strip().split('\n')
 UltimateModShop = executable(
     'UltimateModShop',
     [ sources, borealis_files ],
-    dependencies : borealis_dependencies,
+    dependencies : [borealis_dependencies, thread_dep],
     install: true,
     include_directories: [ borealis_include, include_directories('src')],
     cpp_args: ['-g', '-O3', '-DBRLS_RESOURCES="./resources/"', '-w' ] + borealis_cpp_args,
-    link_args: [ '-lcurl', '-lpthread', ]#'-lelzip', '-lminizip', ]
+    link_args: [ '-lcurl', ]# '-lelzip', '-lminizip', ]
 )

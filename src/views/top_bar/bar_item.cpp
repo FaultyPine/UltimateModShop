@@ -15,6 +15,6 @@ BarItem::BarItem(std::string text) {
 
 brls::Box* BarItem::getTabView() {
     if (!this->tab_box)
-        brls::Logger::error("Attempting to get tab view on nullptr!");
+        brls::Logger::warning("Attempting to get tab view on nullptr!");
     return this->tab_box;
 }

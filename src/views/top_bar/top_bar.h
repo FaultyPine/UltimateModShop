@@ -2,8 +2,10 @@
 
 #include <borealis.hpp>
 #include "bar_item.h"
-#include "../tabs/browse.h"
 #include "../main_window.h"
+
+#include "../tabs/browse.h"
+#include "../tabs/installed.h"
 
 class TopBar : public brls::Box
 {

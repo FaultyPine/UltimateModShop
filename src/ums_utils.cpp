@@ -1,5 +1,7 @@
 #include "ums_utils.h"
 
+InstalledJson* installed_mods;
+
 void stub() { }
 
 std::string replaceAll(std::string str, const std::string &from, const std::string &to) {
@@ -51,4 +53,6 @@ void setup() {
         // unzip
         //std::filesystem::remove(std::string(SMASH_PATH) + skyline_zip_name);
     }
+
+    installed_mods = new InstalledJson( json(  { { "Installed", {} } }   ) );
 }

@@ -12,7 +12,7 @@ void unsetSelected(brls::View* previously_selected_view) {
 }
 
 TopBar::TopBar() {
-    this->Menus = { new BarItem("Browse", Browse::create()), new BarItem("Installed"), new BarItem("Settings") };
+    this->Menus = { new BarItem("Browse", Browse::create()), new BarItem("Installed", Installed::create()), new BarItem("Settings") };
     this->inflateFromXMLRes("xml/views/top_bar.xml");
     for (int i = 0; i < this->Menus.size(); i++) {
         BarItem* baritem = this->Menus.at(i);

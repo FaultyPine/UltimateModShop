@@ -66,6 +66,8 @@ int main(int argc, char* argv[])
 
     }
 
+    delete installed_mods;
+
 // exit for pc/switch
 #ifdef __SWITCH__
     // Switch

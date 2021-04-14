@@ -51,10 +51,13 @@ size_t writeCallback(char* to_write, size_t size, size_t byte_count, void* user_
     return size * byte_count;
 }
 
+int prev_percent_complete = -1;
 int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded) {
     int percent_complete = (int)((NowDownloaded/TotalToDownload)*100.0);
-    //if (percent_complete >= 0)
-        //brls::Logger::debug("Downloading... {}%", percent_complete);
+    if (percent_complete >= 0 && percent_complete <= 100 && percent_complete != prev_percent_complete) {
+        brls::Logger::debug("Downloading... {}%", percent_complete);
+        prev_percent_complete = percent_complete;
+    }
 
     // if you don't return 0, the transfer will be aborted
     return 0; 
