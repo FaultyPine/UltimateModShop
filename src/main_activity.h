@@ -6,5 +6,6 @@ class MainActivity : public brls::Activity {
     public:
     MainActivity();
     void onContentAvailable() override;
-    CONTENT_FROM_XML_RES("main.xml");
+    brls::View* createContentView() override { return v; }
+    brls::View* v;
 };

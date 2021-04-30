@@ -21,11 +21,8 @@ class TopBar : public brls::Box
     void tabNavigateLeft(brls::View* view);
     void tabNavigateRight(brls::View* view);
 
-    private:
-
     int currently_selected_menu_idx = 0;
 
     /// initialized in constructor
-    std::vector<BarItem*> Menus; 
-
+    std::vector<BarItem*> Menus;
 };

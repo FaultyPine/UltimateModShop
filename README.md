@@ -16,11 +16,9 @@ And there are some additional compilation instructions at the [borealis wiki](ht
 
 - Splash screen while loading initial menu -- implemented, but thread stuff creates a lotta UB with brls right now, so this is on hold until Tasks are implemented natively.
 
-- genuinely make a tab system. Solve problem of hiding/showing tabs pushing other windows to the side since they never really go away
-
-- framework for fs stuff... pc & switch.
-    - detect/install skyline (initial modding setup) -- need to get unzipping working first
-    - make clicking on submissions install the mod. Don't worry about making nice ui for it,
-        it's fine its just a fully blocking operation for now
-    - start framework for installed mods
-    - 
+- Reimplement LayerView -- done
+- Unzipping that supports all types of compression that gb supports
+- Installed mods menu
+    - show all installed mods from json, and add to it when downloading new ones -- like a quarter of the way done
+    - Uninstall mods
+    - enable/disable mods

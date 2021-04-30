@@ -51,3 +51,4 @@
 #include <borealis/views/scrolling_frame.hpp>
 #include <borealis/views/sidebar.hpp>
 #include <borealis/views/tab_frame.hpp>
+#include <borealis/views/LayerView.h>

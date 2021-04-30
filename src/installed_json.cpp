@@ -1,20 +1,18 @@
 #include "installed_json.h"
 
 
-InstalledJson::InstalledJson(json j) {
+InstalledJson::InstalledJson(json default_json) {
     if (!std::filesystem::exists(UMS_INSTALLED_JSON_PATH)) {
         std::fstream file;
         file.open(UMS_INSTALLED_JSON_PATH, std::ios::out);
-        file << j;
+        file << default_json;
         file.close();
-    }
-    
-    if (j.empty() && std::filesystem::exists(UMS_INSTALLED_JSON_PATH)) {
-        this->OverwriteMemFromFile();
+        this->installed_json = default_json;
     }
     else {
-        this->installed_json = j;
+        this->OverwriteMemFromFile();
     }
+    
 }
 
 void InstalledJson::OverwriteFileFromMem() {
@@ -32,27 +30,23 @@ void InstalledJson::OverwriteFileFromMem() {
 void InstalledJson::AppendToFile(json j) {
     std::fstream file;
     file.open(UMS_INSTALLED_JSON_PATH, std::ios::out | std::ios::app);
-    if (file.is_open()) {
+    if (file.is_open())
         file << j;
-    }
-    else {
+    else
         brls::Logger::error("Failed to open file");
-    }
     file.close();
 }
 
-
 json InstalledJson::GetFileJson() {
     std::fstream file;
-    std::string line;
-    std::stringstream file_json;
+    json j;
     file.open(UMS_INSTALLED_JSON_PATH, std::ios::in);
-
-    while (std::getline(file, line)) {
-        file_json << line;
-    }
+    if (file.is_open())
+        file >> j;
+    else
+        brls::Logger::error("Failed to open file");
     file.close();
-    return json(file_json.str());
+    return j;
 }
 
 void InstalledJson::OverwriteMemFromFile() {

@@ -6,9 +6,6 @@
 
 void MainActivity::onContentAvailable() {
     TopBar* top_bar = (TopBar*)this->getView("top_bar");
-    MainWindow* main_window = (MainWindow*)this->getView("main_window");
-    main_window->setCurrentWindow(top_bar->getCurrentMenu()->getTabView());
-
     this->registerAction(
         "Tab Right", brls::ControllerButton::BUTTON_RB, [this, top_bar](brls::View* view) {
             top_bar->tabNavigateRight(view);
@@ -21,9 +18,13 @@ void MainActivity::onContentAvailable() {
             return true;
         },
         false, brls::Sound::SOUND_CLICK_SIDEBAR);
-
 }
 
+brls::Box* main_box = nullptr;
+
 MainActivity::MainActivity() {
-    
+    this->v = brls::View::createFromXMLResource("main.xml");
+    main_box = (brls::Box*)this->v;
+    ((brls::Box*)this->v)->addView(TopBar::create());
+    ((brls::Box*)this->v)->addView(MainWindow::create());
 }

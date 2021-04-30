@@ -43,10 +43,6 @@ int main(int argc, char* argv[])
     // Have the application register an action on every activity that will quit when you press BUTTON_START
     brls::Application::setGlobalQuit(true);
 
-    // Register custom views
-    brls::Application::registerXMLView("TopBar", TopBar::create);
-    brls::Application::registerXMLView("MainWindow", MainWindow::create);
-
     setup();
 
     // OpenGL is a single-threaded state machine, b/c of this, brls is absolutely not thread-safe at the moment and stuff like this makes a lotta undefined behavior.

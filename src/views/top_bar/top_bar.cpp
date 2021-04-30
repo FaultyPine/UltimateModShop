@@ -33,7 +33,7 @@ void TopBar::tabNavigateLeft(brls::View* view) {
     this->currently_selected_menu_idx = this->currently_selected_menu_idx-1 < 0 ? this->Menus.size()-1 : this->currently_selected_menu_idx-1;
     setSelected(this->Menus.at(this->currently_selected_menu_idx));
     MainWindow* mainwindow = (MainWindow*)view->getView("main_window");
-    mainwindow->setCurrentWindow(this->Menus.at(this->currently_selected_menu_idx)->getTabView());
+    mainwindow->setLayer(this->currently_selected_menu_idx);
 }
 
 /// 'view' must have "main_window" as a child. (called from MainActivity)
@@ -42,7 +42,7 @@ void TopBar::tabNavigateRight(brls::View* view) {
     this->currently_selected_menu_idx = (this->currently_selected_menu_idx+1) % this->Menus.size();
     setSelected(this->Menus.at(this->currently_selected_menu_idx));
     MainWindow* mainwindow = (MainWindow*)view->getView("main_window");
-    mainwindow->setCurrentWindow(this->Menus.at(this->currently_selected_menu_idx)->getTabView());
+    mainwindow->setLayer(this->currently_selected_menu_idx);
 }
 
 BarItem* TopBar::getCurrentMenu() {

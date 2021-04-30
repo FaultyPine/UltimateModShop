@@ -42,14 +42,15 @@ void SubmissionNode::downloadSubmission() {
     if (this->submission != nullptr && !this->submission->submission_data.empty()) {
         brls::Logger::debug("Downloading submission...");
         json sd = this->submission->submission_data;
-        for (json file : sd[gb::Fields::Files]) { // iterate through each uploaded file in the submission
+        for (json file : sd[gb::Fields::Files]) { // iterate through each uploaded file in the submission... will probably end up prompting the user somehow or having them select which files in the submission they want
             brls::Logger::debug("Downloading file. Size = {} bytes", file["_nFilesize"].get<unsigned long>());
             std::string url = file["_sDownloadUrl"].get<std::string>();
-            std::string path = s(SD_ROOT) + file["_sFile"].get<std::string>();
+            std::string path = stdstr(SD_ROOT) + file["_sFile"].get<std::string>();
             //curl::DownloadFile(url, path);
         }
         brls::Logger::debug("Successfully downloaded {}", sd[gb::Fields::Title].get<std::string>());
         installed_mods->GetMemJsonPtr()->at("Installed") += sd;
+        installed_mods->OverwriteFileFromMem();
     }
     else {
         brls::Logger::debug("Attempted to download submission with invalid data... ignoring...");

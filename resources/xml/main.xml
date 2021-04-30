@@ -10,8 +10,13 @@
     alignItems="center"
 >
 
+    <!-- 
+        
     <TopBar />
 
     <MainWindow />
+
+    -->
+
 
 </brls:Box>

@@ -7,7 +7,7 @@ class InstalledJson {
 
     public:
     /// Init json for installed mods
-    InstalledJson(json j);
+    InstalledJson(json default_json);
 
     /// overwrites file and puts all data from installed_json in 
     void OverwriteFileFromMem();

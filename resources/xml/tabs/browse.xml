@@ -6,9 +6,7 @@
     direction="leftToRight"
     justifyContent="center"
     borderThickness="3"
-    borderColor="#000000"
-    marginTop="5"
-    marginBottom="5"
+    borderColor="#FBFF0F"
 >
 
 
