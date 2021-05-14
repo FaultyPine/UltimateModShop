@@ -9,6 +9,7 @@ class Browse : public brls::Box
 {
     public:
     Browse();
+    ~Browse();
     
     static brls::Box* create();
 

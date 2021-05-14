@@ -48,6 +48,7 @@ size_t writeCallback(char* to_write, size_t size, size_t byte_count, void* user_
     responseString[byte_count] = '\0';
 
     *(std::stringstream*)user_data << responseString;
+    delete responseString;
     return size * byte_count;
 }
 

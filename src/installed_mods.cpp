@@ -1,5 +1,11 @@
 #include "installed_mods.h"
 
+InstalledMods::~InstalledMods() {
+    for (InstalledMod* m : this->mods) {
+        if (m)
+            delete m;
+    }
+}
 
 InstalledMods::InstalledMods(json default_json) {
     if (!std::filesystem::exists(UMS_INSTALLED_JSON_PATH)) {
@@ -65,9 +71,22 @@ json* InstalledMods::GetMemJsonPtr() {
     return &(this->installed_json);
 }
 
-void InstalledMods::resetFile() { // ?
+void InstalledMods::resetFile() {
     if (std::filesystem::exists(UMS_INSTALLED_JSON_PATH))
         std::filesystem::remove(UMS_INSTALLED_JSON_PATH);
     delete installed_mods;
     installed_mods = new InstalledMods();
+}
+
+
+void InstalledMods::addInstalledMod(InstalledMod* m) {
+    this->mods.push_back(m);
+}
+
+InstalledMod* InstalledMods::getInstalledMod(int idx) {
+    return this->mods.at(idx);
+}
+
+size_t InstalledMods::getInstalledModsSize() {
+    return this->mods.size();
 }

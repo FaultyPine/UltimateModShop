@@ -1,11 +1,5 @@
 #include "installed.h"
 
-bool onInstalledItemClicked(brls::View* view) {
-    brls::Logger::debug("{} clicked!", view->describe());
-
-
-    return false;
-}
 
 Installed::Installed() {
     this->inflateFromXMLRes("xml/tabs/installed.xml");
@@ -31,7 +25,6 @@ Installed::Installed() {
         brls::Logger::debug("didn't contain installed");
     }
 
-    BRLS_REGISTER_CLICK_BY_ID("installed_item", onInstalledItemClicked);
     brls::Logger::debug("Sucessfully read installed mods");
 }
 
@@ -64,12 +57,26 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     brls::Image* installed_item_toggle = (brls::Image*)installed_item->getView("installed_item_toggle");
     if (mod->enabled)
         installed_item_toggle->setImageFromRes("icon/toggle_on.png");
+    
+    // add to installed_mods / register click action
+    std::string id = "installed_item" + std::to_string(installed_mods->getInstalledModsSize());
+    installed_item->setId(id);
+    installed_mods->addInstalledMod(mod);
 
     ((brls::Box*)(this->getView("installed_box")))->addView(installed_item);
 
+    BRLS_REGISTER_CLICK_BY_ID(id, this->onInstalledItemClicked);
 }
 
 
 brls::Box* Installed::create() {
     return new Installed();
+}
+
+
+bool Installed::onInstalledItemClicked(brls::View* view) {
+    brls::Logger::debug("{} clicked!", view->describe());
+
+
+    return false;
 }

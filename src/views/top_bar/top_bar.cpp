@@ -23,8 +23,10 @@ TopBar::TopBar() {
 }
 
 TopBar::~TopBar() {
-    for (BarItem* x : Menus)
-        delete x;
+    for (BarItem* x : Menus) {
+        if (x)
+            delete x;
+    }
 }
 
 /// 'view' must have "main_window" as a child. (called from MainActivity)

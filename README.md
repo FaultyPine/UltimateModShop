@@ -15,3 +15,8 @@ And there are some additional compilation instructions at the [borealis wiki](ht
 # TODO
 
 https://trello.com/b/8c35iBqC
+
+
+
+-----
+As a side note, I know I should be using smart/shared pointers instead of tossing raw ones around. I'm purposely not switching to using those as a personal learning experience.

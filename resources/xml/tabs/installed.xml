@@ -8,8 +8,6 @@
         id="installed_scrolling_frame"
         width="100%"
         height="100%"
-        borderThickness="3"
-        borderColor="#00FFF3"
     >
     
     
@@ -21,7 +19,7 @@
             justifyContent="center"
             alignItems="center"
             paddingLeft="35"
-            paddingTop="100"
+            paddingTop="110"
         />
 
     </brls:ScrollingFrame>

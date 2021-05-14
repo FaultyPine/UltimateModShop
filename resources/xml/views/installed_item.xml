@@ -2,7 +2,7 @@
     id="installed_item"
     axis="row"
     width="1200"
-    height="130"
+    height="110"
     marginTop="8px"
     marginBottom="8px"
     justifyContent="spaceBetween"

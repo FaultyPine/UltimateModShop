@@ -61,7 +61,6 @@ int main(int argc, char* argv[])
     while (brls::Application::mainLoop()) {
 
     }
-
     delete installed_mods;
 
 // exit for pc/switch

@@ -29,6 +29,13 @@ Browse::Browse() {
     Browse::initBrowseMenu(this);
 }
 
+Browse::~Browse() {
+    for (gb::GbSubmission* sub : this->new_submissions) {
+        if (sub)
+            delete sub;
+    }
+}
+
 void Browse::getNewGbSubmissions(int page) {
     gb::GbSubmissions subs = gb::GetNewSubmissions(page);
     if (subs.empty()) {
