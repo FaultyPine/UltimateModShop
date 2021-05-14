@@ -61,8 +61,6 @@ void LayerView::changeLayer(int index, bool focus)
                 brls::Application::giveFocus(this->layers[this->selectedIndex]->getDefaultFocus());
             brls::Application::unblockInputs();
         });
-                    brls::Application::giveFocus(this->layers[this->selectedIndex]->getDefaultFocus());
-
 
         this->layers[index]->invalidate();
     }

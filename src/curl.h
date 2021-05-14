@@ -6,13 +6,6 @@
 
 using json = nlohmann::json;
 
-struct MemoryStruct
-{
-  char *memory;
-  size_t size;
-
-  ~MemoryStruct();
-};
 
 namespace curl {
 

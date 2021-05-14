@@ -7,8 +7,9 @@
 struct InstalledMod {
   std::string name;
   std::string author;
+  std::string ver;
   bool enabled;
-  MemoryStruct img;
+  std::string thumbnail_url;
   std::vector<std::string> paths;
 };
 
@@ -17,10 +18,8 @@ class Installed : public brls::Box
   public:
     Installed();
     static brls::Box* create();
-
-    void show(std::function<void(void)> cb) override;
+    void addInstalledItem(InstalledMod* mod);
 
     private:
-    void LoadInstalledFromMem();
 
 };

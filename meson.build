@@ -22,12 +22,14 @@ thread_dep = dependency('threads')
 c = run_command('grabber.sh')
 sources = c.stdout().strip().split('\n')
 
+zlib = dependency('zlib')
+
 UltimateModShop = executable(
     'UltimateModShop',
     [ sources, borealis_files ],
-    dependencies : [borealis_dependencies, thread_dep],
+    dependencies : [borealis_dependencies, thread_dep, zlib],
     install: true,
     include_directories: [ borealis_include, include_directories('src')],
     cpp_args: ['-g', '-O3', '-DBRLS_RESOURCES="./resources/"', '-w' ] + borealis_cpp_args,
-    link_args: [ '-lcurl', ]# '-lelzip', '-lminizip', ]
+    link_args: ['-lcurl', ]
 )

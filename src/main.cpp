@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    brls::Application::createWindow(std::string("UltimateModShop \tVer. ") + APP_VERSION);
+    brls::Application::createWindow(std::string("UltimateModShop \t\tVer. ") + APP_VERSION);
 
     // Have the application register an action on every activity that will quit when you press BUTTON_START
     brls::Application::setGlobalQuit(true);

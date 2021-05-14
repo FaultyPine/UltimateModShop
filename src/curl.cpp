@@ -5,6 +5,10 @@ using json = nlohmann::json;
 MemoryStruct::~MemoryStruct() {
     free(this->memory);
 }
+MemoryStruct::MemoryStruct() {
+    this->memory = nullptr;
+    this->size = 0;
+}
 
 // Credit this curl stuff to Blujay. Thanks dude
 struct  CURL_builder {
@@ -35,11 +39,7 @@ struct  CURL_builder {
     CURLcode Perform() { return curl_easy_perform(request); }
 };
 
-// note to self - fix json files sometimes having "0" at the end.
-//      fixed -> https://stackoverflow.com/questions/43904670/why-is-libcurl-returning-a-0-after-the-json-response-string
 
-// https://curl.se/libcurl/c/CURLOPT_WRITEFUNCTION.html
-//    size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);                      
 size_t writeCallback(char* to_write, size_t size, size_t byte_count, void* user_data) {
 
     // handle null termination

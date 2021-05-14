@@ -3,12 +3,10 @@
 #include "ums_utils.h"
 using json = nlohmann::json;
 
-class InstalledJson {
+
+class InstalledMods {
 
     public:
-    /// Init json for installed mods
-    InstalledJson(json default_json);
-
     /// overwrites file and puts all data from installed_json in 
     void OverwriteFileFromMem();
 
@@ -18,7 +16,7 @@ class InstalledJson {
     /// Overwrites in-memory json with data from file
     void OverwriteMemFromFile();
 
-    // appends json data to in-memory json data
+    /// appends json data to in-memory json data
     void AppendToMem(json j);
 
     /// returns json obj of data from file
@@ -29,6 +27,10 @@ class InstalledJson {
 
     /// returns a pointer to this json obj for direct manipulation
     json* GetMemJsonPtr();
+
+    void resetFile();
+    /// Init json for installed mods
+    InstalledMods(json default_json = json(  { { "Installed", {} } }   ));
 
 
     private:

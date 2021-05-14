@@ -18,6 +18,15 @@ void MainActivity::onContentAvailable() {
             return true;
         },
         false, brls::Sound::SOUND_CLICK_SIDEBAR);
+
+
+    this->registerAction(
+        "ResetJson", brls::ControllerButton::BUTTON_X, [installed_mods] (brls::View* v) {
+            installed_mods->resetFile();
+            brls::Application::quit();
+            return true;
+        }, false, brls::Sound::SOUND_CLICK
+    );
 }
 
 brls::Box* main_box = nullptr;
@@ -27,4 +36,5 @@ MainActivity::MainActivity() {
     main_box = (brls::Box*)this->v;
     ((brls::Box*)this->v)->addView(TopBar::create());
     ((brls::Box*)this->v)->addView(MainWindow::create());
+    //((brls::Box*)this->v)->addView(brls::View::createFromXMLResource("test.xml"));
 }

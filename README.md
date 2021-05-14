@@ -14,11 +14,4 @@ And there are some additional compilation instructions at the [borealis wiki](ht
 
 # TODO
 
-- Splash screen while loading initial menu -- implemented, but thread stuff creates a lotta UB with brls right now, so this is on hold until Tasks are implemented natively.
-
-- Reimplement LayerView -- done
-- Implement unzipping with some sorta library that supports all types of compression that gb supports
-- Installed mods menu
-    - show all installed mods from json, and add to it when downloading new ones -- like a quarter of the way done
-    - Uninstall mods
-    - enable/disable mods
+https://trello.com/b/8c35iBqC

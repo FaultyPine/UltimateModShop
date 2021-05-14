@@ -17,9 +17,19 @@
 #include <math.h>
 #include <thread>
 #include <chrono>
-//#include <elzip/elzip.hpp>
+#include <unordered_map>
+#include "zip/ZipUtil.hpp"
+
+struct MemoryStruct
+{
+  char *memory;
+  size_t size;
+  MemoryStruct();
+  ~MemoryStruct();
+};
+
 #include "curl.h"
-#include "installed_json.h"
+#include "installed_mods.h"
 
 #define stdstr(x) std::string(x)
 
@@ -33,9 +43,9 @@
 using json = nlohmann::json;
 
 
-// frwd declare and extern our InstalledJson object - since this is going to be used all over the project in many different senarios
-class InstalledJson;
-extern InstalledJson* installed_mods;
+// frwd declare and extern our InstalledMods object - since this is going to be used all over the project in many different senarios
+class InstalledMods;
+extern InstalledMods* installed_mods;
 
 // The main parent of all views. Used for inter-view communication when they don't have parents set up, like in ctors (kinda icky, but is the only way I could think of)
 extern brls::Box* main_box;
@@ -43,7 +53,7 @@ extern brls::Box* main_box;
 #define START_BREAKABLE do {
 #define END_BREAKABLE   } while (false);
 
-#define NO_GB_REQUESTS true
+#define REDUCED_NET_REQUESTS false
 
 #define APP_VERSION "0.0.0"
 
@@ -65,3 +75,7 @@ void stub();
 std::string replaceAll(std::string str, const std::string &from, const std::string &to);
 
 std::string EpochToHumanReadable(long long since_epoch);
+
+bool str_contains(std::string str, std::string substr);
+
+std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::filesystem::path> paths = {});

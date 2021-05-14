@@ -106,6 +106,8 @@ float ScrollingFrame::getScrollingAreaHeight()
 
 void ScrollingFrame::willAppear(bool resetState)
 {
+    Box::willAppear(resetState);
+
     this->prebakeScrolling();
 
     // First scroll all the way to the top
@@ -113,11 +115,25 @@ void ScrollingFrame::willAppear(bool resetState)
     // to the selected view if needed (only known then)
     if (resetState)
     {
-        this->startScrolling(false, 0.0f);
+        //this->startScrolling(false, 0.0f);
+        this->updateScrolling(false);
         this->updateScrollingOnNextFrame = true; // focus may have changed since
     }
 
-    Box::willAppear(resetState);
+}
+
+void ScrollingFrame::willDisappear(bool resetState) {
+    if (this->childFocused) {
+        this->prevChildFocused = this->childFocused;
+        this->childFocused = nullptr;
+    }
+}
+
+View* ScrollingFrame::getDefaultFocus() {
+    if (this->prevChildFocused)
+        return this->prevChildFocused;
+    else
+        return Box::getDefaultFocus();
 }
 
 void ScrollingFrame::prebakeScrolling()
@@ -180,7 +196,7 @@ void ScrollingFrame::scrollAnimationTick()
 
 void ScrollingFrame::onChildFocusGained(View* directChild, View* focusedView)
 {
-    this->childFocused = true;
+    this->childFocused = focusedView;
 
     // Start scrolling
     this->updateScrolling(true);
@@ -190,12 +206,12 @@ void ScrollingFrame::onChildFocusGained(View* directChild, View* focusedView)
 
 void ScrollingFrame::onChildFocusLost(View* directChild, View* focusedView)
 {
-    this->childFocused = false;
+    this->childFocused = nullptr;
 }
 
 bool ScrollingFrame::updateScrolling(bool animated)
 {
-    if (!this->contentView || !this->childFocused)
+    if (!this->contentView || this->childFocused == nullptr)
         return false;
 
     float contentHeight = this->getContentHeight();

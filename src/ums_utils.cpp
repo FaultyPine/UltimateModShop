@@ -1,6 +1,6 @@
 #include "ums_utils.h"
 
-InstalledJson* installed_mods;
+InstalledMods* installed_mods;
 
 void stub() { }
 
@@ -23,6 +23,22 @@ std::string EpochToHumanReadable(long long since_epoch) {
     ts = *localtime(&rawtime);
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
     return std::string(buf);
+}
+
+bool str_contains(std::string str, std::string substr) {
+    str.find(substr) != std::string::npos;
+}
+
+std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::filesystem::path> paths) {
+    if (j.is_object()) {
+        for (auto& [key, value] : j.items()) {
+            paths.push_back(key);
+            jsonFileTreeToPaths(value, paths);
+        }
+    }
+    else if (j.is_array()) {
+        
+    }
 }
 
 // init for switch/pc
@@ -54,5 +70,5 @@ void setup() {
         //std::filesystem::remove(std::string(SMASH_PATH) + skyline_zip_name);
     }
 
-    installed_mods = new InstalledJson( json(  { { "Installed", {} } }   ) );
+    installed_mods = new InstalledMods();
 }

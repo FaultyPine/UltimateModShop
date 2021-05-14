@@ -90,7 +90,7 @@ class Box : public View
     virtual void addView(View* view, size_t position);
 
     /**
-     * Removes the given view from the Box. It will be freed.
+     * Removes the given view from the Box. It will be freed by default.
      */
     virtual void removeView(View* view, bool free = true);
 

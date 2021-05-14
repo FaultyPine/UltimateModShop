@@ -65,12 +65,12 @@ CFLAGS	:=	-g -Wall -O3 -ffunction-sections \
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 
-CXXFLAGS	:= $(CFLAGS) -std=c++1z -O2 -Wno-volatile -w
+CXXFLAGS	:= $(CFLAGS) -std=gnu++1z -O2 -Wno-volatile -w
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx `curl-config --libs` -lpthread #-lelzip -lminizip
+LIBS	:= -lnx `curl-config --libs` -lpthread
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

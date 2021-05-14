@@ -60,7 +60,7 @@ void gb::GetSubmissionData(gb::GbSubmission* partial_submission, std::vector<gb:
 }
 
 
-void gb::GetSubmissionDataMulticall(gb::GbSubmissions* partial_submissions, std::vector<gb::GbField> fields) {
+void gb::GetSubmissionDataMulticall(gb::GbSubmissions* partial_submissions, const std::vector<gb::GbField>& fields) {
     if (partial_submissions->empty() || fields.empty()) {
         brls::Application::crash("Invalid args to get submissions data!");
         return;

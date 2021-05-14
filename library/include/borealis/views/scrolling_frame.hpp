@@ -45,6 +45,8 @@ class ScrollingFrame : public Box
     void onChildFocusGained(View* directChild, View* focusedView) override;
     void onChildFocusLost(View* directChild, View* focusedView) override;
     void willAppear(bool resetState) override;
+    void willDisappear(bool resetState) override;
+    View* getDefaultFocus() override;
     void addView(View* view) override;
     void removeView(View* view, bool free = true) override;
     void onLayout() override;
@@ -69,10 +71,11 @@ class ScrollingFrame : public Box
     static View* create();
 
   private:
-    View* contentView = nullptr;
+    View* contentView      = nullptr;
+    View* childFocused     = nullptr;
+    View* prevChildFocused = nullptr;
 
     bool updateScrollingOnNextFrame = false;
-    bool childFocused               = false;
 
     float middleY = 0; // y + height/2
     float bottomY = 0; // y + height

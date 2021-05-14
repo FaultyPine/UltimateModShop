@@ -24,6 +24,7 @@ namespace gb {
         "Skin",
         "Sound",
         "Texture",
+        "Mod",
     };
 
     struct GbSubmission {
@@ -41,6 +42,7 @@ namespace gb {
         static GbField Author = "Owner().name";
         static GbField Thumbnail = "Preview().sSubFeedImageUrl()";
         static GbField UploadDate = "date";
+        static GbField NumUpdates = "Updates().nGetUpdatesCount()";
     }
 
     /// Returns a vector of GbSubmission pointers of the newest submissions of the specified gameid.
@@ -52,7 +54,7 @@ namespace gb {
     void GetSubmissionData(gb::GbSubmission* partial_submission, std::vector<gb::GbField> fields = {});
 
     /// Uses multicalls to get submission data on a vector of itemid/itemtypes. Reduces api requests this way
-    void GetSubmissionDataMulticall(gb::GbSubmissions* partial_submissions, std::vector<gb::GbField> fields);
+    void GetSubmissionDataMulticall(gb::GbSubmissions* partial_submissions, const std::vector<gb::GbField>& fields);
     
     /// Takes list of GbField's and turns it into a single string to be passed into the gb api
     std::string ConcatFields(std::vector<GbField> fields);

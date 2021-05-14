@@ -24,7 +24,7 @@ static_assert( (NUM_SUBMISSIONS_ROW * NUM_SUBMISSIONS_COLUMN) == ( sqrt(NUM_SUBM
 
 Browse::Browse() {
     this->inflateFromXMLRes("xml/tabs/browse.xml");
-    if (!NO_GB_REQUESTS)
+    if (!REDUCED_NET_REQUESTS)
         this->getNewGbSubmissions(1);
     Browse::initBrowseMenu(this);
 }
@@ -52,7 +52,7 @@ void Browse::getNewGbSubmissions(int page) {
 // TODO: seperate this func into two - one that handles making the horzHolders and setting navigation, and another that handles setting img/labels from gb
 void Browse::initBrowseMenu(Browse* browse) {
 
-    gb::GetSubmissionDataMulticall(&(browse->new_submissions), {gb::Fields::Files, gb::Fields::Thumbnail, gb::Fields::Title, gb::Fields::Author});
+    gb::GetSubmissionDataMulticall(&(browse->new_submissions), {gb::Fields::Files, gb::Fields::Thumbnail, gb::Fields::Title, gb::Fields::Author, gb::Fields::NumUpdates});
 
     int submission_index = 0;
     constexpr int total_num_submissions = NUM_SUBMISSIONS_COLUMN * NUM_SUBMISSIONS_ROW;
