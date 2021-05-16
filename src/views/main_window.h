@@ -15,6 +15,7 @@ class MainWindow : public brls::Box
     void setLayer(int idx);
     void addLayerView(brls::View* v);
     
-    private:
     brls::LayerView* layer_view;
+
+    private:
 };

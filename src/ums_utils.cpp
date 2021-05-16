@@ -41,6 +41,24 @@ std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::
     }
 }
 
+void setHintText(std::string text) {
+    brls::Box* hint_box = (brls::Box*)main_box->getView("hint_box");
+    if (text.empty())
+        hint_box->setVisibility(brls::Visibility::GONE);
+    else
+        hint_box->setVisibility(brls::Visibility::VISIBLE);
+    ((brls::Label*)hint_box->getView("hint_text"))->setText(text);
+}
+
+void setMotdText(std::string text) {
+    brls::Box* motd_box = (brls::Box*)main_box->getView("motd_box");
+    if (text.empty())
+        motd_box->setVisibility(brls::Visibility::GONE);
+    else
+        motd_box->setVisibility(brls::Visibility::VISIBLE);
+    ((brls::Label*)motd_box->getView("motd_text"))->setText(text);
+}
+
 // init for switch/pc
 void setup() {
     /**

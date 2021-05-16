@@ -27,6 +27,10 @@ void MainActivity::onContentAvailable() {
             return true;
         }, false, brls::Sound::SOUND_CLICK
     );
+    if (!REDUCED_NET_REQUESTS) {
+        json quote_of_the_day = curl::DownloadJson("http://quotes.rest/qod.json");
+        setMotdText(quote_of_the_day["contents"]["quotes"][0]["quote"].get<std::string>());
+    }
 }
 
 brls::Box* main_box = nullptr;

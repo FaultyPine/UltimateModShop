@@ -16,7 +16,7 @@ MainWindow::MainWindow() {
             this->addLayerView(b->getTabView());
         }
     }
-    this->addView(this->layer_view);
+    ((brls::Box*)this->getView("main_window_box"))->addView(this->layer_view);
 }
 
 void MainWindow::setLayer(int idx) {

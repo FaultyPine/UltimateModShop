@@ -1,4 +1,5 @@
 #include "submission_node.h"
+#include "../main_window.h"
 #include "installed.h"
 
 SubmissionNode::SubmissionNode(gb::GbSubmission* _submission) {
@@ -53,12 +54,12 @@ void SubmissionNode::downloadSubmission() {
         installed_mods->GetMemJsonPtr()->at("Installed") += sd;
         installed_mods->OverwriteFileFromMem();
 
-        /*
         InstalledMod* m = new InstalledMod({
             sd[gb::Fields::Title].get<std::string>(), sd[gb::Fields::Author].get<std::string>(), "0.0.0", true, sd[gb::Fields::Thumbnail].get<std::string>(), {} // <- paths... not filled in yet
         });
-        */
-        //((Installed*)main_box->getView("installed_box"))->addInstalledItem(m);
+        
+        Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->layer_view->getLayer("installed_box");
+        installed->addInstalledItem(m);
 
         brls::Logger::debug("Successfully downloaded {}\n--------", sd[gb::Fields::Title].get<std::string>());
     }

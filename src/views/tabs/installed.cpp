@@ -77,6 +77,15 @@ brls::Box* Installed::create() {
 bool Installed::onInstalledItemClicked(brls::View* view) {
     brls::Logger::debug("{} clicked!", view->describe());
 
-
     return false;
+}
+
+void Installed::willAppear(bool resetState) {
+    setHintText("A -> Toggle | X -> Uninstall");
+    Box::willAppear(resetState);
+}
+
+void Installed::willDisappear(bool resetState) {
+    setHintText();
+    Box::willDisappear(resetState);
 }

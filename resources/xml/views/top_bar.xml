@@ -6,6 +6,7 @@
     id="top_bar"
     width="70%"
     height="10%"
+    marginLeft="300"
     axis="row"
     direction="leftToRight"
     justifyContent="spaceBetween"

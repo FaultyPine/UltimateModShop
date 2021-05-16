@@ -79,3 +79,7 @@ std::string EpochToHumanReadable(long long since_epoch);
 bool str_contains(std::string str, std::string substr);
 
 std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::filesystem::path> paths = {});
+
+void setHintText(std::string text = "");
+
+void setMotdText(std::string text = "");

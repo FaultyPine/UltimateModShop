@@ -10,6 +10,8 @@ class Installed : public brls::Box
     Installed();
     static brls::Box* create();
     void addInstalledItem(InstalledMod* mod);
+    void willAppear(bool resetState) override;
+    void willDisappear(bool resetState) override;
 
     private:
     bool onInstalledItemClicked(brls::View* view);

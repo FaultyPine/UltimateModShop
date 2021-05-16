@@ -5,5 +5,34 @@
     justifyContent="center"
 >
 
+    <brls:Box
+        id="main_window_box"
+        height="100%"
+        width="100%"
+    />
+
+    <brls:Box
+        id="hint_box"
+        positionType="absolute"
+        height="5%"
+        width="20%"
+        positionTop="3"
+        positionRight="10"
+        positionLeft="1000"
+        visibility="gone"
+        borderThickness="1"
+        borderColor="#000000"
+        backgroundColor="#CBCBCB"
+        justifyContent="center"
+    >
+
+        <brls:Label
+            id="hint_text"
+            fontSize="18"
+            autoAnimate="true"
+            textAlign="center"
+        />
+
+    </brls:Box>
 
 </brls:Box>

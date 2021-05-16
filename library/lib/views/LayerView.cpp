@@ -82,6 +82,14 @@ int LayerView::getLayerIndex()
     return this->selectedIndex;
 }
 
+brls::View* LayerView::getLayer(std::string id) {
+    for (auto& v : this->layers) {
+        brls::View* layer = v->getView(id);
+        if (layer != nullptr)
+            return layer;
+    }
+}
+
 brls::View* LayerView::getDefaultFocus()
 {
     if (isValidSelectedIdx())

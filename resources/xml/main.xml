@@ -10,6 +10,31 @@
     alignItems="center"
 >
 
+    <brls:Box
+        id="motd_box"
+        positionType="absolute"
+        height="8%"
+        width="23%"
+        positionTop="10"
+        positionRight="30"
+        positionLeft="25"
+        borderThickness="1"
+        borderColor="#000000"
+        backgroundColor="#CBCBCB"
+        justifyContent="center"
+    >
+
+        <brls:Label
+            id="motd_text"
+            text="UltimateModShop"
+            singleLine="true"
+            autoAnimate="true"
+            animated="true"
+            textAlign="center"
+        />
+
+    </brls:Box>
+
     <!-- 
         
     <TopBar />
