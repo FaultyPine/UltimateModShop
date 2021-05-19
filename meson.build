@@ -6,23 +6,11 @@ project('UltimateModShop', ['c', 'cpp'],
 subdir('library')
 
 thread_dep = dependency('threads')
+zlib = dependency('zlib')
 
-
-#src_files = files(
-#    'src/main.cpp',
-#    'src/utils.cpp',
-#    'src/curl.cpp',
-#    'src/main_activity.cpp',
-
-#    'src/components_tab.cpp',
-#    'src/submission_node.cpp',
-#)
-
-# not supposed to do this... but eh. Gotta reconfigure meson whenever you add a new file
+# a lil cursed lol... P.S. Gotta reconfigure meson whenever you add a new file (meson --reconfigure build)
 c = run_command('grabber.sh')
 sources = c.stdout().strip().split('\n')
-
-zlib = dependency('zlib')
 
 UltimateModShop = executable(
     'UltimateModShop',
@@ -31,5 +19,5 @@ UltimateModShop = executable(
     install: true,
     include_directories: [ borealis_include, include_directories('src')],
     cpp_args: ['-g', '-O3', '-DBRLS_RESOURCES="./resources/"', '-w' ] + borealis_cpp_args,
-    link_args: ['-lcurl', ]
+    link_args: ['-Llibrary/lib', '-lcurl', '-larchive']
 )

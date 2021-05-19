@@ -10,13 +10,18 @@ class Browse : public brls::Box
     public:
     Browse();
     ~Browse();
-    
-    static brls::Box* create();
 
-    static void initBrowseMenu(Browse* browse);
+    void onChildFocusGained(View* directChild, View* focusedView) override;
+    void onChildFocusLost(View* directChild, View* focusedView) override;
+
+    void initBrowseMenu();
+
+    static brls::Box* create();
 
     private:
     gb::GbSubmissions new_submissions;
 
     void getNewGbSubmissions(int page);
+
+    int prev_selected_submission_id = 0;
 };

@@ -8,6 +8,7 @@ struct InstalledMod {
   std::string author;
   std::string ver;
   bool enabled;
+  std::string itemid;
   std::string thumbnail_url;
   std::vector<std::string> paths;
 };

@@ -13,6 +13,7 @@ Installed::Installed() {
                     entry[gb::Fields::Author].get<std::string>(),
                     std::to_string(entry[gb::Fields::NumUpdates].get<int>()),
                     true,
+                    entry[gb::Fields::itemid].get<std::string>(),
                     entry[gb::Fields::Thumbnail].get<std::string>(),
                     {}
                 });

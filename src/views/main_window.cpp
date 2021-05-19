@@ -27,6 +27,9 @@ void MainWindow::addLayerView(brls::View* v) {
     this->layer_view->addLayer(v);
 }
 
+brls::LayerView* MainWindow::getLayerView() {
+    return this->layer_view;
+}
 
 brls::View* MainWindow::create() {
     return new MainWindow();

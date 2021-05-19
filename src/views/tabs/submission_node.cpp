@@ -43,22 +43,35 @@ void SubmissionNode::downloadSubmission() {
     if (this->submission != nullptr && !this->submission->submission_data.empty()) {
         brls::Logger::debug("--------\nDownloading submission...");
         json sd = this->submission->submission_data;
+        std::string root(SD_ROOT);
         for (json file : sd[gb::Fields::Files]) { // iterate through each uploaded file in the submission... will probably end up prompting the user somehow or having them select which files in the submission they want
             brls::Logger::debug("Downloading file. Size = {} bytes", file["_nFilesize"].get<unsigned long>());
             std::string url = file["_sDownloadUrl"].get<std::string>();
-            std::string path = stdstr(SD_ROOT) + file["_sFile"].get<std::string>();
+            std::string path = root + file["_sFile"].get<std::string>();
             if (!REDUCED_NET_REQUESTS) {
                 //curl::DownloadFile(url, path);
+                brls::Logger::debug("Archive type: {}", file["_aMetadata"]["_sMimeType"].get<std::string>());
+                if (file["_aMetadata"]["_sMimeType"].get<std::string>() == "application/zip") {
+                    //UnZip::ArchiveExtract(path, root);
+                }
             }
         }
+        
+        sd[gb::Fields::itemid] = submission->itemid;
         installed_mods->GetMemJsonPtr()->at("Installed") += sd;
         installed_mods->OverwriteFileFromMem();
 
         InstalledMod* m = new InstalledMod({
-            sd[gb::Fields::Title].get<std::string>(), sd[gb::Fields::Author].get<std::string>(), "0.0.0", true, sd[gb::Fields::Thumbnail].get<std::string>(), {} // <- paths... not filled in yet
+            sd[gb::Fields::Title].get<std::string>(), 
+            sd[gb::Fields::Author].get<std::string>(), 
+            std::to_string(sd[gb::Fields::NumUpdates].get<int>()), 
+            true, 
+            sd[gb::Fields::itemid].get<std::string>(), 
+            sd[gb::Fields::Thumbnail].get<std::string>(), 
+            {} // <- paths... not filled in yet
         });
         
-        Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->layer_view->getLayer("installed_box");
+        Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
         installed->addInstalledItem(m);
 
         brls::Logger::debug("Successfully downloaded {}\n--------", sd[gb::Fields::Title].get<std::string>());

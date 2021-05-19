@@ -16,17 +16,15 @@ const std::string horzHolder = R"xml(
 )xml";
 
 
-// if these are to be changed, you'll have to adjust the horzHolder stuff too like height i think
-// also these need to be numbers that multiply to a perfect square
-const int NUM_SUBMISSIONS_ROW = 3;
-const int NUM_SUBMISSIONS_COLUMN = 3;
-static_assert( (NUM_SUBMISSIONS_ROW * NUM_SUBMISSIONS_COLUMN) == ( sqrt(NUM_SUBMISSIONS_ROW * NUM_SUBMISSIONS_COLUMN) * sqrt(NUM_SUBMISSIONS_ROW * NUM_SUBMISSIONS_COLUMN) ), "Number of submission rows and columns must multiply to a perfect square!");
+const int NUM_SUBMISSIONS_ROOT = 3;
+const int NUM_SUBMISSIONS_PER_PAGE = NUM_SUBMISSIONS_ROOT * NUM_SUBMISSIONS_ROOT;
 
 Browse::Browse() {
+    brls::Logger::debug("Initializing browse menu...");
     this->inflateFromXMLRes("xml/tabs/browse.xml");
     if (!REDUCED_NET_REQUESTS)
         this->getNewGbSubmissions(1);
-    Browse::initBrowseMenu(this);
+    Browse::initBrowseMenu();
 }
 
 Browse::~Browse() {
@@ -42,7 +40,6 @@ void Browse::getNewGbSubmissions(int page) {
         brls::Logger::error("Found 0 new submissions... is something broken?");
     }
     this->new_submissions = subs;
-
 }
 
 
@@ -56,27 +53,34 @@ void Browse::getNewGbSubmissions(int page) {
  */
 
 
-// TODO: seperate this func into two - one that handles making the horzHolders and setting navigation, and another that handles setting img/labels from gb
-void Browse::initBrowseMenu(Browse* browse) {
+/**
+ * pseudo scratchpad
+ * 
+ * 
+ * 
+ * queue for GbSubmissions
+ * queue for pages (max amount of items in this queue at any time will be NUM_PRELOADED_PAGES)
+ *     ^ provide interface for adding/getting items that ensures it never goes above ^
+ * 
+ */
 
-    gb::GetSubmissionDataMulticall(&(browse->new_submissions), {gb::Fields::Files, gb::Fields::Thumbnail, gb::Fields::Title, gb::Fields::Author, gb::Fields::NumUpdates});
+// TODO: seperate this func into two - one that handles making the horzHolders and setting navigation, and another that handles setting img/labels from gb
+void Browse::initBrowseMenu() {
+
+    gb::GetSubmissionDataMulticall(&(this->new_submissions), {gb::Fields::Files, gb::Fields::Thumbnail, gb::Fields::Title, gb::Fields::Author, gb::Fields::NumUpdates});
 
     int submission_index = 0;
-    constexpr int total_num_submissions = NUM_SUBMISSIONS_COLUMN * NUM_SUBMISSIONS_ROW;
     
-    brls::Logger::debug("Populating Browse menu with new submissions...");
+    for (int i = 0; i < NUM_SUBMISSIONS_ROOT; i++) {
+        brls::Box* horzHolderBox = (brls::Box*)this->createFromXMLString(horzHolder);
+        ((brls::Box*)this->getView("browse_box"))->addView(horzHolderBox);
 
-    for (int i = 0; i < NUM_SUBMISSIONS_COLUMN; i++) {
-        brls::Box* horzHolderBox = (brls::Box*)browse->createFromXMLString(horzHolder);
-        browse->addView(horzHolderBox);
+        for (int i = 0; i < NUM_SUBMISSIONS_ROOT; i++) {
 
-        for (int i = 0; i < NUM_SUBMISSIONS_ROW; i++) {
-
-            gb::GbSubmissions new_subs = browse->new_submissions;
+            gb::GbSubmissions new_subs = this->new_submissions;
             SubmissionNode* submission_node;
             if (!new_subs.empty()) {
                 gb::GbSubmission* sub = new_subs.at(submission_index);
-                //gb::GetSubmissionData(sub, {gb::Fields::Files, gb::Fields::Thumbnail, gb::Fields::Title, gb::Fields::Author});
                 submission_node = new SubmissionNode(sub);
 
                 brls::Image* submission_image = (brls::Image*)submission_node->getView("submission_image");
@@ -105,10 +109,10 @@ void Browse::initBrowseMenu(Browse* browse) {
             submission_node->setId( std::to_string( submission_index ) );
 
             /*  ---- Scrolling where going up will loop back down and going to the side will loop to the other side -----
-            int scroll_down_idx = (submission_index+NUM_SUBMISSIONS_ROW) % total_num_submissions;
-            int scroll_up_idx = submission_index-NUM_SUBMISSIONS_ROW < 0 ? total_num_submissions-(sqrt(total_num_submissions))+submission_index : submission_index-NUM_SUBMISSIONS_ROW;
-            int scroll_right_idx = ((submission_index+1) % NUM_SUBMISSIONS_ROW) == 0 ? (submission_index-(NUM_SUBMISSIONS_ROW-1)) : submission_index+1;
-            int scroll_left_idx = (submission_index % NUM_SUBMISSIONS_ROW) == 0 ? (submission_index+(NUM_SUBMISSIONS_ROW-1)) : submission_index-1;
+            int scroll_down_idx = (submission_index+NUM_SUBMISSIONS_ROOT) % NUM_SUBMISSIONS_PER_PAGE;
+            int scroll_up_idx = submission_index-NUM_SUBMISSIONS_ROOT < 0 ? NUM_SUBMISSIONS_PER_PAGE-(sqrt(NUM_SUBMISSIONS_PER_PAGE))+submission_index : submission_index-NUM_SUBMISSIONS_ROOT;
+            int scroll_right_idx = ((submission_index+1) % NUM_SUBMISSIONS_ROOT) == 0 ? (submission_index-(NUM_SUBMISSIONS_ROOT-1)) : submission_index+1;
+            int scroll_left_idx = (submission_index % NUM_SUBMISSIONS_ROOT) == 0 ? (submission_index+(NUM_SUBMISSIONS_ROOT-1)) : submission_index-1;
 
             submission_node->setCustomNavigationRoute(brls::FocusDirection::DOWN, std::to_string( scroll_down_idx ));
             submission_node->setCustomNavigationRoute(brls::FocusDirection::UP, std::to_string( scroll_up_idx ));
@@ -116,16 +120,36 @@ void Browse::initBrowseMenu(Browse* browse) {
             submission_node->setCustomNavigationRoute(brls::FocusDirection::LEFT, std::to_string( scroll_left_idx ));
             */
 
-            // ---- Scrolling where scrolling all the way up/down/left/right doesn't loop back
-            int scroll_down_idx = submission_index+NUM_SUBMISSIONS_ROW <= total_num_submissions ? submission_index+NUM_SUBMISSIONS_ROW : submission_index;
-            int scroll_up_idx = submission_index-NUM_SUBMISSIONS_ROW < 0 ? total_num_submissions-(sqrt(total_num_submissions))+submission_index : submission_index-NUM_SUBMISSIONS_ROW;
+            int scroll_down_idx = (submission_index+NUM_SUBMISSIONS_ROOT) % NUM_SUBMISSIONS_PER_PAGE;
+            int scroll_up_idx = submission_index-NUM_SUBMISSIONS_ROOT < 0 ? NUM_SUBMISSIONS_PER_PAGE-(sqrt(NUM_SUBMISSIONS_PER_PAGE))+submission_index : submission_index-NUM_SUBMISSIONS_ROOT;
+            int scroll_right_idx = ((submission_index+1) % NUM_SUBMISSIONS_ROOT) == 0 ? (submission_index-(NUM_SUBMISSIONS_ROOT-1)) : submission_index+1;
+            int scroll_left_idx = (submission_index % NUM_SUBMISSIONS_ROOT) == 0 ? (submission_index+(NUM_SUBMISSIONS_ROOT-1)) : submission_index-1;
+
 
             submission_node->setCustomNavigationRoute(brls::FocusDirection::DOWN, std::to_string( scroll_down_idx ));
             submission_node->setCustomNavigationRoute(brls::FocusDirection::UP, std::to_string( scroll_up_idx ));
 
+            submission_node->setCustomNavigationRoute(brls::FocusDirection::RIGHT, std::to_string( scroll_right_idx ));
+            submission_node->setCustomNavigationRoute(brls::FocusDirection::LEFT, std::to_string( scroll_left_idx ));
 
             submission_index += 1;
             horzHolderBox->addView(submission_node);
         }
     }
+}
+
+void Browse::onChildFocusGained(View* directChild, View* focusedView) {
+    if ( ((this->prev_selected_submission_id + 1) - NUM_SUBMISSIONS_ROOT) == std::stoi(focusedView->getID()) ) {
+        // if we just scrolled right on the right-most submission
+
+    }
+    else if ( this->prev_selected_submission_id % NUM_SUBMISSIONS_ROOT == 0 && (std::stoi(focusedView->getID()) + 1) % NUM_SUBMISSIONS_ROOT == 0 ) {
+        // if we just scrolled left on the left-most submission
+        
+    }
+    Box::onChildFocusGained(directChild, focusedView);
+}
+void Browse::onChildFocusLost(View* directChild, View* focusedView) {
+    this->prev_selected_submission_id = std::stoi(focusedView->getID());
+    Box::onChildFocusLost(directChild, focusedView);
 }

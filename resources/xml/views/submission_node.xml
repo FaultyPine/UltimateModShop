@@ -3,12 +3,13 @@
     axis="column"
     width="300"
     height="170"
-    marginRight="60"
-    marginLeft="60"
+    marginRight="70"
+    marginLeft="20"
     justifyContent="center"
     alignItems="center"
     borderThickness="2"
     borderColor="#1CDB92"
+    cornerRadius="15"
     focusable="true"
     >
 

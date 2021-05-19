@@ -24,7 +24,7 @@ namespace gb {
         "Skin",
         "Sound",
         "Texture",
-        "Mod",
+        "Mod", // most everything is under Mod or Sound nowadays
     };
 
     struct GbSubmission {
@@ -43,6 +43,8 @@ namespace gb {
         static GbField Thumbnail = "Preview().sSubFeedImageUrl()";
         static GbField UploadDate = "date";
         static GbField NumUpdates = "Updates().nGetUpdatesCount()";
+        /// not a real gamebanana field... using it for convinience
+        static GbField itemid = "itemid";
     }
 
     /// Returns a vector of GbSubmission pointers of the newest submissions of the specified gameid.

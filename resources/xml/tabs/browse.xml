@@ -2,16 +2,34 @@
     id="browse"
     width="100%"
     height="100%"
-    axis="column"
+    axis="row"
     direction="leftToRight"
     justifyContent="center"
     borderThickness="3"
     borderColor="#FBFF0F"
 >
 
+    <brls:Image
+        image="@res/icon/play_l.png"
+        marginLeft="10"
+        width="5%"
+        height="100%"
+    />
+
+
+    <brls:Box
+        id="browse_box"
+        axis="column"
+    />
+
+
+    <brls:Image
+        image="@res/icon/play_r.png"
+        marginRight="10"
+        width="5%"
+        height="100%"
+    />
 
     <!-- SubmissionNode's added in here dynamically -->
-
- 
 
 </brls:Box>
