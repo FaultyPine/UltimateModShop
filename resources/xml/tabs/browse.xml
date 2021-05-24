@@ -10,10 +10,12 @@
 >
 
     <brls:Image
+        id="arrow_left"
         image="@res/icon/play_l.png"
         marginLeft="10"
         width="5%"
         height="100%"
+        focusable="true"
     />
 
 
@@ -24,10 +26,12 @@
 
 
     <brls:Image
+        id="arrow_right"
         image="@res/icon/play_r.png"
         marginRight="10"
         width="5%"
         height="100%"
+        focusable="true"
     />
 
     <!-- SubmissionNode's added in here dynamically -->

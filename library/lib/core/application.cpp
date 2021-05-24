@@ -686,7 +686,7 @@ void Application::crash(std::string text)
 void Application::blockInputs()
 {
     Application::blockInputsTokens += 1;
-    Logger::debug("Adding an inputs block token (tokens={})", Application::blockInputsTokens);
+    //Logger::debug("Adding an inputs block token (tokens={})", Application::blockInputsTokens);
 }
 
 void Application::unblockInputs()
@@ -694,7 +694,7 @@ void Application::unblockInputs()
     if (Application::blockInputsTokens > 0)
         Application::blockInputsTokens -= 1;
 
-    Logger::debug("Removing an inputs block token (tokens={})", Application::blockInputsTokens);
+    //Logger::debug("Removing an inputs block token (tokens={})", Application::blockInputsTokens);
 }
 
 NVGcontext* Application::getNVGContext()

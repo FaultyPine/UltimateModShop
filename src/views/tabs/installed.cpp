@@ -9,13 +9,13 @@ Installed::Installed() {
         for (json entry : mem_json_installed["Installed"]) {
             if (!entry.is_null()) {
                 InstalledMod* m = new InstalledMod({
-                    entry[gb::Fields::Title].get<std::string>(),
-                    entry[gb::Fields::Author].get<std::string>(),
-                    std::to_string(entry[gb::Fields::NumUpdates].get<int>()),
-                    true,
-                    entry[gb::Fields::itemid].get<std::string>(),
-                    entry[gb::Fields::Thumbnail].get<std::string>(),
-                    {}
+                    entry[gb::Fields::Name].get<std::string>(), 
+                    entry[gb::Fields::Submitter::Submitter][gb::Fields::Name].get<std::string>(), 
+                    "0.0.0", 
+                    true, 
+                    entry[gb::Fields::idRow].get<std::string>(), 
+                    entry[gb::Fields::Custom::ThumbnailURL].get<std::string>(), 
+                    {} // <- paths... not filled in yet
                 });
 
                 this->addInstalledItem(m);
@@ -41,13 +41,13 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     installed_item_author->setText(mod->author);
 
     brls::Label* installed_item_ver = (brls::Label*)installed_item->getView("installed_item_ver");
-    installed_item_ver->setText("'Ver.' " + mod->ver);
+    installed_item_ver->setText("Ver. " + mod->ver);
 
     // thumbnail    ---- in the future when Tasks are a thing in brls, spin a thread here to load the thumbnail in the background.
 
     if (!REDUCED_NET_REQUESTS) {
         brls::Image* installed_item_thumbnail = (brls::Image*)installed_item->getView("installed_item_thumbnail");
-        if (mod->thumbnail_url != gb::GB_NO_THUMBNAIL_URL) {
+        if (!mod->thumbnail_url.empty()) {
             MemoryStruct img = curl::DownloadToMem(mod->thumbnail_url);
             installed_item_thumbnail->setImageFromMem((unsigned char*)img.memory, img.size);
         }

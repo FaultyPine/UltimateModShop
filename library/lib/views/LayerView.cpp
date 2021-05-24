@@ -77,6 +77,12 @@ void LayerView::changeLayer(int index, bool focus)
     }
 }
 
+void LayerView::removeLayer(int index, bool should_free) {
+    if (should_free && this->layers.at(index))
+        delete this->layers.at(index);
+    this->layers.erase(this->layers.begin()+index);
+}
+
 int LayerView::getLayerIndex()
 {
     return this->selectedIndex;

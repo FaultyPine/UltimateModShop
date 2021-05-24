@@ -82,6 +82,7 @@ CURLcode curl::DownloadFile(std::string url, std::string path) {
             .SetOPT(CURLOPT_FOLLOWLOCATION, 1L)
             .SetOPT(CURLOPT_SSL_VERIFYPEER, 0L)
             .SetOPT(CURLOPT_SSL_VERIFYHOST, 0L)
+            .SetOPT(CURLOPT_FAILONERROR, true)
             .SetOPT(CURLOPT_NOPROGRESS, 0L)
             .SetOPT(CURLOPT_PROGRESSFUNCTION, download_progress)
             .Perform();
@@ -109,6 +110,7 @@ json curl::DownloadJson(std::string url) {
                 .SetOPT(CURLOPT_WRITEDATA, &buffer)
                 .SetOPT(CURLOPT_WRITEFUNCTION, writeCallback)
                 .SetOPT(CURLOPT_USERAGENT, "UMS-User")
+                .SetOPT(CURLOPT_FAILONERROR, true)
                 .Perform();
         if (result == CURLE_OK) {
             try {
@@ -171,10 +173,14 @@ MemoryStruct curl::DownloadToMem(std::string url) {
                 .SetOPT(CURLOPT_WRITEDATA, (void *)&chunk)
                 .SetOPT(CURLOPT_WRITEFUNCTION, write_memory_callback)
                 .SetOPT(CURLOPT_USERAGENT, "UMS-User")
+                .SetOPT(CURLOPT_FAILONERROR, true)
                 .Perform();
         if (result != CURLE_OK) {
-            brls::Logger::error("Failed to download to mem!");
+            brls::Logger::error("Failed to download! {}", url);
         }
+    }
+    else {
+        brls::Logger::error("Failed to init curl!");
     }
     return chunk;
 }

@@ -17,7 +17,6 @@
 #include <math.h>
 #include <thread>
 #include <chrono>
-#include <queue>
 #include "zip/ZipUtil.hpp"
 
 struct MemoryStruct
