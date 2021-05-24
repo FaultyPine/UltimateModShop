@@ -10,7 +10,7 @@ See instructions for building from the borealis readme [here](https://github.com
 And there are some additional compilation instructions at the [borealis wiki](https://github.com/natinusala/borealis/wiki/Additional-compilation-instructions).
 (If you need help building it, let me know. Especially building for PC is a bit complicated)
 
-For building/running on PC, you'll need (VcXsrv)[https://sourceforge.net/projects/vcxsrv/] as well.
+For building/running on PC, you'll need [VcXsrv](https://sourceforge.net/projects/vcxsrv/) as well.
 
 Also if you're going to use the build.sh bash script, make sure to change the `export` line to have an absolute path to your library/lib folder in this project's root.
 
