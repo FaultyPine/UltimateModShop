@@ -2,7 +2,6 @@
 
 #include <borealis.hpp>
 #include "submission_node.h"
-#include "gb.h"
 #include "ums_utils.h"
 
 

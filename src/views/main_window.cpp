@@ -6,7 +6,6 @@ MainWindow::~MainWindow() {
 }
 
 MainWindow::MainWindow() {
-    brls::Logger::debug("Mainwindow ctor");
     this->inflateFromXMLRes("xml/views/main_window.xml");
 
     this->layer_view = new brls::LayerView();

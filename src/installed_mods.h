@@ -10,7 +10,7 @@ struct InstalledMod {
   bool enabled;
   std::string itemid;
   std::string thumbnail_url;
-  std::vector<std::string> paths;
+  std::vector<std::filesystem::path> paths;
 };
 
 class InstalledMods {

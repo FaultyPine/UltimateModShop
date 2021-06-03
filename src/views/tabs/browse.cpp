@@ -26,25 +26,23 @@ const std::string basicBox = R"xml(
 Browse::Browse() {
     brls::Logger::debug("Initializing browse menu...");
     this->pages = new brls::LayerView();
-    this->inflateFromXMLRes("xml/tabs/browse.xml");
+    this->inflateFromXMLRes("xml/tabs/browse/browse.xml");
     this->loadNextPage();
     ((brls::Box*)this->getView("browse_box"))->addView(this->pages);
 
-    /*           need a button combo or something for this.. Want the user to be able to scroll by either navigating offscreen, or by using a button combo for quick navigation
     this->registerAction(
-        "Page Right", brls::ControllerButton::BUTTON_RIGHT, [this](brls::View* view) { 
+        "Page Right", brls::ControllerButton::BUTTON_RSB, [this](brls::View* view) { 
             this->scroll(brls::FocusDirection::RIGHT);
             return true;
         },
         false, brls::Sound::SOUND_FOCUS_SIDEBAR);
 
     this->registerAction(
-        "Page Left", brls::ControllerButton::BUTTON_LEFT, [this](brls::View* view) {
+        "Page Left", brls::ControllerButton::BUTTON_LSB, [this](brls::View* view) {
             this->scroll(brls::FocusDirection::LEFT);
             return true;
         },
         false, brls::Sound::SOUND_FOCUS_SIDEBAR);
-    */
 }
 
 Browse::~Browse() {
@@ -59,9 +57,7 @@ Browse::~Browse() {
 void Browse::getNewGbSubmissions(int page) {
     // vector of NUM_SUBMISSIONS_PER_PAGE elements
     gb::GbSubmissions* new_subs = gb::GetNewSubmissions(page, NUM_SUBMISSIONS_PER_PAGE);
-
     if (!new_subs->empty()) {
-        
         // push submission data onto vec
         for (gb::GbSubmission* e : *new_subs) {
             this->subs.push_back(e);
@@ -83,12 +79,12 @@ void Browse::loadNextPage() {
     // start idx of the submissions vector to pull the submissions for this page from
     int start_idx = (NUM_SUBMISSIONS_PER_PAGE * this->current_page) - NUM_SUBMISSIONS_PER_PAGE;
 
-    brls::Box* this_layer = (brls::Box*)this->createFromXMLString(basicBox);
-    this->pages->addLayer(this_layer);
+    brls::Box* this_page = (brls::Box*)this->createFromXMLString(basicBox);
+    this->pages->addLayer(this_page);
 
     for (int i = 0; i < NUM_SUBMISSIONS_ROOT; i++) {
         brls::Box* horzHolderBox = (brls::Box*)this->createFromXMLString(horzHolder);
-        this_layer->addView(horzHolderBox);
+        this_page->addView(horzHolderBox);
 
         for (int i = 0; i < NUM_SUBMISSIONS_ROOT; i++) {
 
@@ -123,7 +119,6 @@ void Browse::loadNextPage() {
                 submission_node = new SubmissionNode();
             }
             
-
             // handle navigation between SubmissionNodes
             submission_node->setId( std::to_string( submission_index ) );
 
@@ -144,16 +139,16 @@ void Browse::loadNextPage() {
 }
 
 
-
-
-
-
 void Browse::scroll(brls::FocusDirection dir) {
+    brls::Label* page_right = (brls::Label*)this->getView("arrow_right_label");
+    brls::Label* page_left = (brls::Label*)this->getView("arrow_left_label");
     switch (dir) {
         case brls::FocusDirection::LEFT:
 
             if (this->current_page > 1) {
                 this->current_page -= 1;
+                page_right->setText(std::to_string(this->current_page+1));
+                page_left->setText(std::to_string(this->current_page-1));
                 //this->loadNextPage();
                 this->pages->changeLayer(this->pages->getLayerIndex()-1);
             }
@@ -165,6 +160,8 @@ void Browse::scroll(brls::FocusDirection dir) {
             if (this->current_page > this->pages->getLayersSize()) {
                 this->loadNextPage();
             }
+            page_right->setText(std::to_string(this->current_page+1));
+            page_left->setText(std::to_string(this->current_page-1));
             this->pages->changeLayer(this->pages->getLayerIndex()+1);
 
             break;

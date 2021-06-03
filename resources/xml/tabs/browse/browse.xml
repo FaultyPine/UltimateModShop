@@ -1,0 +1,82 @@
+<brls:Box
+    id="browse"
+    width="100%"
+    height="100%"
+    axis="row"
+    direction="leftToRight"
+    justifyContent="center"
+    borderThickness="3"
+    borderColor="#FBFF0F"
+>
+
+    <brls:Box
+        id="arrow_left_box"
+        marginLeft="10"
+        width="5%"
+        height="100%"
+    >
+
+        <brls:Image
+            id="arrow_left"
+            image="@res/icon/play_l.png"
+            height="80"
+            width="80"
+            positionTop="260"
+            positionRight="8"
+            focusable="true"
+        />  
+
+        <brls:Label
+            id="arrow_left_label"
+            width="30"
+            height="30"
+            positionTop="285"
+            positionRight="55"
+            text="0"
+            fontSize="25"
+        />
+
+    </brls:Box>
+    
+ 
+
+
+    <brls:Box
+        id="browse_box"
+        axis="column"
+    />
+
+
+
+    <brls:Box
+        id="arrow_right_box"
+        marginRight="10"
+        width="5%"
+        height="100%"
+    >
+
+        <brls:Image
+            id="arrow_right"
+            image="@res/icon/play_r.png"
+            height="80"
+            width="80"
+            positionTop="260"
+            positionRight="8"
+            focusable="true"
+        />  
+
+        <brls:Label
+            id="arrow_right_label"
+            width="30"
+            height="30"
+            positionTop="285"
+            positionRight="72"
+            text="2"
+            fontSize="25"
+        />
+
+    </brls:Box>
+
+
+
+</brls:Box>

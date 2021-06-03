@@ -1,5 +1,9 @@
 #include "installed.h"
 
+bool toggleInstalledMod(brls::View* mod_view) {
+    brls::Logger::debug("Clicked installed mod: {}", mod_view->describe());
+    return true;
+}
 
 Installed::Installed() {
     this->inflateFromXMLRes("xml/tabs/installed.xml");
@@ -8,6 +12,11 @@ Installed::Installed() {
     if (mem_json_installed.contains("Installed") && mem_json_installed["Installed"].size() > 0) {
         for (json entry : mem_json_installed["Installed"]) {
             if (!entry.is_null()) {
+
+                std::vector<std::filesystem::path> paths = {};
+                if (entry.contains(gb::Fields::Custom::Paths))
+                    paths = entry[gb::Fields::Custom::Paths].get<std::vector<std::filesystem::path>>();
+
                 InstalledMod* m = new InstalledMod({
                     entry[gb::Fields::Name].get<std::string>(), 
                     entry[gb::Fields::Submitter::Submitter][gb::Fields::Name].get<std::string>(), 
@@ -15,18 +24,15 @@ Installed::Installed() {
                     true, 
                     entry[gb::Fields::idRow].get<std::string>(), 
                     entry[gb::Fields::Custom::ThumbnailURL].get<std::string>(), 
-                    {} // <- paths... not filled in yet
+                    paths
                 });
 
                 this->addInstalledItem(m);
 
             }
         }
-    } else {
-        brls::Logger::debug("didn't contain installed");
     }
 
-    brls::Logger::debug("Sucessfully read installed mods");
 }
 
 void Installed::addInstalledItem(InstalledMod* mod) {
@@ -38,7 +44,7 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     installed_item_title->setText(mod->name);
 
     brls::Label* installed_item_author = (brls::Label*)installed_item->getView("installed_item_author");
-    installed_item_author->setText(mod->author);
+    installed_item_author->setText("Author: " + mod->author);
 
     brls::Label* installed_item_ver = (brls::Label*)installed_item->getView("installed_item_ver");
     installed_item_ver->setText("Ver. " + mod->ver);
@@ -64,22 +70,11 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     installed_item->setId(id);
     installed_mods->addInstalledMod(mod);
 
+    installed_item->registerClickAction(toggleInstalledMod);
+
     ((brls::Box*)(this->getView("installed_box")))->addView(installed_item);
-
-    BRLS_REGISTER_CLICK_BY_ID(id, this->onInstalledItemClicked);
 }
 
-
-brls::Box* Installed::create() {
-    return new Installed();
-}
-
-
-bool Installed::onInstalledItemClicked(brls::View* view) {
-    brls::Logger::debug("{} clicked!", view->describe());
-
-    return false;
-}
 
 void Installed::willAppear(bool resetState) {
     setHintText("A -> Toggle | X -> Uninstall");
@@ -89,4 +84,9 @@ void Installed::willAppear(bool resetState) {
 void Installed::willDisappear(bool resetState) {
     setHintText();
     Box::willDisappear(resetState);
+} 
+
+
+brls::Box* Installed::create() {
+    return new Installed();
 }

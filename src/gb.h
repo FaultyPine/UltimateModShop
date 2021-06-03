@@ -71,6 +71,7 @@ namespace gb {
         // not real fields from gb, for internal use
         namespace Custom {
             static GbField ThumbnailURL = "thumbnail_url";
+            static GbField Paths = "paths";
         }
     }
 

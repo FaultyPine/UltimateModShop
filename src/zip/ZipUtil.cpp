@@ -1,5 +1,6 @@
 #include "ZipUtil.hpp"
 
+// https://github.com/libarchive/libarchive/wiki/Examples#A_Complete_Extractor
 
 static int
 copy_data(struct archive *ar, struct archive *aw)
@@ -73,5 +74,6 @@ int UnZip::ArchiveExtract(std::string filename, std::string dest)
   archive_read_free(a);
   archive_write_close(ext);
   archive_write_free(ext);
+  brls::Logger::debug("Extracted {}...", filename);
   return 0;
 }

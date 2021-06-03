@@ -18,7 +18,6 @@ InstalledMods::InstalledMods(json default_json) {
     else {
         this->OverwriteMemFromFile();
     }
-    brls::Logger::debug("Synced installed mods json");
 }
 
 void InstalledMods::OverwriteFileFromMem() {

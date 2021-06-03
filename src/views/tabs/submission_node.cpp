@@ -1,6 +1,7 @@
 #include "submission_node.h"
 #include "../main_window.h"
 #include "installed.h"
+#include "installation/manager.h"
 
 SubmissionNode::SubmissionNode(gb::GbSubmission* _submission) {
     this->inflateFromXMLRes("xml/views/submission_node.xml");
@@ -22,7 +23,6 @@ SubmissionNode::SubmissionNode() {
 
 bool SubmissionNode::onSubmissionNodeClicked(brls::View* view)
 {
-    brls::Logger::debug("Submission node Clicked");
     this->downloadSubmission();
     return false;
 }
@@ -48,16 +48,14 @@ void SubmissionNode::downloadSubmission() {
     if (this->submission != nullptr && !this->submission->submission_data.empty()) {
         brls::Logger::debug("--------\nDownloading submission...");
         json sd = this->submission->submission_data;
-        std::string root(SD_ROOT);
-        for (json file : sd[gb::Fields::Files::Files]) { // iterate through each uploaded file in the submission... will probably end up prompting the user somehow or having them select which files in the submission they want
-            brls::Logger::debug("Downloading file. Size = {} bytes", file[gb::Fields::Files::FileSize].get<unsigned long>());
-            std::string url = file[gb::Fields::Files::DownloadURL].get<std::string>();
-            std::string path = root + file[gb::Fields::Files::FileName].get<std::string>();
-            if (!REDUCED_NET_REQUESTS) {
-                //curl::DownloadFile(url, path);
-                //UnZip::ArchiveExtract(path, root);
-            }
+
+        std::vector<std::filesystem::path> paths = {};
+        if (!REDUCED_NET_REQUESTS) {
+            paths = Manager::InstallModFiles(sd[gb::Fields::Files::Files]);
         }
+
+        if (!paths.empty())
+            sd[gb::Fields::Custom::Paths] = paths;
         
         installed_mods->GetMemJsonPtr()->at("Installed") += sd;
         installed_mods->OverwriteFileFromMem();
@@ -69,7 +67,7 @@ void SubmissionNode::downloadSubmission() {
             true, 
             sd[gb::Fields::idRow].get<std::string>(), 
             sd[gb::Fields::Custom::ThumbnailURL].get<std::string>(), 
-            {} // <- paths... not filled in yet
+            paths
         });
         
         Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");

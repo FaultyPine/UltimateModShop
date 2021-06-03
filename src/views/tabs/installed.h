@@ -2,7 +2,6 @@
 
 #include <borealis.hpp>
 #include "ums_utils.h"
-#include "gb.h"
 
 class Installed : public brls::Box
 {
@@ -14,5 +13,5 @@ class Installed : public brls::Box
     void willDisappear(bool resetState) override;
 
     private:
-    bool onInstalledItemClicked(brls::View* view);
+
 };
