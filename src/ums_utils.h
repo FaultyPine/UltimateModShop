@@ -86,6 +86,8 @@ bool str_contains(std::string data, std::string toSearch, size_t pos = 0);
 
 bool strHasEnding (std::string const &fullString, std::string const &ending);
 
+std::string cleanGBDescriptionText(std::string str);
+
 std::string ReplaceString(std::string subject, const std::string& search, const std::string& replace);
 
 std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::filesystem::path> paths = {});

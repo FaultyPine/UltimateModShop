@@ -51,13 +51,21 @@
 
 
             <!-- Screenshots -->
-            <brls:Image
-                id="screenshots_image"
-                image="@res/icon/unknown_image.png"
-                scalingType="crop"
+            <brls:Box
+                id="screenshots_box"
                 height="300"
                 width="80%"
-            />
+                borderThickness="3"
+                borderColor="#000000"
+            >
+                <brls:Image
+                    id="screenshots_default_image"
+                    image="@res/icon/unknown_image.png"
+                    scalingType="fit"
+                    
+                />
+            </brls:Box>
+
 
             <!-- Screenshot Caption -->
             <brls:Label
@@ -152,8 +160,8 @@
         height="100%"
         width="35%"
         axis="column"
-        paddingRight="20"
-        paddingLeft="20"
+        paddingRight="15"
+        paddingLeft="15"
         paddingTop="20"
         paddingBottom="20"
         justifyContent="spaceEvenly"
@@ -172,6 +180,7 @@
             paddingRight="30"
             borderThickness="3"
             borderColor="#000000"
+            focusable="true"
         >
 
             <brls:Image
@@ -195,16 +204,16 @@
         <!-- AUTHOR -->
         <brls:Box
             id="author_box"
-            height="15%"
+            height="13%"
             width="100%"
             axis="row"
-            paddingRight="20"
-            paddingLeft="20"
+            paddingRight="5"
+            paddingLeft="10"
         >
             
             <brls:Label
+                grow="1.0"
                 id="author_label"
-                animated="true"
                 autoAnimate="true"
                 text="Author: ???"
                 fontSize="24"
@@ -213,7 +222,6 @@
 
             <brls:Image
                 id="author_image"
-                marginLeft="50"
                 height="100%"
                 width="25%"
                 image="@res/icon/unknown_image.png"
@@ -229,7 +237,7 @@
             width="100%"
             axis="row"
             paddingRight="20"
-            paddingLeft="20"
+            paddingLeft="10"
         >
 
             <brls:Label
@@ -247,7 +255,7 @@
             width="100%"
             axis="row"
             paddingRight="20"
-            paddingLeft="20"
+            paddingLeft="10"
         >
 
             <brls:Label
@@ -265,7 +273,7 @@
             width="100%"
             axis="row"
             paddingRight="20"
-            paddingLeft="20"
+            paddingLeft="10"
         >
 
             <brls:Label
@@ -488,7 +496,8 @@
             paddingLeft="30"
             paddingRight="30"
             borderThickness="3"
-            visibility="visible"
+            focusable="true"
+            visibility="gone"
             borderColor="#000000"
         >
 
@@ -520,6 +529,7 @@
             paddingRight="30"
             borderThickness="3"
             borderColor="#000000"
+            focusable="true"
         >
 
             <brls:Image

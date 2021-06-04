@@ -15,4 +15,6 @@ class ModPage : public brls::Activity {
     private:
     SubmissionNode* submission; // don't free
 
+    void setupModPage();
+
 };

@@ -35,17 +35,27 @@ bool str_contains(std::string data, std::string toSearch, size_t pos)
     return data.find(toSearch, pos) != std::string::npos;
 }
 
-std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::filesystem::path> paths) {
-    if (j.is_object()) {
-        for (auto& [key, value] : j.items()) {
-            paths.push_back(key);
-            jsonFileTreeToPaths(value, paths);
+std::string cleanGBDescriptionText(std::string str) {
+    std::string html = str;
+    while (html.find("<") != std::string::npos)
+    {
+        auto startpos = html.find("<");
+        auto endpos = html.find(">") + 1;
+
+        if (endpos != std::string::npos)
+        {
+            html.erase(startpos, endpos - startpos);
         }
     }
-    else if (j.is_array()) {
-        
+    std::string weird_thing = "&nbsp;"; // idk what this is, but it's in gb descriptions lol
+    int weird_thing_idx = html.find(weird_thing);
+    while (weird_thing_idx != std::string::npos) {
+        html.replace(weird_thing_idx, weird_thing.size(), "");
+        weird_thing_idx = html.find(weird_thing);
     }
+    return html;
 }
+
 
 void hint_text_wait(brls::Box* hint_box) {
     std::this_thread::sleep_for(std::chrono::seconds(2));

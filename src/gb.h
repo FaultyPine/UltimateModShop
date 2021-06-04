@@ -38,6 +38,7 @@ namespace gb {
         static GbField Subtitle = "_sDescription";
         static GbField Records = "_aRecords";
         static GbField ProfileURL = "_sProfileUrl";
+        static GbField Type = "_sType";
 
         namespace Metadata {
             static GbField Metadata = "_aMetadata";
@@ -62,9 +63,13 @@ namespace gb {
             // Name
         }
         namespace Category {
-            static GbField Category = "_aCategory";
+            static GbField SubCategory = "_aCategory";
             static GbField RootCategory = "_aRootCategory";
             // Name
+        }
+        namespace AdditionalInfo {
+            static GbField AdditionalInfo = "_aAdditionalInfo";
+            static GbField Version = "_sVersion";
         }
         // not real fields from gb, for internal use
         namespace Custom {
