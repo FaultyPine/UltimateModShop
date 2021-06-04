@@ -54,8 +54,8 @@ int main(int argc, char* argv[])
     //SplashScreen* s = new SplashScreen();
     //brls::Application::pushActivity(s);
     //std::thread t([](){
-        MainActivity* m = new MainActivity();
-        brls::Application::pushActivity(m);
+        //MainActivity* m = new MainActivity();
+        //brls::Application::pushActivity(m);
         //brls::Logger::debug("Loaded main activity!");
     //});
     //t.detach();
@@ -167,9 +167,9 @@ int main(int argc, char* argv[])
 }
     )"_json;
 
-    //gb::GbSubmission* tmp_sub = new gb::GbSubmission {.submission_data = temp_json};
-    //SubmissionNode* sub = new SubmissionNode(tmp_sub);
-    //brls::Application::pushActivity(new ModPage(sub));
+    gb::GbSubmission* tmp_sub = new gb::GbSubmission {.submission_data = temp_json};
+    SubmissionNode* sub = new SubmissionNode(tmp_sub);
+    brls::Application::pushActivity(new ModPage(sub));
 
     while (brls::Application::mainLoop()) {
 

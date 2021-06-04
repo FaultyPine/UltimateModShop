@@ -7,18 +7,139 @@
     backgroundColor="#B5B5B5"
 >
 
-
+    <!-- LEFT SIDE -->
+    <!--
+        OF NOTE:
+            ScrollingFrame's technically have infinite height (since they scroll infinitely),
+            so you can't use percentages in their children's heights.
+    -->
     <brls:Box
         id="mod_page_box_left"
-        height="100%"
         width="65%"
         borderThickness="5"
-        borderColor="#831BEB"
+        borderColor="#414141"
     >
+        <!-- child view for scrollingframe -->
+        <brls:Box
+            axis="column"
+            width="825"
+            height="720"
+            paddingTop="20"
+            paddingRight="20"
+            paddingLeft="20"
+            paddingBottom="20"
+
+        >
 
 
+            <!-- Title/subtitle -->
+            <brls:Label
+                width="100%"
+                id="subtitle_label"
+                text="Mod Subtitle Here"
+                fontSize="15"
+                textAlign="right"
+            />
+            <brls:Label
+                id="title_label"
+                width="90%"
+                height="50"
+                text="Mod Title Here"
+                fontSize="36"
+                textColor="#000000"
+            />
+
+
+            <!-- Screenshots -->
+            <brls:Image
+                id="screenshots_image"
+                image="@res/icon/unknown_image.png"
+                scalingType="crop"
+                height="300"
+                width="80%"
+            />
+
+            <!-- Screenshot Caption -->
+            <brls:Label
+                id="image_caption_label"
+                text="Image Caption Here"
+                marginTop="10"
+                width="80%"
+                textAlign="center"
+                fontSize="18"
+            />
+
+            <!-- Screenshot Scroll -->
+
+            <!-- Scroll image holder -->
+            <brls:Box
+                width="80%"
+                height="50"
+                axis="row"
+                justifyContent="center"
+                marginTop="10"
+                marginBottom="10"
+            >
+                <brls:Image
+                    id="left_scroll_button"
+                    image="@res/icon/L.png"
+                />
+
+                <!-- Holds scroll dots... added to with more screenshots-->
+                <brls:Box
+                    id="scroll_dot_box"
+                    marginTop="10"
+                    paddingTop="8"
+                    height="50%"
+                    grow="0.1"
+                    justifyContent="spaceEvenly"
+                >
+
+                    <brls:Image
+                        id="scroll_dot"
+                        image="@res/icon/dot.png"
+                        marginRight="2"
+                        marginLeft="2"
+                        height="60%"
+                    />
+
+                </brls:Box>
+                
+                <brls:Image
+                    id="right_scroll_button"
+                    image="@res/icon/R.png"
+                />
+
+            </brls:Box>
+
+            <!-- Description -->
+            <brls:Label
+                id="description_label"
+                maxHeight="250"
+                text="Description Here "
+                textColor="#000000"
+                fontSize="18"
+            />
+
+            <brls:Box
+                justifyContent="flexEnd"
+            >
+                <brls:Button
+                    marginTop="10"
+                    id="description_read_more_button"
+                    visibility="invisible"
+                    height="40"
+                    width="20%"
+                    text="Read More"
+                    backgroundColor="#D6D6D6"
+                />
+            </brls:Box>
+
+
+        </brls:Box>
     </brls:Box>
 
+    <!-- END LEFT SIDE -->
 
 
 
@@ -36,8 +157,8 @@
         paddingTop="20"
         paddingBottom="20"
         justifyContent="spaceEvenly"
-        borderThickness="10"
-        borderColor="#1B6DEB"
+        borderThickness="5"
+        borderColor="#414141"
     >
 
 
@@ -85,7 +206,7 @@
                 id="author_label"
                 animated="true"
                 autoAnimate="true"
-                text="Author: Bruh"
+                text="Author: ???"
                 fontSize="24"
             />
             
@@ -419,8 +540,7 @@
 
     </brls:Box>
 
-
-
+    <!-- END RIGHT SIDE -->
 
 
 </brls:Box>
