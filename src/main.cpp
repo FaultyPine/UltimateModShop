@@ -21,6 +21,8 @@
 #include "views/top_bar/top_bar.h"
 #include "views/main_window.h"
 
+#include "views/tabs/mod_page.h"
+
 int main(int argc, char* argv[])
 {
 // init for pc/switch
@@ -57,6 +59,117 @@ int main(int argc, char* argv[])
         //brls::Logger::debug("Loaded main activity!");
     //});
     //t.detach();
+
+    json temp_json = R"(
+{
+    "_aMetadata": {
+        "_nRecordCount": 1,
+        "_nTotalRecordCount": 2970,
+        "_nPageCount": 2970
+    },
+    "_aRecords": [
+        {
+            "_sName": "Hyper Sonic",
+            "_sModelName": "Mod",
+            "_sProfileUrl": "https:\/\/gamebanana.com\/mods\/292237",
+            "_aSubmitter": {
+                "_sName": "AGhostsPumpkinSoup",
+                "_sAvatarUrl": "https:\/\/images.gamebanana.com\/img\/av\/5ea0f0c6d6b92.png",
+                "_sUpicUrl": "https:\/\/images.gamebanana.com\/img\/upic\/5ea6f4253447b.png"
+            },
+            "_tsDateUpdated": 1622767536,
+            "_tsDateAdded": 1622767536,
+            "_aPreviewMedia": [
+                {
+                    "_sType": "image",
+                    "_sBaseUrl": "https:\/\/images.gamebanana.com\/img\/ss\/mods",
+                    "_sFile": "60b972cd0ae04.jpg",
+                    "_sFile530": "530-90_60b972cd0ae04.jpg",
+                    "_sFile100": "100-90_60b972cd0ae04.jpg",
+                    "_sFile220": "220-90_60b972cd0ae04.jpg"
+                },
+                {
+                    "_sType": "image",
+                    "_sBaseUrl": "https:\/\/images.gamebanana.com\/img\/ss\/mods",
+                    "_sFile": "60b972a952cf9.jpg",
+                    "_sFile530": "530-90_60b972cd0ae04.jpg",
+                    "_sFile100": "100-90_60b972a952cf9.jpg",
+                    "_sFile220": "220-90_60b972cd0ae04.jpg"
+                },
+                {
+                    "_sType": "image",
+                    "_sBaseUrl": "https:\/\/images.gamebanana.com\/img\/ss\/mods",
+                    "_sFile": "60b972aa01087.jpg",
+                    "_sFile530": "530-90_60b972cd0ae04.jpg",
+                    "_sFile100": "100-90_60b972aa01087.jpg",
+                    "_sFile220": "220-90_60b972cd0ae04.jpg"
+                },
+                {
+                    "_sType": "image",
+                    "_sBaseUrl": "https:\/\/images.gamebanana.com\/img\/ss\/mods",
+                    "_sFile": "60b972aa0b39a.jpg",
+                    "_sFile530": "530-90_60b972cd0ae04.jpg",
+                    "_sFile100": "100-90_60b972aa0b39a.jpg",
+                    "_sFile220": "220-90_60b972cd0ae04.jpg"
+                },
+                {
+                    "_sType": "image",
+                    "_sBaseUrl": "https:\/\/images.gamebanana.com\/img\/ss\/mods",
+                    "_sFile": "60b972ab1abd9.jpg",
+                    "_sFile530": "530-90_60b972cd0ae04.jpg",
+                    "_sFile100": "100-90_60b972ab1abd9.jpg",
+                    "_sFile220": "220-90_60b972cd0ae04.jpg"
+                }
+            ],
+            "_sText": "This mod changes Sonic's Final Smash to \"Hyper Sonic\" and makes him changes to a couple different colors.&nbsp;<br><br>This isn't an edit to any models itself so should work with any Super Sonic mod that uses the regular model names.&nbsp;",
+            "_sDescription": "",
+            "_aCategory": {
+                "_idRow": 7581,
+                "_sName": "Sonic",
+                "_sIconUrl": "https:\/\/images.gamebanana.com\/img\/ico\/ModCategory\/5bff4a2f110cd.png"
+            },
+            "_aRootCategory": {
+                "_idRow": 7581,
+                "_sName": "Skins",
+                "_sIconUrl": "https:\/\/images.gamebanana.com\/img\/ico\/ModCategory\/60b57708604b3.png"
+            },
+            "_aGame": {
+                "_idRow": 6498
+            },
+            "_nViewCount": 0,
+            "_nLikeCount": 2,
+            "_nDownloadCount": 0,
+            "_aFiles": [
+                {
+                    "_idRow": "584614",
+                    "_sFile": "hyper_sonic_32f85.rar",
+                    "_nFilesize": 878,
+                    "_sDownloadUrl": "https:\/\/gamebanana.com\/dl\/584614",
+                    "_sDescription": "",
+                    "_tsDateAdded": 1622766308,
+                    "_nDownloadCount": 0,
+                    "_sAnalysisResult": "Archive passed",
+                    "_bContainsExe": false
+                }
+            ],
+            "_aModManagerIntegrations": {
+                "584614": [
+                    {
+                        "_sInstallerName": "Quasar 2.1.0.1",
+                        "_sInstallerUrl": "https:\/\/gamebanana.com\/tools\/6722",
+                        "_sIconClasses": "QuasarModManagerIcon",
+                        "_sDownloadUrl": "quasar:https:\/\/gamebanana.com\/mmdl\/584614,Mod,292237,rar"
+                    }
+                ]
+            }
+        }
+    ]
+}
+    )"_json;
+
+    //gb::GbSubmission* tmp_sub = new gb::GbSubmission {.submission_data = temp_json};
+    //SubmissionNode* sub = new SubmissionNode(tmp_sub);
+    //brls::Application::pushActivity(new ModPage(sub));
 
     while (brls::Application::mainLoop()) {
 

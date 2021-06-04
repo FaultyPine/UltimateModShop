@@ -21,8 +21,6 @@ namespace gb {
     }
 
     struct GbSubmission {
-        //std::string itemid;
-        //std::string itemtype;
         json submission_data;
     };
 
@@ -37,7 +35,7 @@ namespace gb {
         static GbField LikeCount = "_nLikeCount";
         static GbField IconURL = "_sIconUrl";
         static GbField Text = "_sText";
-        static GbField Description = "_sDescription";
+        static GbField Subtitle = "_sDescription";
         static GbField Records = "_aRecords";
         static GbField ProfileURL = "_sProfileUrl";
 

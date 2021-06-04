@@ -26,7 +26,7 @@ const std::string basicBox = R"xml(
 Browse::Browse() {
     brls::Logger::debug("Initializing browse menu...");
     this->pages = new brls::LayerView();
-    this->inflateFromXMLRes("xml/tabs/browse/browse.xml");
+    this->inflateFromXMLRes("xml/tabs/browse.xml");
     this->loadNextPage();
     ((brls::Box*)this->getView("browse_box"))->addView(this->pages);
 
@@ -147,8 +147,6 @@ void Browse::scroll(brls::FocusDirection dir) {
 
             if (this->current_page > 1) {
                 this->current_page -= 1;
-                page_right->setText(std::to_string(this->current_page+1));
-                page_left->setText(std::to_string(this->current_page-1));
                 //this->loadNextPage();
                 this->pages->changeLayer(this->pages->getLayerIndex()-1);
             }
@@ -160,14 +158,13 @@ void Browse::scroll(brls::FocusDirection dir) {
             if (this->current_page > this->pages->getLayersSize()) {
                 this->loadNextPage();
             }
-            page_right->setText(std::to_string(this->current_page+1));
-            page_left->setText(std::to_string(this->current_page-1));
             this->pages->changeLayer(this->pages->getLayerIndex()+1);
 
             break;
         default:
             brls::Logger::error("Cannot scroll up/down in browse menu!");
     }
+    setHintText("Page: " + std::to_string(this->current_page));
     brls::Application::giveFocus(this->pages->getDefaultFocus());
 }
 

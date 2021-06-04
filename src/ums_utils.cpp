@@ -47,6 +47,11 @@ std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::
     }
 }
 
+void hint_text_wait(brls::Box* hint_box) {
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    hint_box->setVisibility(brls::Visibility::INVISIBLE);
+}
+
 void setHintText(std::string text) {
     brls::Box* hint_box = (brls::Box*)main_box->getView("hint_box");
     if (hint_box != nullptr) {
@@ -56,6 +61,10 @@ void setHintText(std::string text) {
         else {
             hint_box->setVisibility(brls::Visibility::VISIBLE);
             ((brls::Label*)hint_box->getView("hint_text"))->setText(text);
+            std::thread hint_thread([hint_box](){
+                hint_text_wait(hint_box);
+            });
+            hint_thread.detach();
         }
     }
 }

@@ -2,6 +2,7 @@
 #include "../main_window.h"
 #include "installed.h"
 #include "installation/manager.h"
+#include "mod_page.h"
 
 SubmissionNode::SubmissionNode(gb::GbSubmission* _submission) {
     this->inflateFromXMLRes("xml/views/submission_node.xml");
@@ -23,8 +24,8 @@ SubmissionNode::SubmissionNode() {
 
 bool SubmissionNode::onSubmissionNodeClicked(brls::View* view)
 {
-    this->downloadSubmission();
-    return false;
+    brls::Application::pushActivity(new ModPage(this));
+    return true;
 }
 
 void SubmissionNode::onFocusGained() {

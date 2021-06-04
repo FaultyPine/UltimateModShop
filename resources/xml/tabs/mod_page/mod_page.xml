@@ -1,0 +1,426 @@
+<brls:Box
+    id="mod_page_box"
+    axis="row"
+
+    borderThickness="3"
+    borderColor="#4E4E4E"
+    backgroundColor="#B5B5B5"
+>
+
+
+    <brls:Box
+        id="mod_page_box_left"
+        height="100%"
+        width="65%"
+        borderThickness="5"
+        borderColor="#831BEB"
+    >
+
+
+    </brls:Box>
+
+
+
+
+
+
+    <!--  Right Box  -->
+
+    <brls:Box
+        id="mod_page_box_right"
+        height="100%"
+        width="35%"
+        axis="column"
+        paddingRight="20"
+        paddingLeft="20"
+        paddingTop="20"
+        paddingBottom="20"
+        justifyContent="spaceEvenly"
+        borderThickness="10"
+        borderColor="#1B6DEB"
+    >
+
+
+
+        <!--  INSTALL  -->
+        <brls:Box
+            id="install_box"
+            height="10%"
+            width="97%"
+            paddingLeft="30"
+            paddingRight="30"
+            borderThickness="3"
+            borderColor="#000000"
+        >
+
+            <brls:Image
+                id="install_box_image"
+                image="@res/icon/X.png"
+                width="15%"
+            />
+
+            <brls:Label
+                id="install_box_label"
+                marginLeft="90"
+                text="Install"
+                textAlign="center"
+            />
+
+        </brls:Box>
+
+
+
+
+        <!-- AUTHOR -->
+        <brls:Box
+            id="author_box"
+            height="15%"
+            width="100%"
+            axis="row"
+            paddingRight="20"
+            paddingLeft="20"
+        >
+            
+            <brls:Label
+                id="author_label"
+                animated="true"
+                autoAnimate="true"
+                text="Author: Bruh"
+                fontSize="24"
+            />
+            
+
+            <brls:Image
+                id="author_image"
+                marginLeft="50"
+                height="100%"
+                width="25%"
+                image="@res/icon/unknown_image.png"
+            />
+
+        </brls:Box>
+
+
+        <!-- VERSION -->
+        <brls:Box
+            id="version_box"
+            height="7%"
+            width="100%"
+            axis="row"
+            paddingRight="20"
+            paddingLeft="20"
+        >
+
+            <brls:Label
+                id="version_label"
+                text="Version: 0.0.0"
+                fontSize="24"
+            />
+
+        </brls:Box>
+
+        <!-- UPLOADED DATE -->
+        <brls:Box
+            id="date_box"
+            height="7%"
+            width="100%"
+            axis="row"
+            paddingRight="20"
+            paddingLeft="20"
+        >
+
+            <brls:Label
+                id="date_label"
+                text="Date Uploaded: 0/0/2020"
+                fontSize="24"
+            />
+
+        </brls:Box>
+
+        <!-- DOWNLOAD SIZE -->
+        <brls:Box
+            id="dlsize_box"
+            height="7%"
+            width="100%"
+            axis="row"
+            paddingRight="20"
+            paddingLeft="20"
+        >
+
+            <brls:Label
+                id="dlsize_label"
+                text="Download Size: 0.0 MB"
+                fontSize="24"
+            />
+
+        </brls:Box>
+
+        <!-- DOWNLOADS, VIEWS, LIKES -->
+
+        <brls:Box
+            id="stats_box"
+            axis="row"
+            paddingRight="5"
+            paddingLeft="5"
+            paddingTop="5"
+            paddingBottom="10"
+            height="10%"
+            width="100%"
+        >
+            <!-- Download Count -->
+            <brls:Box
+                id="download_count_box"
+                width="33%"
+                height="100%"
+                axis="row"
+                justifyContent="spaceEvenly"
+            >
+
+                <brls:Image
+                    id="download_count_image"
+                    maxWidth="50"
+                    image="@res/icon/download.png"
+                />
+
+                <brls:Label
+                    id="download_count_label"
+                    singleLine="true"
+                    fontSize="22"
+                    text="0"
+                />
+
+            </brls:Box>
+
+            <!-- View Count -->
+            <brls:Box
+                id="view_count_box"
+                width="33%"
+                height="100%"
+                axis="row"
+                justifyContent="spaceEvenly"
+            >
+
+                <brls:Image
+                    id="view_count_image"
+                    maxWidth="50"
+                    image="@res/icon/view.png"
+                />
+
+                <brls:Label
+                    id="view_count_label"
+                    singleLine="true"
+                    fontSize="22"
+                    text="0"
+                />
+
+            </brls:Box>
+
+            <!-- Like Count -->
+            <brls:Box
+                id="like_count_box"
+                width="33%"
+                height="100%"
+                axis="row"
+                justifyContent="spaceEvenly"
+            >
+
+                <brls:Image
+                    id="like_count_image"
+                    maxWidth="50"
+                    image="@res/icon/heart.png"
+                />
+
+                <brls:Label
+                    id="like_count_label"
+                    singleLine="true"
+                    fontSize="22"
+                    text="0"
+                />
+
+            </brls:Box>
+
+        </brls:Box>
+
+        <!-- CATEGORIES -->
+
+        <brls:Box
+            id="categories_box"
+            height="15%"
+            width="100%"
+            justifyContent="spaceEvenly"
+            borderThickness="5"
+            paddingBottom="5"
+        >
+
+            <!-- CATEGORY -->
+            <brls:Box
+                height="100%"
+                width="45%"
+                paddingTop="5"
+                backgroundColor="#A49F9F"
+                cornerRadius="50"
+            >
+
+                <brls:Box
+                    axis="column"
+                    height="100%"
+                    width="100%"
+                >
+
+                    <brls:Label
+                        width="45%"
+                        text="Category:"
+                        fontSize="18"
+                        textAlign="center"
+                        textColor="#000000"
+                    />
+
+                    <brls:Box
+                       axis="row"
+                       width="45%"
+                       height="75%"
+                       paddingLeft="15"
+                    >
+
+                        <brls:Label
+                            id="category_label"
+                            text="???"
+                            fontSize="24"
+                            textColor="#000000"
+                        />
+
+                        <brls:Image
+                            id="category_image"
+                            image="@res/icon/unknown_image.png"
+                            marginTop="7"
+                            width="20%"
+                            height="70%"
+                        />
+
+                    </brls:Box>
+
+                </brls:Box>
+
+            </brls:Box>
+
+
+            <!-- SUBCATEGORY -->
+            <brls:Box
+                height="100%"
+                width="45%"
+                paddingTop="5"
+                backgroundColor="#A49F9F"
+                cornerRadius="50"
+            >
+
+                <brls:Box
+                    axis="column"
+                    height="100%"
+                    width="100%"
+                >
+
+                    <brls:Label
+                        width="45%"
+                        text="Sub-Category:"
+                        fontSize="16"
+                        textAlign="center"
+                        textColor="#000000"
+                    />
+
+                    <brls:Box
+                       axis="row"
+                       width="45%"
+                       height="75%"
+                       paddingLeft="15"
+                    >
+
+                        <brls:Label
+                            id="subcategory_label"
+                            text="???"
+                            fontSize="24"
+                            textColor="#000000"
+                        />
+
+                        <brls:Image
+                            id="subcategory_image"
+                            image="@res/icon/unknown_image.png"
+                            marginTop="7"
+                            width="20%"
+                            height="70%"
+                        />
+
+                    </brls:Box>
+
+                </brls:Box>
+
+            </brls:Box>
+
+        </brls:Box>
+
+
+        <!-- TOGGLE -->
+
+        <brls:Box
+            id="toggle_box"
+            height="10%"
+            width="97%"
+            paddingLeft="30"
+            paddingRight="30"
+            borderThickness="3"
+            visibility="visible"
+            borderColor="#000000"
+        >
+
+            <brls:Image
+                id="toggle_box_image"
+                image="@res/icon/Y.png"
+                width="15%"
+            />
+
+            <brls:Label
+                id="toggle_box_label"
+                marginLeft="90"
+                text="Disable"
+                textAlign="center"
+            />
+
+        </brls:Box>
+        
+
+
+
+
+        <!-- CLOSE -->
+        <brls:Box
+            id="close_box"
+            height="10%"
+            width="97%"
+            paddingLeft="30"
+            paddingRight="30"
+            borderThickness="3"
+            borderColor="#000000"
+        >
+
+            <brls:Image
+                id="close_box_image"
+                image="@res/icon/B.png"
+                width="15%"
+            />
+
+            <brls:Label
+                id="close_box_label"
+                marginLeft="90"
+                text="Close"
+                textAlign="center"
+            />
+
+        </brls:Box>
+
+
+    </brls:Box>
+
+
+
+
+
+</brls:Box>

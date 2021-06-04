@@ -25,16 +25,7 @@
             positionRight="8"
             focusable="true"
         />  
-
-        <brls:Label
-            id="arrow_left_label"
-            width="30"
-            height="30"
-            positionTop="285"
-            positionRight="55"
-            text="0"
-            fontSize="25"
-        />
+       
 
     </brls:Box>
     
@@ -65,15 +56,6 @@
             focusable="true"
         />  
 
-        <brls:Label
-            id="arrow_right_label"
-            width="30"
-            height="30"
-            positionTop="285"
-            positionRight="72"
-            text="2"
-            fontSize="25"
-        />
 
     </brls:Box>
 

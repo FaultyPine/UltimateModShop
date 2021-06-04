@@ -2,6 +2,7 @@
 
 bool toggleInstalledMod(brls::View* mod_view) {
     brls::Logger::debug("Clicked installed mod: {}", mod_view->describe());
+    // InstalledMod* clicked_mod = installed_mods->getInstalledMod(std::stoi(mod_view->getID());
     return true;
 }
 
@@ -66,7 +67,7 @@ void Installed::addInstalledItem(InstalledMod* mod) {
         installed_item_toggle->setImageFromRes("icon/toggle_on.png");
     
     // add to installed_mods / register click action
-    std::string id = "installed_item" + std::to_string(installed_mods->getInstalledModsSize());
+    std::string id = std::to_string(installed_mods->getInstalledModsSize());
     installed_item->setId(id);
     installed_mods->addInstalledMod(mod);
 
