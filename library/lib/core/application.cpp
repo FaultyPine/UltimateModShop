@@ -280,7 +280,7 @@ void Application::onControllerButtonPressed(enum ControllerButton button, bool r
 {
     if (Application::blockInputsTokens != 0)
     {
-        Logger::debug("{} button press blocked (tokens={})", button, Application::blockInputsTokens);
+        //Logger::debug("{} button press blocked (tokens={})", button, Application::blockInputsTokens);
         return;
     }
 

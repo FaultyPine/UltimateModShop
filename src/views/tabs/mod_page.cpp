@@ -1,6 +1,45 @@
 #include "mod_page.h"
 #include "../../installation/manager.h"
 
+
+const std::string screenshotTemplate = R"xml(
+    <brls:Image 
+        scalingType="fit"
+        imageAlign="center"
+    />
+)xml";
+const std::string scrollDotXML = R"xml(
+    <brls:Image
+        id="scroll_dot"
+        image="@res/icon/dot.png"
+        scalingType="fit"
+        marginRight="2"
+        marginLeft="7"
+        alignSelf="center"
+        width="2%"
+        height="55%"
+        maxHeight="20"
+        maxWidth="20"
+        cornerRadius="25"
+        borderColor="#FFFFFF"
+    />
+)xml";
+const std::string scrollDotHorzHolder = R"xml(
+    <brls:Box
+        id="scroll_dot_horz_holder"
+        axis="row"
+        justifyContent="spaceEvenly"
+        width="100%"
+    />
+)xml";
+
+void setScrollDotSelected(brls::Image* dot) {
+    dot->setBorderThickness(8);
+}
+void setScrollDotUnselected(brls::Image* dot) {
+    dot->setBorderThickness(0);
+}
+
 ModPage::ModPage(SubmissionNode* sub) {
     this->screenshots_layers = new brls::LayerView();
     this->submission = sub;
@@ -13,26 +52,6 @@ ModPage::~ModPage() {
         }
     }
 }
-
-const std::string imgTemplate = R"xml(
-    <brls:Image 
-        scalingType="fit"
-        imageAlign="center"
-    />
-)xml";
-const std::string scrollDotXML = R"xml(
-    <brls:Image
-        id="scroll_dot"
-        image="@res/icon/dot.png"
-        scalingType="stretch"
-        marginRight="2"
-        marginLeft="2"
-        width="5%"
-        height="70%"
-        cornerRadius="15"
-        borderColor="#FFFFFF"
-    />
-)xml";
 
 #define GetChildView(type, id) brls::type* id = (brls::type*)this->getView(#id);
 
@@ -99,7 +118,7 @@ void ModPage::setupModPage() {
                 std::string img_url = gb::Fields::PreviewMedia::BaseURL + img_json[gb::Fields::Files::FileName].get<std::string>();
                 MemoryStruct img = curl::DownloadToMem(img_url);
                 if (img.memory != nullptr && img.size > 0) {
-                    brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(imgTemplate);
+                    brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
                     new_img->setImageFromMem((unsigned char*)img.memory, img.size);
                     this->screenshots_layers->addLayer(new_img);
 
@@ -117,11 +136,22 @@ void ModPage::setupModPage() {
             image_caption_label->setVisibility(brls::Visibility::GONE);
 
         /* Scroll Dots */
-        for (int i = 0; i < this->medias.size(); i++) {
-            brls::Image* scroll_dot = (brls::Image*)brls::View::createFromXMLString(scrollDotXML);
-            if (i == 0)
-                scroll_dot->setBorderThickness(5);
-            scroll_dot_box->addView(scroll_dot);
+        int num_dots_iter = 0;
+        int num_row_iterations = ceil( (float)this->medias.size() / (float)num_screenshot_dots_per_row );
+        for (int i = 0; i < num_row_iterations; i++) {
+            brls::Box* scroll_dot_horz_holder = (brls::Box*)brls::View::createFromXMLString(scrollDotHorzHolder);
+            for (int j = 0; j < num_screenshot_dots_per_row; j++) {
+                if (num_dots_iter >= this->medias.size()) {
+                    i = num_row_iterations; 
+                    break;
+                }
+                brls::Image* scroll_dot = (brls::Image*)brls::View::createFromXMLString(scrollDotXML);
+                if (i == 0 && j == 0)
+                    setScrollDotSelected(scroll_dot);
+                scroll_dot_horz_holder->addView(scroll_dot);
+                num_dots_iter += 1;
+            }
+            scroll_dot_box->addView(scroll_dot_horz_holder);
         }
 
         /* Description */
@@ -212,7 +242,13 @@ void ModPage::setupModPage() {
 
 void ModPage::screenshotsScroll(brls::FocusDirection dir) {
     GetChildView(Box, scroll_dot_box)
-    scroll_dot_box->getChildren().at(this->screenshot_idx)->setBorderThickness(0); // prev scroll dot
+
+    {   // prev scroll dot
+        int row = this->screenshot_idx / 10;
+        brls::Box* scroll_dot_row_box = (brls::Box*)scroll_dot_box->getChildren().at(row);
+        setScrollDotUnselected((brls::Image*)scroll_dot_row_box->getChildren().at(this->screenshot_idx % 10));
+    }
+
 
     int num_preview_medias = this->medias.size();
     switch (dir) {
@@ -238,7 +274,12 @@ void ModPage::screenshotsScroll(brls::FocusDirection dir) {
     else
         image_caption_label->setVisibility(brls::Visibility::GONE);
 
-    ((brls::Image*)scroll_dot_box->getChildren().at(this->screenshot_idx))->setBorderThickness(5);
+
+    {
+        int row = this->screenshot_idx / 10;
+        brls::Box* scroll_dot_row_box = (brls::Box*)scroll_dot_box->getChildren().at(row);
+        setScrollDotSelected((brls::Image*)scroll_dot_row_box->getChildren().at(this->screenshot_idx % 10));
+    }
 }
 
 void ModPage::onContentAvailable() {

@@ -4,6 +4,10 @@
 #include "views/main_window.h"
 #include "views/tabs/browse.h"
 
+// for debugging
+#include "views/tabs/submission_node.h"
+#include "views/tabs/mod_page.h"
+
 void MainActivity::onContentAvailable() {
     TopBar* top_bar = (TopBar*)this->getView("top_bar");
     this->registerAction(
@@ -19,7 +23,7 @@ void MainActivity::onContentAvailable() {
         },
         false, brls::Sound::SOUND_CLICK_SIDEBAR);
 
-
+    /* ------ actions for debugging ------- */
     this->registerAction(
         "ResetJson", brls::ControllerButton::BUTTON_X, [installed_mods] (brls::View* v) {
             installed_mods->resetFile();
@@ -27,6 +31,18 @@ void MainActivity::onContentAvailable() {
             return true;
         }, false, brls::Sound::SOUND_CLICK
     );
+    this->registerAction( // F1
+        "modpage", brls::ControllerButton::BUTTON_BACK, [] (brls::View* v) {
+            std::string mod_id = "174318";
+            json _j = curl::DownloadJson("https://gamebanana.com/apiv3/Mod/" + mod_id);
+            gb::GbSubmission* _g = new gb::GbSubmission {.submission_data = _j};
+            SubmissionNode* _sub = new SubmissionNode(_g);
+            brls::Application::pushActivity(new ModPage(_sub));
+            return true;
+        }, false, brls::Sound::SOUND_CLICK
+    );
+    /* -------------------------------------- */
+
     if (!REDUCED_NET_REQUESTS) {
         //json quote_of_the_day = curl::DownloadJson("http://quotes.rest/qod.json");
         //setMotdText(quote_of_the_day["contents"]["quotes"][0]["quote"].get<std::string>());

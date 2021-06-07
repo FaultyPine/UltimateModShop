@@ -90,31 +90,32 @@
                 height="50"
                 axis="row"
                 justifyContent="center"
-                marginTop="10"
+                marginTop="5"
                 marginBottom="10"
             >
                 <brls:Image
                     id="left_scroll_button"
                     image="@res/icon/L.png"
+                    marginTop="10"
                 />
 
                 <!-- Holds scroll dots... added to with more screenshots-->
                 <brls:Box
                     id="scroll_dot_box"
+                    axis="column"
                     marginTop="10"
-                    paddingTop="8"
-                    height="50%"
                     grow="0.1"
                     justifyContent="spaceEvenly"
                 >
 
-                    <!-- Scroll dots added in here -->
+                    <!-- Scroll dots added in here with horizontal "holders" -->
 
                 </brls:Box>
                 
                 <brls:Image
                     id="right_scroll_button"
                     image="@res/icon/R.png"
+                    marginTop="10"
                 />
 
             </brls:Box>
