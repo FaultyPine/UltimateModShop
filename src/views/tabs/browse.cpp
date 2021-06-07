@@ -47,8 +47,7 @@ Browse::Browse() {
 
 Browse::~Browse() {
     for (gb::GbSubmission* e : this->subs) {
-        if (e)
-            delete e;
+        delete e;
     }
         
     delete this->pages;

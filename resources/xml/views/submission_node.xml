@@ -17,13 +17,11 @@
     <brls:Image
         id="submission_image"
         image="@res/icon/unknown_image.png"
-        width="auto"
+        width="70%"
         height="70%"
-        imageAlign="top"
         scalingType="fit"
         marginBottom="20px"
         marginTop="10px"
-        marginRight="20px"
     />
 
     <brls:Label

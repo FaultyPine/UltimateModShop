@@ -2,8 +2,7 @@
 
 InstalledMods::~InstalledMods() {
     for (InstalledMod* m : this->mods) {
-        if (m)
-            delete m;
+        delete m;
     }
 }
 

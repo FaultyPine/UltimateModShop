@@ -44,7 +44,7 @@ extern brls::Box* main_box;
 #define START_BREAKABLE do {
 #define END_BREAKABLE   } while (false);
 
-#define REDUCED_NET_REQUESTS true
+#define REDUCED_NET_REQUESTS false
 
 #define APP_VERSION "0.0.0"
 
@@ -78,9 +78,13 @@ void setup();
 
 void stub();
 
+float lerp(float a, float b, float f);
+
 std::string replaceAll(std::string str, const std::string &from, const std::string &to);
 
 std::string EpochToHumanReadable(long long since_epoch);
+
+std::string readable_fs(double bytes);
 
 bool str_contains(std::string data, std::string toSearch, size_t pos = 0);
 
@@ -89,8 +93,6 @@ bool strHasEnding (std::string const &fullString, std::string const &ending);
 std::string cleanGBDescriptionText(std::string str);
 
 std::string ReplaceString(std::string subject, const std::string& search, const std::string& replace);
-
-std::vector<std::filesystem::path> jsonFileTreeToPaths(json j, std::vector<std::filesystem::path> paths = {});
 
 void setHintText(std::string text = "");
 

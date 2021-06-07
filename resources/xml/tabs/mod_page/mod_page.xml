@@ -19,7 +19,6 @@
         borderThickness="5"
         borderColor="#414141"
     >
-        <!-- child view for scrollingframe -->
         <brls:Box
             axis="column"
             width="825"
@@ -33,21 +32,30 @@
 
 
             <!-- Title/subtitle -->
-            <brls:Label
-                width="100%"
-                id="subtitle_label"
-                text="Mod Subtitle Here"
-                fontSize="15"
-                textAlign="right"
-            />
-            <brls:Label
-                id="title_label"
-                width="90%"
+            <brls:Box
                 height="50"
-                text="Mod Title Here"
-                fontSize="36"
-                textColor="#000000"
-            />
+                axis="row"
+                lineBottom="3"
+                lineColor="#000000"
+                marginBottom="5"
+            >
+
+                <brls:Label
+                    id="title_label"
+                    text="Mod Title Here"
+                    width="65%"
+                    fontSize="32"
+                    textColor="#000000"
+                />
+                <brls:Label
+                    id="subtitle_label"
+                    visibility="gone"
+                    fontSize="15"
+                    textAlign="right"
+                />
+                
+
+            </brls:Box>
 
 
             <!-- Screenshots -->
@@ -55,12 +63,11 @@
                 id="screenshots_box"
                 height="300"
                 width="80%"
-                borderThickness="3"
-                borderColor="#000000"
             >
                 <brls:Image
                     id="screenshots_default_image"
                     image="@res/icon/unknown_image.png"
+                    imageAlign="center"
                     scalingType="fit"
                     
                 />
@@ -77,9 +84,7 @@
                 fontSize="18"
             />
 
-            <!-- Screenshot Scroll -->
-
-            <!-- Scroll image holder -->
+            <!-- Screenshot Scroll Dots -->
             <brls:Box
                 width="80%"
                 height="50"
@@ -103,13 +108,7 @@
                     justifyContent="spaceEvenly"
                 >
 
-                    <brls:Image
-                        id="scroll_dot"
-                        image="@res/icon/dot.png"
-                        marginRight="2"
-                        marginLeft="2"
-                        height="60%"
-                    />
+                    <!-- Scroll dots added in here -->
 
                 </brls:Box>
                 
@@ -123,10 +122,10 @@
             <!-- Description -->
             <brls:Label
                 id="description_label"
-                maxHeight="250"
-                text="Description Here "
+                singleLine="false"
+                visibility="gone"
                 textColor="#000000"
-                fontSize="18"
+                fontSize="16"
             />
 
             <brls:Box
@@ -135,7 +134,7 @@
                 <brls:Button
                     marginTop="10"
                     id="description_read_more_button"
-                    visibility="invisible"
+                    visibility="gone"
                     height="40"
                     width="20%"
                     text="Read More"
@@ -215,7 +214,7 @@
                 grow="1.0"
                 id="author_label"
                 autoAnimate="true"
-                text="Author: ???"
+                text="123456789123456789"
                 fontSize="24"
             />
             
@@ -376,18 +375,19 @@
             id="categories_box"
             height="15%"
             width="100%"
-            justifyContent="spaceEvenly"
-            borderThickness="5"
+            justifyContent="spaceBetween"
             paddingBottom="5"
+            paddingRight="10"
+            paddingLeft="10"
         >
 
             <!-- CATEGORY -->
             <brls:Box
                 height="100%"
-                width="45%"
+                width="35%"
                 paddingTop="5"
                 backgroundColor="#A49F9F"
-                cornerRadius="50"
+                cornerRadius="15"
             >
 
                 <brls:Box
@@ -397,24 +397,25 @@
                 >
 
                     <brls:Label
-                        width="45%"
+                        width="35%"
                         text="Category:"
-                        fontSize="18"
+                        fontSize="16"
                         textAlign="center"
                         textColor="#000000"
                     />
 
                     <brls:Box
                        axis="row"
-                       width="45%"
+                       width="35%"
                        height="75%"
-                       paddingLeft="15"
+                       justifyContent="spaceEvenly"
                     >
 
                         <brls:Label
                             id="category_label"
+                            animated="true"
                             text="???"
-                            fontSize="24"
+                            fontSize="20"
                             textColor="#000000"
                         />
 
@@ -422,8 +423,8 @@
                             id="category_image"
                             image="@res/icon/unknown_image.png"
                             marginTop="7"
-                            width="20%"
-                            height="70%"
+                            height="60%"
+                            width="10%"
                         />
 
                     </brls:Box>
@@ -439,17 +440,17 @@
                 width="45%"
                 paddingTop="5"
                 backgroundColor="#A49F9F"
-                cornerRadius="50"
+                cornerRadius="15"
             >
 
                 <brls:Box
                     axis="column"
                     height="100%"
-                    width="100%"
+                    width="50%"
                 >
 
                     <brls:Label
-                        width="45%"
+                        width="100%"
                         text="Sub-Category:"
                         fontSize="16"
                         textAlign="center"
@@ -458,24 +459,25 @@
 
                     <brls:Box
                        axis="row"
-                       width="45%"
+                       width="100%"
                        height="75%"
-                       paddingLeft="15"
+                       justifyContent="spaceEvenly"
                     >
 
                         <brls:Label
                             id="subcategory_label"
+                            animated="true"
                             text="???"
-                            fontSize="24"
+                            fontSize="20"
                             textColor="#000000"
                         />
 
                         <brls:Image
                             id="subcategory_image"
+                            scalingType="fit"
                             image="@res/icon/unknown_image.png"
                             marginTop="7"
-                            width="20%"
-                            height="70%"
+                            width="35%"
                         />
 
                     </brls:Box>

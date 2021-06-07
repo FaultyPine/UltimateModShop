@@ -186,7 +186,7 @@ void Image::invalidateImageBounds()
     {
         case ImageScalingType::FIT:
         {
-            if (viewAspectRatio >= imageAspectRatio)
+            /*if (viewAspectRatio >= imageAspectRatio)
             {
                 this->imageHeight = this->getHeight();
                 this->imageWidth  = this->imageHeight * imageAspectRatio;
@@ -199,7 +199,12 @@ void Image::invalidateImageBounds()
                 this->imageHeight = this->imageWidth * imageAspectRatio;
                 this->imageY      = (height - this->imageHeight) / 2.0F;
                 this->imageX      = 0;
-            }
+            }*/
+            float factor = height / this->originalImageHeight;
+            if (this->originalImageWidth * factor > width)
+                factor = width / this->originalImageWidth;
+            this->imageHeight = this->originalImageHeight * factor;
+            this->imageWidth = this->originalImageWidth * factor;
             break;
         }
         case ImageScalingType::STRETCH:

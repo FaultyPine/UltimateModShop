@@ -24,8 +24,7 @@ TopBar::TopBar() {
 
 TopBar::~TopBar() {
     for (BarItem* x : Menus) {
-        if (x)
-            delete x;
+        delete x;
     }
 }
 

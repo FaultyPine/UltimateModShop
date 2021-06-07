@@ -4,6 +4,11 @@ InstalledMods* installed_mods;
 
 void stub() { }
 
+float lerp(float a, float b, float f) 
+{
+    return (a * (1.0 - f)) + (b * f);
+}
+
 std::string replaceAll(std::string str, const std::string &from, const std::string &to) {
     size_t start_pos = 0;
     while ((start_pos = str.find(from, start_pos)) != std::string::npos)
@@ -35,8 +40,15 @@ bool str_contains(std::string data, std::string toSearch, size_t pos)
     return data.find(toSearch, pos) != std::string::npos;
 }
 
+
+
 std::string cleanGBDescriptionText(std::string str) {
     std::string html = str;
+    html = replaceAll(html, "<br>", "\n");
+    html = replaceAll(html, "&amp;", "&");
+    html = replaceAll(html, "&nbsp;", "");
+
+    // get rid of remaining html tags
     while (html.find("<") != std::string::npos)
     {
         auto startpos = html.find("<");
@@ -47,15 +59,20 @@ std::string cleanGBDescriptionText(std::string str) {
             html.erase(startpos, endpos - startpos);
         }
     }
-    std::string weird_thing = "&nbsp;"; // idk what this is, but it's in gb descriptions lol
-    int weird_thing_idx = html.find(weird_thing);
-    while (weird_thing_idx != std::string::npos) {
-        html.replace(weird_thing_idx, weird_thing.size(), "");
-        weird_thing_idx = html.find(weird_thing);
-    }
     return html;
 }
 
+std::string readable_fs(double bytes) {
+    char buf[10]; // 10 should be fine
+    int i = 0;
+    const char* units[] = {"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+    while (bytes > 1024) {
+        bytes /= 1024;
+        i++;
+    }
+    sprintf(buf, "%.*f %s", i, bytes, units[i]);
+    return std::string(buf);
+}
 
 void hint_text_wait(brls::Box* hint_box) {
     std::this_thread::sleep_for(std::chrono::seconds(2));

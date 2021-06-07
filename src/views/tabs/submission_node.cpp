@@ -13,8 +13,7 @@ SubmissionNode::SubmissionNode(gb::GbSubmission* _submission) {
 }
 
 SubmissionNode::~SubmissionNode() {
-    if (this->submission)
-        delete this->submission;
+    delete this->submission;
 }
 
 SubmissionNode::SubmissionNode() {

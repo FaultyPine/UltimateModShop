@@ -1105,7 +1105,7 @@ void View::show(std::function<void(void)> cb, bool animate, float animationDurat
         return;
     }
 
-    brls::Logger::debug("Showing {}", this->describe());
+    //brls::Logger::debug("Showing {}", this->describe());
 
     this->hidden = false;
 
@@ -1147,7 +1147,7 @@ void View::hide(std::function<void(void)> cb, bool animated, float animationDura
         return;
     }
 
-    brls::Logger::debug("Hiding {}", this->describe());
+    //brls::Logger::debug("Hiding {}", this->describe());
 
     this->hidden = true;
     this->fadeIn = false;

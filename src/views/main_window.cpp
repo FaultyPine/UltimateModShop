@@ -1,8 +1,7 @@
 #include "main_window.h"
 
 MainWindow::~MainWindow() {
-    if (this->layer_view)
-        delete this->layer_view;
+    delete this->layer_view;
 }
 
 MainWindow::MainWindow() {

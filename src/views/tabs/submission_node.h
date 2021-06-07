@@ -16,11 +16,12 @@ class SubmissionNode : public brls::Box
     void onFocusGained() override;
     void onFocusLost() override;
 
+    void downloadSubmission();
+
     private:
 
     gb::GbSubmission* submission;
 
     bool onSubmissionNodeClicked(brls::View* view);
 
-    void downloadSubmission();
 };

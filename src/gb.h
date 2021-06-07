@@ -50,6 +50,7 @@ namespace gb {
             static GbField File220 = "_sFile220";
             static GbField File530 = "_sFile530";
             static GbField File100 = "_sFile100";
+            static GbField Caption = "_sCaption";
         }
         namespace Files {
             static GbField Files = "_aFiles";
