@@ -17,7 +17,6 @@
 #include <thread>
 #include <chrono>
 #include <map>
-#include <mutex>
 #include "zip/ZipUtil.hpp"
 
 struct MemoryStruct
@@ -31,7 +30,6 @@ struct MemoryStruct
 #include "curl.h"
 #include "installed_mods.h"
 #include "gb.h"
-#include "bg_task.h"
 
 using json = nlohmann::json;
 

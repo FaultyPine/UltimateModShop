@@ -4,7 +4,7 @@
 void SplashScreen::onContentAvailable() {
     //brls::Logger::debug("Splash screen content available");
     std::string motds = 
-    R"motd(
+    R""""(
     .------------------------.
     |      HELP DESK         |
     |________________________|
@@ -23,10 +23,11 @@ ___||____;_--'___'/ (      ||
 ||||       0700 - 1700      |
 \|||                (------)|
 \||_________________//||\\_|
-)motd";
+)"""";
     ((brls::Label*)this->getView("splash_screen_motd_text"))->setText(motds);
 }
 
 SplashScreen::SplashScreen() {
-    
+    //brls::Logger::debug("Splash screen ctor");
+    //setup();
 }
