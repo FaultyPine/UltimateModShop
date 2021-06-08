@@ -23,6 +23,14 @@
         textColor="#EEEEEE"
         marginLeft="50"
     />
+    
+    <brls:Label
+        id="loading_txt"
+        text="Loading..."
+        fontSize="25"
+        textColor="#EEEEEE"
+        marginLeft="1100"
+    />
 
     
 
