@@ -21,8 +21,6 @@
 #include "views/top_bar/top_bar.h"
 #include "views/main_window.h"
 
-#include "views/tabs/mod_page.h"
-
 int main(int argc, char* argv[])
 {
 // init for pc/switch

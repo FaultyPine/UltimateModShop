@@ -33,7 +33,7 @@ void MainActivity::onContentAvailable() {
     );
     this->registerAction( // F1
         "modpage", brls::ControllerButton::BUTTON_BACK, [] (brls::View* v) {
-            std::string mod_id = "174318";
+            std::string mod_id = "293274";
             json _j = curl::DownloadJson("https://gamebanana.com/apiv3/Mod/" + mod_id);
             gb::GbSubmission* _g = new gb::GbSubmission {.submission_data = _j};
             SubmissionNode* _sub = new SubmissionNode(_g);

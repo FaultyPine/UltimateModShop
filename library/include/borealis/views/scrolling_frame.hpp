@@ -30,6 +30,9 @@ enum class ScrollingBehavior
 
     // The focused view is always in the center, inputs always change focus and scroll immediately
     CENTERED,
+
+    // The frame can be scrolled with some input at any time
+    NO_FOCUS,
 };
 
 // A vertical-only frame that can scroll if its content overflows.
@@ -76,6 +79,7 @@ class ScrollingFrame : public Box
     View* prevChildFocused = nullptr;
 
     bool updateScrollingOnNextFrame = false;
+    float noFocusScrollRate = 0.01;
 
     float middleY = 0; // y + height/2
     float bottomY = 0; // y + height
@@ -85,6 +89,7 @@ class ScrollingFrame : public Box
     void prebakeScrolling();
     bool updateScrolling(bool animated);
     void startScrolling(bool animated, float newScroll);
+    void startScrollingNoFocus();
     void scrollAnimationTick();
 
     float getScrollingAreaTopBoundary();

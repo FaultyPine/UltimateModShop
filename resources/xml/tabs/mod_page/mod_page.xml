@@ -121,13 +121,29 @@
             </brls:Box>
 
             <!-- Description -->
-            <brls:Label
-                id="description_label"
-                singleLine="false"
-                visibility="gone"
-                textColor="#000000"
-                fontSize="16"
-            />
+            <brls:ScrollingFrame
+                height="270"
+                scrollingBehavior="no_focus"
+            >
+                <brls:Box
+                    justifyContent="center"
+                    paddingLeft="20"
+                >
+
+                    <brls:Label
+                        id="description_label"
+                        singleLine="false"
+                        visibility="gone"
+                        textColor="#000000"
+                        fontSize="17"
+                    />
+
+                </brls:Box>
+
+
+
+            </brls:ScrollingFrame>
+
 
             <brls:Box
                 justifyContent="flexEnd"

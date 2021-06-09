@@ -28,6 +28,7 @@ ScrollingFrame::ScrollingFrame()
         {
             { "natural", ScrollingBehavior::NATURAL },
             { "centered", ScrollingBehavior::CENTERED },
+            { "no_focus", ScrollingBehavior::NO_FOCUS },
         });
 
     this->setMaximumAllowedXMLElements(1);
@@ -36,8 +37,10 @@ ScrollingFrame::ScrollingFrame()
 void ScrollingFrame::draw(NVGcontext* vg, float x, float y, float width, float height, Style style, FrameContext* ctx)
 {
     // Update scrolling - try until it works
-    if (this->updateScrollingOnNextFrame && this->updateScrolling(false))
+    if (this->behavior != ScrollingBehavior::NO_FOCUS && this->updateScrollingOnNextFrame && this->updateScrolling(false))
         this->updateScrollingOnNextFrame = false;
+    else if (this->behavior == ScrollingBehavior::NO_FOCUS)
+        this->startScrollingNoFocus();
 
     // Enable scissoring
     nvgSave(vg);
@@ -175,6 +178,20 @@ void ScrollingFrame::startScrolling(bool animated, float newScroll)
     this->invalidate();
 }
 
+void ScrollingFrame::startScrollingNoFocus() {
+    if (this->getContentHeight() > this->getHeight()) {
+        ControllerState controllerState = {};
+        Application::getPlatform()->getInputManager()->updateControllerState(&controllerState);
+        if (controllerState.buttons[brls::ControllerButton::BUTTON_UP] && this->scrollY > 0) {
+            this->scrollY = this->scrollY - this->noFocusScrollRate;
+        }
+        else if (controllerState.buttons[brls::ControllerButton::BUTTON_DOWN]) {
+            this->scrollY = this->scrollY + this->noFocusScrollRate;
+        }
+        this->scrollAnimationTick();
+    }
+}
+
 void ScrollingFrame::setScrollingBehavior(ScrollingBehavior behavior)
 {
     this->behavior = behavior;
@@ -196,10 +213,12 @@ void ScrollingFrame::scrollAnimationTick()
 
 void ScrollingFrame::onChildFocusGained(View* directChild, View* focusedView)
 {
-    this->childFocused = focusedView;
+    if (this->behavior != ScrollingBehavior::NO_FOCUS) {
+        this->childFocused = focusedView;
 
-    // Start scrolling
-    this->updateScrolling(true);
+        // Start scrolling
+        this->updateScrolling(true);
+    }
 
     Box::onChildFocusGained(directChild, focusedView);
 }

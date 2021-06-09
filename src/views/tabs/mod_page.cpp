@@ -57,11 +57,15 @@ ModPage::~ModPage() {
 
 void ModPage::setupModPage() {
     if (this->submission != nullptr && this->submission->getSubmissionData() != nullptr) {
-
+        
         const json& mod = this->submission->getSubmissionData()->submission_data;
         if (mod.empty())
             return;
-        brls::Logger::debug("Setting up ModPage...");
+
+        if (mod.contains(gb::Fields::idRow))
+            brls::Logger::debug("Setting up ModPage... Itemid: {}", mod[gb::Fields::idRow].get<std::string>());
+        else
+            brls::Logger::debug("Setting up ModPage...");
 
         /* ---------------- Left Side Prep ---------------- */
         GetChildView(Label, title_label)
