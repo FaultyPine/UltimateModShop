@@ -28,7 +28,7 @@ std::vector<std::string> ArcFolders = {
 
 void move_folder(std::string sorc, std::string dst, bool createRoot = true) {
     if (createRoot)
-        fs::create_directory(dst);
+        fs::create_directories(dst);
 
     for(fs::path p: fs::directory_iterator(sorc)){
         fs::path destFile = dst/p.filename();
@@ -57,23 +57,37 @@ void move_folder(std::string sorc, std::string dst, bool createRoot = true) {
  *  
  *     ^ that's the automatic part of the system. If there are any mod files that should be dealt with differently, mod creators will need to specify
  *      that in some sort of modfiles.ini or something for me to parse.
+ *      Might also just give users a prompt to put files in proper locations themselves... would honestly be less of a headache
  */
 
 
-
-std::vector<fs::path> handleArcFiles(const std::string& tmp_extraction_dir, const std::vector<fs::path>& tmp_dir_paths) {
+std::vector<fs::path> handleArcFiles(const std::string& tmp_extraction_dir, const std::vector<fs::path>& tmp_dir_paths, const std::string& zip_filename) {
     std::vector<fs::path> paths = {};
 
     for (fs::path p : tmp_dir_paths) {
         // this ignores workspaces. If a mod has a workspace, I'm fine with assuming that it is formatted for the sd root.
         if (std::find(ArcFolders.begin(), ArcFolders.end(), p.filename()) != ArcFolders.end()) {
             fs::path parent = p.parent_path();
+
+            // if parent is the tmp extraction dir (which means the mod itself doesn't have a proper ultimate/mods/MyMod folder), insert the zip filename as the "name" of the mod
+            if (parent.filename().string() == TEMP_EXTRACTION_DIRNAME) {
+                fs::path new_path = MODS_WORKSPACE_PATH + zip_filename + "/" + p.filename().string();
+                move_folder(p.string(), new_path.string());
+                paths.push_back(new_path.parent_path());
+
+                continue;
+            }
+
             // if we haven't already pushed this mod folder... accounts for mods with multiple arc folder roots... I.E. having a `ui` AND a `fighter` folder
-            if ( std::none_of(paths.begin(), paths.end(), [parent](fs::path i){ return str_contains(i.string(), parent.filename().string()); }) ) {
+            if ( std::none_of(paths.begin(), paths.end(), [parent](fs::path i){ 
+                    return str_contains(i.string(), parent.filename().string()) || str_contains(parent.string(), i.filename().string()) ;
+                }) ) {
                 fs::path new_path = MODS_WORKSPACE_PATH + parent.filename().string();
+                
                 paths.push_back(new_path);
                 move_folder(parent.string(), new_path);
             }
+
         }
     }
  
@@ -119,7 +133,7 @@ std::vector<fs::path> handleSkylinePlugins(const std::string& tmp_extraction_dir
 std::vector<fs::path> handleModFiles(const std::string& tmp_extraction_dir, const std::vector<fs::path>& tmp_dir_paths, const std::string& zip_filename) {
     std::vector<fs::path> paths = {};
 
-    for (fs::path p : handleArcFiles(tmp_extraction_dir, tmp_dir_paths)) {
+    for (fs::path p : handleArcFiles(tmp_extraction_dir, tmp_dir_paths, zip_filename)) {
         brls::Logger::debug("ArcFile: {}", p.string());
         paths.push_back(p);
     }
@@ -172,7 +186,7 @@ std::vector<std::filesystem::path> Manager::InstallModFiles(const json &files) {
     }
 
     for (json file : files) { // iterate through each uploaded file in the submission... will probably end up prompting the user somehow or having them select which files in the submission they want
-        brls::Logger::debug("Downloading file. Size = {} bytes", file[gb::Fields::Files::FileSize].get<unsigned long>());
+        brls::Logger::debug("Downloading file ({} files total)). Size = {} bytes", files.size(), file[gb::Fields::Files::FileSize].get<unsigned long>());
         std::string url = file[gb::Fields::Files::DownloadURL].get<std::string>();
         std::string filename = file[gb::Fields::Files::FileName].get<std::string>();
         std::vector<fs::path> modfile = Manager::InstallModFile(url, filename);
@@ -181,4 +195,47 @@ std::vector<std::filesystem::path> Manager::InstallModFiles(const json &files) {
     }
 
     return paths;
+}
+
+
+
+void Manager::ToggleMod(InstalledMod* mod) {
+    json* installed_mods_json = &installed_mods->GetMemJsonPtr()->at("Installed");
+    for (int i = 0; i < mod->paths.size(); i++) {
+        fs::path path = mod->paths.at(i);
+        if (fs::exists(path)) {
+            // if is a plugin, and not a plugin dependency, and exists, place it in "disabled_plugins" folder
+            if (path.extension().string() == ".nro" && !str_contains(path.string(), SKYLINE_PLUGIN_DEP_PATH)) {
+                std::string old_path = path.string();
+                std::string new_path = mod->enabled ?
+                                        replaceAll(path, "plugins", "disabled_plugins") : replaceAll(path, "disabled_plugins", "plugins") ;
+                fs::rename(old_path, new_path);
+
+                mod->paths.at(i) = fs::path(new_path);
+                installed_mods_json->at(mod->itemid)[gb::Fields::Custom::Paths][i] = new_path;
+            }
+            // else, is an arc mod. So rename it with a period in front to disable
+            else if (str_contains(path.string(), ULTIMATE_ARC_PATH) && (mod->enabled ? path.filename().string().at(0) != '.' : path.filename().string().at(0) == '.')) {
+                std::string old_path = path.string();
+                std::string new_path = mod->enabled ? 
+                                       path.replace_filename("." + path.filename().string()) : path.replace_filename(path.filename().string().substr(1));
+                fs::rename(old_path, new_path);
+
+                mod->paths.at(i) = fs::path(new_path);
+                installed_mods_json->at(mod->itemid)[gb::Fields::Custom::Paths][i] = new_path;
+            }
+        }
+    }
+    installed_mods_json->at(mod->itemid)[gb::Fields::Custom::Enabled] = !mod->enabled;
+    installed_mods->OverwriteFileFromMem();
+    mod->enabled = !mod->enabled;
+}
+
+void Manager::UninstallMod(InstalledMod* mod) {
+    for (fs::path p : mod->paths) {
+        if (fs::exists(p)) {
+            fs::remove_all(p);
+        }
+    }
+    installed_mods->removeInstalledMod(mod);
 }

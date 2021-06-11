@@ -507,7 +507,7 @@
 
 
         <!-- TOGGLE -->
-
+        <!--
         <brls:Box
             id="toggle_box"
             height="10%"
@@ -534,6 +534,8 @@
             />
 
         </brls:Box>
+        -->
+        
         
 
 

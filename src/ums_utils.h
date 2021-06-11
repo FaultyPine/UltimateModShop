@@ -70,8 +70,8 @@ extern brls::Box* main_box;
 #define SKYLINE_PLUGINS_PATH      stdstr(ROMFS_PATH)           + "skyline/plugins/"
 #define SKYLINE_PLUGIN_DEP_PATH   stdstr(SKYLINE_PLUGINS_PATH) + "dependencies/"
 
-#define TEMP_EXTRACTION_DIRNAME   "tmp_dir/"
-#define TEMP_EXTRACTION_DIR       stdstr(SD_ROOT)     + TEMP_EXTRACTION_DIRNAME
+#define TEMP_EXTRACTION_DIRNAME   "tmp_dir"
+#define TEMP_EXTRACTION_DIR       stdstr(SD_ROOT)     + TEMP_EXTRACTION_DIRNAME + "/"
 
 /// setup things that don't necessarily have to do with brls stuff
 void setup();
@@ -91,8 +91,6 @@ bool str_contains(std::string data, std::string toSearch, size_t pos = 0);
 bool strHasEnding (std::string const &fullString, std::string const &ending);
 
 std::string cleanGBDescriptionText(std::string str);
-
-std::string ReplaceString(std::string subject, const std::string& search, const std::string& replace);
 
 void setHintText(std::string text = "");
 

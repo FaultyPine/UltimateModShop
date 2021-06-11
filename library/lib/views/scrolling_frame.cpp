@@ -185,7 +185,7 @@ void ScrollingFrame::startScrollingNoFocus() {
         if (controllerState.buttons[brls::ControllerButton::BUTTON_UP] && this->scrollY > 0) {
             this->scrollY = this->scrollY - this->noFocusScrollRate;
         }
-        else if (controllerState.buttons[brls::ControllerButton::BUTTON_DOWN]) {
+        else if (controllerState.buttons[brls::ControllerButton::BUTTON_DOWN] && ( (this->contentView->getY() + this->getContentHeight()) > (this->getY() + this->getHeight()) )) {
             this->scrollY = this->scrollY + this->noFocusScrollRate;
         }
         this->scrollAnimationTick();

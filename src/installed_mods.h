@@ -47,6 +47,8 @@ class InstalledMods {
     /// push back list with supplied ptr
     void addInstalledMod(InstalledMod* m);
 
+    void removeInstalledMod(InstalledMod* m);
+
     /// get ptr at idx
     InstalledMod* getInstalledMod(int idx);
 

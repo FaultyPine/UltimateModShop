@@ -13,6 +13,7 @@ InstalledMods::InstalledMods(json default_json) {
         file << default_json;
         file.close();
         this->installed_json = default_json;
+        brls::Logger::debug("Init new InstalledMods json");
     }
     else {
         this->OverwriteMemFromFile();
@@ -79,6 +80,14 @@ void InstalledMods::resetFile() {
 
 void InstalledMods::addInstalledMod(InstalledMod* m) {
     this->mods.push_back(m);
+}
+
+void InstalledMods::removeInstalledMod(InstalledMod* m) {
+    auto idx = std::find(this->mods.begin(), this->mods.end(), m);
+    this->mods.erase(idx);
+    this->installed_json["Installed"].erase(m->itemid);
+    this->OverwriteFileFromMem();
+    delete m;
 }
 
 InstalledMod* InstalledMods::getInstalledMod(int idx) {

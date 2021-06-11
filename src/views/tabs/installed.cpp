@@ -1,8 +1,11 @@
 #include "installed.h"
+#include "installation/manager.h"
 
 bool toggleInstalledMod(brls::View* mod_view) {
-    brls::Logger::debug("Clicked installed mod: {}", mod_view->describe());
-    // InstalledMod* clicked_mod = installed_mods->getInstalledMod(std::stoi(mod_view->getID());
+    InstalledMod* clicked_mod = installed_mods->getInstalledMod(std::stoi(mod_view->getID()));
+    Manager::ToggleMod(clicked_mod);
+    float new_alpha = mod_view->getAlpha() > 0.5 ? 0.5 : 1.0;
+    mod_view->setAlpha(new_alpha);
     return true;
 }
 
@@ -18,11 +21,15 @@ Installed::Installed() {
                 if (entry.contains(gb::Fields::Custom::Paths))
                     paths = entry[gb::Fields::Custom::Paths].get<std::vector<std::filesystem::path>>();
 
+                std::string version;
+                if (entry.contains(gb::Fields::AdditionalInfo::AdditionalInfo))
+                    version = entry[gb::Fields::AdditionalInfo::AdditionalInfo][gb::Fields::AdditionalInfo::Version].get<std::string>();
+
                 InstalledMod* m = new InstalledMod({
                     entry[gb::Fields::Name].get<std::string>(), 
                     entry[gb::Fields::Submitter::Submitter][gb::Fields::Name].get<std::string>(), 
-                    "0.0.0", 
-                    true, 
+                    version.empty() ? "0.0.0" : version,
+                    entry.contains(gb::Fields::Custom::Enabled) ? entry[gb::Fields::Custom::Enabled].get<bool>() : true,
                     entry[gb::Fields::idRow].get<std::string>(), 
                     entry[gb::Fields::Custom::ThumbnailURL].get<std::string>(), 
                     paths
@@ -72,6 +79,14 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     installed_mods->addInstalledMod(mod);
 
     installed_item->registerClickAction(toggleInstalledMod);
+    installed_item->registerAction(
+        "Uninstall", brls::ControllerButton::BUTTON_X, [this, mod, installed_mods, installed_item] (brls::View* v) {
+            Manager::UninstallMod(mod);
+            this->removeView(installed_item);
+            brls::Logger::debug("Uninstalled: {}", mod->name);
+            return true;
+        }, false, brls::Sound::SOUND_CLICK
+    );
 
     ((brls::Box*)(this->getView("installed_box")))->addView(installed_item);
 }

@@ -57,14 +57,20 @@ void SubmissionNode::downloadSubmission() {
         if (!paths.empty())
             sd[gb::Fields::Custom::Paths] = paths;
         
-        installed_mods->GetMemJsonPtr()->at("Installed") += sd;
+        sd[gb::Fields::Custom::Enabled] = true;
+        
+        installed_mods->GetMemJsonPtr()->at("Installed")[sd[gb::Fields::idRow].get<std::string>()] = sd;
         installed_mods->OverwriteFileFromMem();
+
+        std::string version;
+        if (sd.contains(gb::Fields::AdditionalInfo::AdditionalInfo))
+            version = sd[gb::Fields::AdditionalInfo::AdditionalInfo][gb::Fields::AdditionalInfo::Version].get<std::string>();
 
         InstalledMod* m = new InstalledMod({
             sd[gb::Fields::Name].get<std::string>(), 
             sd[gb::Fields::Submitter::Submitter][gb::Fields::Name].get<std::string>(), 
-            "0.0.0", 
-            true, 
+            version.empty() ? "0.0.0" : version,
+            true,
             sd[gb::Fields::idRow].get<std::string>(), 
             sd[gb::Fields::Custom::ThumbnailURL].get<std::string>(), 
             paths

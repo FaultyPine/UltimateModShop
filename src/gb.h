@@ -76,6 +76,7 @@ namespace gb {
         namespace Custom {
             static GbField ThumbnailURL = "thumbnail_url";
             static GbField Paths = "paths";
+            static GbField Enabled = "is_enabled";
         }
     }
 
