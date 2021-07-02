@@ -28,7 +28,7 @@ class LayerView : public brls::Box
     LayerView();
     ~LayerView();
 
-    void addLayer(brls::View* view);
+    void addLayer(brls::View* view, int idx = -1);
     void changeLayer(int index, bool focus = false);
     void removeLayer(int index, bool should_free);
     brls::View* getLayer(std::string id);
@@ -41,6 +41,8 @@ class LayerView : public brls::Box
 
     void willAppear(bool resetState = false) override;
     void willDisappear(bool resetState = false) override;
+
+    static brls::View* create();
 
   private:
     bool isValidSelectedIdx();

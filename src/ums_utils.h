@@ -1,22 +1,7 @@
 #pragma once
 
 #include <borealis.hpp>
-
-#include <filesystem>
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <vector>
-#include <fstream>
-#include <nlohmann/json.hpp>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <time.h>
-#include <math.h>
-#include <thread>
-#include <chrono>
-#include <map>
+#include "ums_pch.h"
 #include "zip/ZipUtil.hpp"
 
 struct MemoryStruct
@@ -44,7 +29,7 @@ extern brls::Box* main_box;
 #define START_BREAKABLE do {
 #define END_BREAKABLE   } while (false);
 
-#define REDUCED_NET_REQUESTS false
+#define REDUCED_NET_REQUESTS true
 
 #define APP_VERSION "0.0.0"
 
@@ -94,7 +79,7 @@ std::string cleanGBDescriptionText(std::string str);
 
 void setHintText(std::string text = "");
 
-void setMotdText(std::string text = "");
+void setTopText(std::string text = "");
 
 
 

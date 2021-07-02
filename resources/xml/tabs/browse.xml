@@ -3,24 +3,24 @@
     width="100%"
     height="100%"
     axis="row"
-    direction="leftToRight"
-    justifyContent="center"
-    borderThickness="3"
-    borderColor="#FBFF0F"
+    borderColor="#E3E830"
+    borderThickness="0"
 >
+
+    <!-- LEFT ARROW -->
 
     <brls:Box
         id="arrow_left_box"
         marginLeft="10"
-        width="5%"
+        width="3%"
         height="100%"
     >
 
         <brls:Image
             id="arrow_left"
             image="@res/icon/play_l.png"
-            height="80"
-            width="80"
+            height="60"
+            width="60"
             positionTop="260"
             positionRight="8"
             focusable="true"
@@ -31,7 +31,7 @@
     
  
 
-
+    <!-- Actual box that contains the dynamically created mods -->
     <brls:Box
         id="browse_box"
         axis="column"
@@ -39,23 +39,70 @@
 
 
 
+    <!-- RIGHT ARROW -->
     <brls:Box
         id="arrow_right_box"
+        axis="column"
         marginRight="10"
-        width="5%"
+        positionRight="-50"
+        width="3%"
         height="100%"
+        borderThickness="0"
+        borderColor="#000000"
     >
 
         <brls:Image
             id="arrow_right"
             image="@res/icon/play_r.png"
-            height="80"
-            width="80"
+            height="60"
+            width="60"
             positionTop="260"
-            positionRight="8"
             focusable="true"
         />  
 
+
+    </brls:Box>
+
+
+    <!-- Category Filters / Browse "menu" -->
+    <brls:Box
+        id="browse_menu_box"
+        axis="row"
+        visibility="gone"
+        positionTop="0"
+        positionRight="0"
+        height="630"
+        width="7%"
+        borderThickness="0"
+        borderColor="#000000"
+    >
+
+        <brls:Image
+            id="browse_menu_button_image"
+            image="@res/icon/y.png"
+            height="40"
+            width="40"
+            borderColor="#FFFFFF"
+            borderThickness="0"
+        />
+        <brls:Image
+            id="browse_menu_image"
+            image="@res/icon/menu.png"
+            height="80"
+            width="40"
+            borderColor="#FFFFFF"
+            borderThickness="0"
+        />
+
+        <brls:LayerView
+            id="browse_menu_layerview"
+            borderThickness="2"
+            borderColor="#000000"
+            positionRight="450"
+            width="450"
+            height="100%"
+        />
+        
 
     </brls:Box>
 

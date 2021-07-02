@@ -1,0 +1,63 @@
+<brls:Box
+    id="browse_submenu_main_box"
+    axis="column"
+    borderColor="#FFFFFF"
+    borderThickness="0"
+    width="450"
+    height="100%"
+    backgroundColor="#CBCBCB"
+>
+
+    <!-- TOP BOX -->
+    <brls:Box
+        id="browse_submenu_top_box"
+        height="6%"
+        borderColor="#FFFFFF"
+        borderThickness="0"
+    >
+
+        <brls:Label
+            text="Filters"
+            fontSize="24"
+            textAlign="center"
+            height="75%"
+            width="450"
+            textColor="#000000"
+            focusable="false"
+        />
+
+    </brls:Box>
+
+
+    <brls:Box
+        id="browse_submenu_scrollingframe"
+        height="550"
+        width="100%"
+        borderColor="#FFFFFF"
+        borderThickness="2"
+    >
+
+    <!-- 
+
+    <brls:Box
+        id="browse_submenu_container"
+        width="100%"
+        height="90%"
+        justifyContent="spaceBetween"
+        axis="column"
+        paddingTop="5"
+        paddingBottom="5"
+        paddingRight="5"
+        paddingLeft="5"
+    >
+
+
+    </brls:Box>
+
+    -->
+
+    </brls:Box>
+    
+
+
+</brls:Box>

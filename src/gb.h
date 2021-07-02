@@ -7,6 +7,7 @@ namespace gb {
     static const char GB_APIV3_URL[] = "https://gamebanana.com/apiv3/";
     static const char GB_SMASH_GAMEID[] = "6498";
     static const char NewSubsReq[] = "https://gamebanana.com/apiv3/Mod/ByGame?_aGameRowIds[]=6498&_sRecordSchema=FileDaddy&_bReturnMetadata=true&";
+    static const char CategoryReq[] = "https://gamebanana.com/apiv3/Mod/ByCategory?_sRecordSchema=FileDaddy&_bReturnMetadata=true&_aCategoryRowIds[]=";
 
     namespace Endpoints {
         static const char ModByGame[] = "Mod/ByGame?";
@@ -66,6 +67,7 @@ namespace gb {
         namespace Category {
             static GbField SubCategory = "_aCategory";
             static GbField RootCategory = "_aRootCategory";
+            static GbField ParentCategory = "_idParentCategoryRow";
             // Name
         }
         namespace AdditionalInfo {
@@ -92,7 +94,9 @@ namespace gb {
     std::string getItemIdFromProfileURL(std::string profileURL);
 
     typedef std::vector<GbSubmission*> GbSubmissions;
+
     /// Returns a vector of GbSubmission pointers of the newest submissions of the specified gameid.
-    /// Those GbSubmission's will only have itemid and itemtype populated. To get actual info about the submission, use gb::GetSubmissionData
     GbSubmissions* GetNewSubmissions(int page, int numItemsPerPage, std::string game = GB_SMASH_GAMEID);
+
+    GbSubmissions* GetSubmissionsFromCategory(int page, int category, int numItemsPerPage, std::string game = GB_SMASH_GAMEID);
 }

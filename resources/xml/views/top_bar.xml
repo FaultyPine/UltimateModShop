@@ -4,14 +4,15 @@
 
 <brls:Box
     id="top_bar"
-    width="70%"
-    height="10%"
-    marginLeft="300"
+    width="50%"
+    height="8%"
+    marginLeft="600"
+    marginBottom="8"
     axis="row"
     direction="leftToRight"
     justifyContent="spaceBetween"
     alignItems="spaceBetween"
-    borderThickness="3"
+    borderThickness="1.5"
     backgroundColor="#C3C3C3"
     borderColor="#000000">
 

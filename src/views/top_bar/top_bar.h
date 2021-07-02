@@ -25,4 +25,12 @@ class TopBar : public brls::Box
 
     /// initialized in constructor
     std::vector<BarItem*> Menus;
+
+    private:
+
+    void setSelected(brls::View* selected_view);
+    void unsetSelected(brls::View* previously_selected_view);
+
+    const float heightIncreaseOnSelect = 5.0;
+    const float widthIncreaseOnSelect = 65.0;
 };

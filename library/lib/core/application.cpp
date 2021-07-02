@@ -32,6 +32,7 @@
 #include <borealis/views/rectangle.hpp>
 #include <borealis/views/sidebar.hpp>
 #include <borealis/views/tab_frame.hpp>
+#include <borealis/views/LayerView.h>
 #include <stdexcept>
 #include <string>
 
@@ -781,6 +782,7 @@ void Application::registerBuiltInXMLViews()
     Application::registerXMLView("brls:Image", Image::create);
     Application::registerXMLView("brls:Padding", Padding::create);
     Application::registerXMLView("brls:Button", Button::create);
+    Application::registerXMLView("brls:LayerView", LayerView::create);
 }
 
 void Application::registerXMLView(std::string name, XMLViewCreator creator)

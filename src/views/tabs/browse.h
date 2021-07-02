@@ -3,7 +3,13 @@
 #include "submission_node.h"
 #include "ums_utils.h"
 
-
+struct Category {
+    std::string name;
+    int id;
+    int parentCatId;
+    std::string iconUrl;
+    std::vector<Category*> subcategories;
+};
 /** 
  *      _______________________
  *      |  0   |   1   |   2  |
@@ -30,10 +36,17 @@ class Browse : public brls::Box
     const static int NUM_SUBMISSIONS_ROOT = 3;
     const int NUM_SUBMISSIONS_PER_PAGE = NUM_SUBMISSIONS_ROOT * NUM_SUBMISSIONS_ROOT;
 
-    const int NUM_PRELOADED_PAGES = 2;
-    void loadNextPage();
+    // loads the current page (based on current_page)
+    void loadPage(int page, int category = -1);
 
-    void getNewGbSubmissions(int page);
+    void loadCategoryFilters();
+
+    void toggleSubmenu();
+
+    bool category_action_inner(View* view, const std::map<int, Category*>& categories, Box* browse_submenu_container, Box* browse_submenu, brls::ActionListener category_action);
+
+
+    void getNewGbSubmissions(int page, int category);
 
     // scroll left or right
     void scroll(brls::FocusDirection dir);

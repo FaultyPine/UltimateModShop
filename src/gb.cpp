@@ -12,10 +12,26 @@ std::string gb::Embeddables::ConstructEmbeddableImageUrl(std::string itemid, std
 
 
 gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, std::string game) {
-    brls::Logger::debug("Gettings new submissions...");
+    brls::Logger::debug("Gettings new submissions (page {})...", page);
     std::stringstream url;
     url << gb::NewSubsReq << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page);
 
+    json submissions = curl::DownloadJson(url.str());
+    GbSubmissions* ret = new std::vector<gb::GbSubmission*>;
+    if (!submissions.empty()) {
+        for (auto entry : submissions[gb::Fields::Records]) {
+            gb::GbSubmission* tmp = new gb::GbSubmission { .submission_data = entry };
+            ret->push_back(tmp);
+        }
+    }
+    return ret;
+}
+
+gb::GbSubmissions* gb::GetSubmissionsFromCategory(int page, int category, int numItemsPerPage, std::string game) {
+    brls::Logger::debug("Gettings new submissions (page {} category {})...", page, category);
+    std::stringstream url;
+    url << gb::CategoryReq << std::to_string(category) << "&" << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page);
+    
     json submissions = curl::DownloadJson(url.str());
     GbSubmissions* ret = new std::vector<gb::GbSubmission*>;
     if (!submissions.empty()) {

@@ -109,28 +109,32 @@ void ModPage::setupModPage() {
 
 
         /* Screenshots */
-        screenshots_box->addView(this->screenshots_layers);
+        if (!REDUCED_NET_REQUESTS) {
+            screenshots_box->addView(this->screenshots_layers);
 
-        json PreviewMedia = mod[gb::Fields::PreviewMedia::PreviewMedia];
-        if (PreviewMedia.size() > 0)
-            screenshots_default_image->setVisibility(brls::Visibility::GONE);
+            json PreviewMedia = mod[gb::Fields::PreviewMedia::PreviewMedia];
+            if (PreviewMedia.size() > 0)
+                screenshots_default_image->setVisibility(brls::Visibility::GONE);
 
+            CURL_builder curl;
+            for (json img_json : PreviewMedia) {
+                // doesn't support videos/gifs and stuff
+                if (img_json[gb::Fields::Type].get<std::string>() == "image") {
+                    std::string img_url = gb::Fields::PreviewMedia::BaseURL + img_json[gb::Fields::Files::FileName].get<std::string>();
+                    // for some fucked up reason this block of code is preventing the install/close buttons from being focusable... what even
+                    MemoryStruct img = curl::DownloadToMem(img_url, &curl);
+                    if (img.memory != nullptr && img.size > 0) {
+                        brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
+                        new_img->setImageFromMem((unsigned char*)img.memory, img.size);
+                        this->screenshots_layers->addLayer(new_img);
 
-        for (json img_json : PreviewMedia) {
-            // doesn't support videos/gifs and stuff
-            if (img_json[gb::Fields::Type].get<std::string>() == "image") {
-                std::string img_url = gb::Fields::PreviewMedia::BaseURL + img_json[gb::Fields::Files::FileName].get<std::string>();
-                MemoryStruct img = curl::DownloadToMem(img_url);
-                if (img.memory != nullptr && img.size > 0) {
-                    brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
-                    new_img->setImageFromMem((unsigned char*)img.memory, img.size);
-                    this->screenshots_layers->addLayer(new_img);
-
-                    std::string caption = img_json.contains(gb::Fields::PreviewMedia::Caption) ? img_json[gb::Fields::PreviewMedia::Caption].get<std::string>() : "";
-                    this->medias.push_back(new PreviewMediaContainer({ .img = new_img, .caption = caption}));
+                        std::string caption = img_json.contains(gb::Fields::PreviewMedia::Caption) ? img_json[gb::Fields::PreviewMedia::Caption].get<std::string>() : "";
+                        this->medias.emplace_back(new PreviewMediaContainer({ .img = new_img, .caption = caption}));
+                    } // --
                 }
             }
         }
+
 
         /* Image Caption(s) */
         if (!this->medias.empty() && !this->medias.at(0)->caption.empty()) {

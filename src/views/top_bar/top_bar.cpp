@@ -1,14 +1,16 @@
 #include "top_bar.h"
 
-void setSelected(brls::View* selected_view) {
+void TopBar::setSelected(brls::View* selected_view) {
     selected_view->setBackgroundColor(nvgRGBf(0.5, 0.0, 0.1));
-    selected_view->setHeightPercentage(60.0);
-    selected_view->setWidthPercentage(20.0);
+    selected_view->setHeight(selected_view->getHeight() + this->heightIncreaseOnSelect);
+    selected_view->setWidth(selected_view->getWidth() + this->widthIncreaseOnSelect);
+    //selected_view->setTranslationY(-this->heightIncreaseOnSelect);
 }
-void unsetSelected(brls::View* previously_selected_view) {
+void TopBar::unsetSelected(brls::View* previously_selected_view) {
     previously_selected_view->setBackgroundColor(nvgRGBf(1.0, 1.0, 1.0));
-    previously_selected_view->setHeightPercentage(45.0);
-    previously_selected_view->setWidthPercentage(15.0);
+    previously_selected_view->setHeight(previously_selected_view->getHeight() - this->heightIncreaseOnSelect);
+    previously_selected_view->setWidth(previously_selected_view->getWidth() - this->widthIncreaseOnSelect);
+    //previously_selected_view->setTranslationY(this->heightIncreaseOnSelect);
 }
 
 TopBar::TopBar() {

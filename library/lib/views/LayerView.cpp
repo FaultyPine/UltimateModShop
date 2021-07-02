@@ -30,11 +30,14 @@ LayerView::~LayerView()
     this->layers.clear();
 }
 
-void LayerView::addLayer(brls::View* view)
+void LayerView::addLayer(brls::View* view, int idx)
 {
     if (view)
     {
-        this->layers.push_back(view);
+        if (idx < 0)
+            this->layers.push_back(view);
+        else
+            this->layers.insert(this->layers.begin() + idx, view);
         if (this->getLayersSize() == 1)
             this->changeLayer(0, true);
     }
@@ -135,6 +138,10 @@ size_t LayerView::getLayersSize() {
 
 bool LayerView::isValidSelectedIdx() {
     return this->selectedIndex >= 0 && this->selectedIndex < static_cast<int>(this->layers.size());
+}
+
+brls::View* LayerView::create() {
+    return new LayerView();
 }
 
 }

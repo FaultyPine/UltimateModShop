@@ -96,8 +96,8 @@ void setHintText(std::string text) {
     }
 }
 
-void setMotdText(std::string text) {
-    brls::Box* motd_box = (brls::Box*)main_box->getView("motd_box");
+void setTopText(std::string text) {
+    brls::Box* motd_box = (brls::Box*)main_box->getView("top_box");
     if (motd_box != nullptr) {
         if (text.empty()) {
             motd_box->setVisibility(brls::Visibility::GONE);

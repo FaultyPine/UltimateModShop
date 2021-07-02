@@ -497,6 +497,8 @@ class View
      */
     void setVisibility(Visibility visibility);
 
+    Visibility getVisibility() { return this->visibility; }
+
     /**
      * Sets the top position of the view, in pixels.
      *
