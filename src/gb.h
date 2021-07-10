@@ -87,16 +87,16 @@ namespace gb {
         static GbField EmbeddableSoundBaseURL = "https://images.gamebanana.com/img/embeddables/Sound_";
         // something like:
         //  https://images.gamebanana.com/img/embeddables/Mod_288826_medium_square.jpg    <- for Mod's
-        std::string ConstructEmbeddableImageUrl(std::string itemid, std::string variant, bool is_sound);
+        std::string ConstructEmbeddableImageUrl(const std::string& itemid, const std::string& variant, bool is_sound);
     }
 
     // return itemid from the url of the mod page. Using this since idRow isn't included in the FileDaddy recordschema
-    std::string getItemIdFromProfileURL(std::string profileURL);
+    std::string getItemIdFromProfileURL(const std::string& profileURL);
 
     typedef std::vector<GbSubmission*> GbSubmissions;
 
     /// Returns a vector of GbSubmission pointers of the newest submissions of the specified gameid.
-    GbSubmissions* GetNewSubmissions(int page, int numItemsPerPage, std::string game = GB_SMASH_GAMEID);
+    GbSubmissions* GetNewSubmissions(int page, int numItemsPerPage, const std::string& game = GB_SMASH_GAMEID);
 
-    GbSubmissions* GetSubmissionsFromCategory(int page, int category, int numItemsPerPage, std::string game = GB_SMASH_GAMEID);
+    GbSubmissions* GetSubmissionsFromCategory(int page, int category, int numItemsPerPage, const std::string& game = GB_SMASH_GAMEID);
 }

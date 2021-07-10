@@ -334,7 +334,7 @@ bool Application::handleAction(char button)
 
     while (hintParent)
     {
-        for (auto& action : hintParent->getActions())
+        for (const brls::Action& action : hintParent->getActions())
         {
             if (action.button != static_cast<enum ControllerButton>(button))
                 continue;

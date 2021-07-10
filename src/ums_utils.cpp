@@ -42,7 +42,7 @@ bool str_contains(std::string data, std::string toSearch, size_t pos)
 
 
 
-std::string cleanGBDescriptionText(std::string str) {
+std::string cleanGBDescriptionText(const std::string& str) {
     std::string html = str;
     html = replaceAll(html, "<br>", "\n");
     html = replaceAll(html, "&amp;", "&");

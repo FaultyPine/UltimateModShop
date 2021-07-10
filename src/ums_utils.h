@@ -29,7 +29,7 @@ extern brls::Box* main_box;
 #define START_BREAKABLE do {
 #define END_BREAKABLE   } while (false);
 
-#define REDUCED_NET_REQUESTS true
+#define REDUCED_NET_REQUESTS false
 
 #define APP_VERSION "0.0.0"
 
@@ -75,7 +75,7 @@ bool str_contains(std::string data, std::string toSearch, size_t pos = 0);
 
 bool strHasEnding (std::string const &fullString, std::string const &ending);
 
-std::string cleanGBDescriptionText(std::string str);
+std::string cleanGBDescriptionText(const std::string& str);
 
 void setHintText(std::string text = "");
 
@@ -89,7 +89,7 @@ struct Timer {
     std::chrono::duration<float> duration;
     std::string func;
 
-    Timer(std::string _func = "") {
+    Timer(const std::string& _func = "") {
         start = std::chrono::high_resolution_clock::now();
         func = _func;
     }

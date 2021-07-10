@@ -31,6 +31,7 @@ class LayerView : public brls::Box
     void addLayer(brls::View* view, int idx = -1);
     void changeLayer(int index, bool focus = false);
     void removeLayer(int index, bool should_free);
+    void clearLayers();
     brls::View* getLayer(std::string id);
     int getLayerIndex();
     size_t getLayersSize();

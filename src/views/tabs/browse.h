@@ -36,25 +36,32 @@ class Browse : public brls::Box
     const static int NUM_SUBMISSIONS_ROOT = 3;
     const int NUM_SUBMISSIONS_PER_PAGE = NUM_SUBMISSIONS_ROOT * NUM_SUBMISSIONS_ROOT;
 
+    std::map<int, Category*> categories = {};
+
     // loads the current page (based on current_page)
-    void loadPage(int page, int category = -1);
+    bool loadPage(int page, int category = -1);
 
     void loadCategoryFilters();
 
     void toggleSubmenu();
 
-    bool category_action_inner(View* view, const std::map<int, Category*>& categories, Box* browse_submenu_container, Box* browse_submenu, brls::ActionListener category_action);
+    bool show_submenu_category(brls::View* view, int curr_category);
+    void submenu_back_inner(brls::View* v);
 
+    void ResetPages();
 
     void getNewGbSubmissions(int page, int category);
 
     // scroll left or right
     void scroll(brls::FocusDirection dir);
 
-    brls::LayerView* pages;
+    brls::LayerView* pages = nullptr;
 
     // hold submission datas. Will be filled up NUM_SUBMISSIONS_PER_PAGE elements at a time. I.E. will always be divisible by that
-    std::vector<gb::GbSubmission*> subs;
+    std::vector<gb::GbSubmission*> subs = {};
 
     int current_page = 1;
+
+    int current_category_filter = -1;
+    int curr_parent_category = 0;
 };

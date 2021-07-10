@@ -44,7 +44,7 @@
         id="arrow_right_box"
         axis="column"
         marginRight="10"
-        positionRight="-50"
+        positionLeft="-60"
         width="3%"
         height="100%"
         borderThickness="0"
@@ -73,7 +73,7 @@
         positionRight="0"
         height="630"
         width="7%"
-        borderThickness="0"
+        borderThickness="5"
         borderColor="#000000"
     >
 
@@ -90,11 +90,12 @@
             image="@res/icon/menu.png"
             height="80"
             width="40"
-            borderColor="#FFFFFF"
-            borderThickness="0"
+            borderColor="#FFFFDD"
+            borderThickness="100"
+            positionRight="-100"
         />
 
-        <brls:LayerView
+        <brls:Box
             id="browse_menu_layerview"
             borderThickness="2"
             borderColor="#000000"

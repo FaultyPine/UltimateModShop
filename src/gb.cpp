@@ -1,7 +1,7 @@
 #include "gb.h"
 
 
-std::string gb::Embeddables::ConstructEmbeddableImageUrl(std::string itemid, std::string variant, bool is_sound) {
+std::string gb::Embeddables::ConstructEmbeddableImageUrl(const std::string& itemid, const std::string& variant, bool is_sound) {
     std::string url = gb::Embeddables::EmbeddableModBaseURL;
     if (is_sound) {
         gb::Embeddables::EmbeddableSoundBaseURL;
@@ -11,7 +11,7 @@ std::string gb::Embeddables::ConstructEmbeddableImageUrl(std::string itemid, std
 }
 
 
-gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, std::string game) {
+gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, const std::string& game) {
     brls::Logger::debug("Gettings new submissions (page {})...", page);
     std::stringstream url;
     url << gb::NewSubsReq << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page);
@@ -27,7 +27,7 @@ gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, std::str
     return ret;
 }
 
-gb::GbSubmissions* gb::GetSubmissionsFromCategory(int page, int category, int numItemsPerPage, std::string game) {
+gb::GbSubmissions* gb::GetSubmissionsFromCategory(int page, int category, int numItemsPerPage, const std::string& game) {
     brls::Logger::debug("Gettings new submissions (page {} category {})...", page, category);
     std::stringstream url;
     url << gb::CategoryReq << std::to_string(category) << "&" << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page);
@@ -43,6 +43,6 @@ gb::GbSubmissions* gb::GetSubmissionsFromCategory(int page, int category, int nu
     return ret;
 }
 
-std::string gb::getItemIdFromProfileURL(std::string profileURL) {
+std::string gb::getItemIdFromProfileURL(const std::string& profileURL) {
     return profileURL.substr(profileURL.rfind("/")+1);
 }

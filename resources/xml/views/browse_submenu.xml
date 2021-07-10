@@ -17,13 +17,12 @@
     >
 
         <brls:Label
-            text="Filters"
-            fontSize="24"
+            text="Category Filters"
+            fontSize="22"
             textAlign="center"
             height="75%"
             width="450"
             textColor="#000000"
-            focusable="false"
         />
 
     </brls:Box>

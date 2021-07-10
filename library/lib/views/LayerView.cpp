@@ -86,6 +86,14 @@ void LayerView::removeLayer(int index, bool should_free) {
     this->layers.erase(this->layers.begin()+index);
 }
 
+void LayerView::clearLayers() {
+    for (brls::View* v : this->layers) {
+        this->removeView(v);
+    }
+    this->layers.clear();
+    this->invalidate();
+}
+
 int LayerView::getLayerIndex()
 {
     return this->selectedIndex;
