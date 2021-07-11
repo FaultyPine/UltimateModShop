@@ -21,36 +21,12 @@ const std::string basicBox = R"xml(
         axis="column"
     />
 )xml";
-const std::string categoryBox = R"xml(
-    <brls:Label
-        id="browse_submenu_category_label"
-        shrink="0.5"
-        text="Category"
-        width="100%"
-        height="35"
-        textColor="#000000"
-        focusable="true"
-    />
-)xml";
-const std::string browseSubmenuContainerBox = R"xml(
-    <brls:Box
-        id="browse_submenu_container"
-        width="100%"
-        height="90%"
-        justifyContent="flexStart"
-        axis="column"
-        paddingTop="5"
-        paddingBottom="5"
-        paddingRight="5"
-        paddingLeft="5"
-    />
-)xml";
 
 
 Browse::Browse() {
     brls::Logger::debug("Initializing browse menu...");
     this->pages = new brls::LayerView();
-    this->inflateFromXMLRes("xml/tabs/browse.xml");
+    this->inflateFromXMLRes("xml/tabs/browse/browse.xml");
     this->loadCategoryFilters();
     this->loadPage(this->current_page);
     ((brls::Box*)this->getView("browse_box"))->addView(this->pages);
@@ -81,12 +57,14 @@ Browse::~Browse() {
     for (gb::GbSubmission* e : this->subs) {
         delete e;
     }
+    for (const auto &[key, value] : categories) {
+        delete value;
+    }
         
     delete this->pages;
 }
 
 void Browse::getNewGbSubmissions(int page, int category) {
-
     // vector of NUM_SUBMISSIONS_PER_PAGE elements
     gb::GbSubmissions* new_subs = nullptr;
     if (category != -1)
@@ -238,24 +216,6 @@ void Browse::onChildFocusGained(View* directChild, View* focusedView) {
     }
 }
 
-void Browse::ResetPages() {
-    brls::Box* browse_box = ((brls::Box*)this->getView("browse_box"));
-    //for (brls::View* v : browse_box->getChildren())
-    //    browse_box->removeView(v);
-    //this->pages = new brls::LayerView();
-    //browse_box->addView(this->pages); 
-    this->pages->clearLayers();
-
-    for (gb::GbSubmission* sub : this->subs) {
-        delete sub;
-    }
-    this->subs.clear();
-
-    this->current_page = 1;
-
-    this->loadPage(this->current_page, this->current_category_filter);
-
-}
 
 
 /*
@@ -276,7 +236,19 @@ Since none of the gamebanana categories have more than like 2-3 subcategories, t
 ==========================================================================================
 */
 
-
+const std::string browseSubmenuContainerBox = R"xml(
+    <brls:Box
+        id="browse_submenu_container"
+        width="100%"
+        height="90%"
+        justifyContent="flexStart"
+        axis="column"
+        paddingTop="5"
+        paddingBottom="5"
+        paddingRight="5"
+        paddingLeft="5"
+    />
+)xml";
 
 
 
@@ -314,7 +286,7 @@ Category* recurseCatSearch(Category* rootToSearch, int idToSearch) {
 
     }
 }
-Category* recurseCatSearchHelper(std::map<int, Category*>* mapToSearch, int idToSearch) {
+Category* recurseCatSearchHelper(CategoryMap* mapToSearch, int idToSearch) {
     for (auto &[key, val] : *mapToSearch) {
         Category* c = recurseCatSearch(val, idToSearch);
         if (c != nullptr)
@@ -324,74 +296,93 @@ Category* recurseCatSearchHelper(std::map<int, Category*>* mapToSearch, int idTo
 }
 // ----------------------------------------------------------------------
 
-brls::ActionListener category_action = [](brls::View* v) { brls::Logger::debug("Category action empty!"); return false; };
-brls::ActionListener submenu_back = [](brls::View* v) { brls::Logger::debug("Submenu back action empty!"); return false; };
+
+brls::ActionListener onClickCategoryFilter = [](brls::View* v) { brls::Logger::warning("Blank onClickCategoryFilter action! {}", v->describe()); return false; };
+brls::ActionListener onSubmenuBack = [](brls::View* v) { brls::Logger::warning("Blank onSubmenuBack action! {}", v->describe()); return false; };
 
 
-bool Browse::show_submenu_category(brls::View* view, int curr_category) {
-    brls::Application::giveFocus(nullptr);
-    //brls::LayerView* browse_layerview = (brls::LayerView*)this->getView("browse_menu_layerview");
-    brls::Box* browse_layerview = (brls::Box*)this->getView("browse_menu_layerview");
+void Browse::onClickCategoryFilterInner(brls::View* view) {
+    brls::Logger::debug("onClickCategoryFilter: {}", view->describe());
 
-    //brls::Box* browse_submenu = (brls::Box*)browse_layerview->getLayer("browse_submenu_scrollingframe");
-    brls::Box* browse_submenu = (brls::Box*)browse_layerview->getView("browse_submenu_scrollingframe");
-    brls::Box* browse_submenu_container = (brls::Box*)browse_submenu->getView("browse_submenu_container");
+    int category_id = std::stoi(view->getID());
+    Category* cat = recurseCatSearchHelper(&this->categories, category_id);
+    brls::LayerView* l = (brls::LayerView*)this->getView("browse_submenu_content");
 
-    //int curr_category = std::stoi(view->getID());
-    Category* selected_category = recurseCatSearchHelper(&this->categories, curr_category);
-    brls::Logger::debug("Category {}", curr_category);
-    if (selected_category) {
+    bool has_subcats = cat->childLayerIdx >= 0;
+    if (has_subcats) {
+        l->changeLayer(cat->childLayerIdx, true);
+    }
+    else {
+        l->changeLayer(0, false);
+        this->current_page = 1;
+        this->current_category_filter = category_id;
 
-        if (!selected_category->subcategories.empty()) {
-            brls::Application::giveFocus(browse_submenu);
-
-            browse_submenu->removeView(browse_submenu_container);
-
-            brls::Box* browse_submenu_container_new = (brls::Box*)brls::View::createFromXMLString(browseSubmenuContainerBox);
-            browse_submenu->addView(browse_submenu_container_new);
-
-            std::vector<Category*> categories_to_iterate = selected_category->subcategories;
-            if (curr_category == 0) {
-                categories_to_iterate.clear();
-                for (const auto &[key, value] : this->categories) {
-                    categories_to_iterate.push_back(value);
-                }
-            }
-            
-            for (Category* cat : categories_to_iterate) {
-                brls::Label* v = (brls::Label*)brls::View::createFromXMLString(categoryBox);
-                v->setId(std::to_string(cat->id));
-                v->setText(cat->name);
-                v->registerClickAction(category_action);
-                v->registerAction("Submenu Back", brls::ControllerButton::BUTTON_B, submenu_back, false, brls::Sound::SOUND_FOCUS_CHANGE);
-                browse_submenu_container_new->addView(v);
-            }
-            this->curr_parent_category = selected_category->parentCatId;
+        for (gb::GbSubmission* sub : this->subs) {
+            delete sub;
         }
-        else {
-            brls::Logger::debug("No subcats");
-            this->current_category_filter = curr_category;
-            this->toggleSubmenu();
-            this->ResetPages();
-        }
+        this->subs.clear();
+        this->pages->clearLayers();
+
+        this->toggleSubmenu();
+        this->loadPage(this->current_page, this->current_category_filter);
+        setTopText("Category: " + cat->name);
 
     }
-    
-    return false;
+
 }
 
+void Browse::onSubmenuBackInner(brls::View* view) {
+    brls::Logger::debug("onSubmenuBackInner: {}", view->describe());
 
-void Browse::submenu_back_inner(brls::View* v) {
-    int curr_category = std::stoi(v->getID());
-    brls::Logger::debug("Submenu back. [ViewID={}] [Current parent={}]", curr_category, this->curr_parent_category);
+    int category_id = std::stoi(view->getID());
+    Category* cat = recurseCatSearchHelper(&this->categories, category_id);
+    brls::LayerView* l = (brls::LayerView*)this->getView("browse_submenu_content");
 
-    this->show_submenu_category(v, this->curr_parent_category);
+    l->changeLayer(cat->parentLayerIdx, true);
+}
 
+brls::Box* createViewFromCategory(Category* cat, CURL_builder* curl, bool is_root) {
+    brls::Box* v = (brls::Box*)brls::View::createFromXMLResource("tabs/browse/browse_submenu_category.xml");
+    brls::Label* lab = (brls::Label*)v->getView("browse_submenu_category_label");
+    brls::Image* img = (brls::Image*)v->getView("browse_submenu_category_image");
+
+    /*if (!cat->iconUrl.empty()) {
+        MemoryStruct img_mem = curl::DownloadToMem(cat->iconUrl, curl);
+        if (img_mem.memory != nullptr && img_mem.size > 0)
+            img->setImageFromMem((unsigned char*)img_mem.memory, img_mem.size);
+    }*/
+
+    lab->setText(cat->name);
+
+    v->setId(std::to_string(cat->id));
+    v->setCustomNavigationRoute(brls::FocusDirection::LEFT, nullptr);
+    v->setCustomNavigationRoute(brls::FocusDirection::RIGHT, nullptr);
+    v->registerClickAction(onClickCategoryFilter);
+    if (!is_root) {
+        v->registerAction("Submenu back", brls::ControllerButton::BUTTON_B, onSubmenuBack, false, brls::Sound::SOUND_FOCUS_CHANGE);
+    }
+
+    return v;
+}
+
+void recursiveCategorySetup(const std::vector<Category*>& cats, CURL_builder* curl, brls::LayerView* browse_submenu_layerview, brls::Box* browse_submenu_container) {
+    for (Category* cat : cats) {
+        brls::Box* v = createViewFromCategory(cat, curl, false);
+        browse_submenu_container->addView(v);
+
+        if (!cat->subcategories.empty()) {
+            brls::Box* browse_submenu_container_new = (brls::Box*)brls::View::createFromXMLString(browseSubmenuContainerBox);
+            cat->childLayerIdx = browse_submenu_layerview->getLayersSize();
+            browse_submenu_layerview->addLayer(browse_submenu_container_new);
+            recursiveCategorySetup(cat->subcategories, curl, browse_submenu_layerview, browse_submenu_container_new);
+        }
+        
+    }
 }
 
 
 void Browse::loadCategoryFilters() {
-    //      init map
+    //      ----- init map -----
 
     // dl first page of categories
     std::string init_category_url = "https://gamebanana.com/apiv3/ModCategory/ByGame?_aGameRowIds[]=6498&_sRecordSchema=Custom&_csvProperties=_idRow,_sName,_sIconUrl,_idParentCategoryRow&_nPerpage=50&_bReturnMetadata=true&_nPage=1";
@@ -420,7 +411,9 @@ void Browse::loadCategoryFilters() {
                 .id = id,
                 .parentCatId = parent_id,
                 .iconUrl = category_json[gb::Fields::IconURL].get<std::string>(),
-                .subcategories = {}
+                .subcategories = {},
+                .childLayerIdx = -1,
+                .parentLayerIdx = 0,
             };
 
             // root category
@@ -444,54 +437,52 @@ void Browse::loadCategoryFilters() {
         }
     }
 
-    /*for (const auto &[key, value] : categories) {
-        brls::Logger::debug("Root: {}, id: {}", value->name, value->id);
-        printSubCats(value);
-    }*/
 
-    //      init views
+    //      ----- init views -----
 
-    brls::Box* browse_layerview = (brls::Box*)this->getView("browse_menu_layerview");
-    brls::Box* browse_submenu = (brls::Box*)brls::View::createFromXMLResource("views/browse_submenu.xml");
-    browse_layerview->addView(browse_submenu);
 
+    // add in browse_submenu.xml
+    brls::Box* browse_submenu_root = (brls::Box*)this->getView("browse_menu_root");
+    brls::Box* browse_submenu = (brls::Box*)brls::View::createFromXMLResource("tabs/browse/browse_submenu.xml");
+    browse_submenu_root->addView(browse_submenu);
+
+    // create browse 
     brls::Box* browse_submenu_container = (brls::Box*)brls::View::createFromXMLString(browseSubmenuContainerBox);
-    ((brls::Box*)this->getView("browse_submenu_scrollingframe"))->addView(browse_submenu_container);
 
-    category_action = [this](brls::View* v) {
-        return this->show_submenu_category(v, std::stoi(v->getID()));
-    };
-    submenu_back = [this](brls::View* v) {
-        brls::Logger::debug("HERE");
-        this->submenu_back_inner(v);
-        return false;
-    };
+    // add root category container to layerview
+    brls::LayerView* browse_submenu_layerview = (brls::LayerView*)this->getView("browse_submenu_content");
+    browse_submenu_layerview->addLayer(browse_submenu_container);
 
+
+    onClickCategoryFilter = [this](brls::View* v) { this->onClickCategoryFilterInner(v); return false; };
+    onSubmenuBack =         [this](brls::View* v) { this->onSubmenuBackInner(v); return false; };
+
+    // set up root/subcategory layerviews
     for (const auto &[key, value] : categories) {
-        brls::Label* v = (brls::Label*)brls::View::createFromXMLString(categoryBox);
-        v->setId(std::to_string(key));
-        v->setText(value->name);
-        v->registerClickAction(category_action);
-        v->setCustomNavigationRoute(brls::FocusDirection::LEFT, nullptr);
-        v->setCustomNavigationRoute(brls::FocusDirection::RIGHT, nullptr);
+        bool has_subcats = !value->subcategories.empty();
+        brls::Box* v = createViewFromCategory(value, &curl, true);
         browse_submenu_container->addView(v);
+
+        if (has_subcats) { // if this category has subcats, add them in recursively
+            brls::Box* browse_submenu_container_new = (brls::Box*)brls::View::createFromXMLString(browseSubmenuContainerBox);
+            value->childLayerIdx = browse_submenu_layerview->getLayersSize();
+            browse_submenu_layerview->addLayer(browse_submenu_container_new);
+            recursiveCategorySetup(value->subcategories, &curl, browse_submenu_layerview, browse_submenu_container_new);
+        }
     }
+
 }
 
 
 
-
-
 void Browse::toggleSubmenu() {
-    brls::Box* browse_submenu_holder = (brls::Box*)this->getView("browse_menu_box");
+    brls::View* browse_submenu_holder = (brls::View*)this->getView("browse_menu_root");
     if (browse_submenu_holder->getVisibility() != brls::Visibility::VISIBLE) {
         browse_submenu_holder->setVisibility(brls::Visibility::VISIBLE);
         brls::Application::giveFocus(browse_submenu_holder);
-        brls::Logger::debug("Toggle submenu on!");
     }
     else {
         brls::Application::giveFocus(this);
         browse_submenu_holder->setVisibility(brls::Visibility::INVISIBLE);
-        brls::Logger::debug("Toggle submenu off!");
     }
 }

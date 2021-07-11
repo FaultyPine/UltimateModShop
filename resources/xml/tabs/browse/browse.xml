@@ -22,7 +22,6 @@
             height="60"
             width="60"
             positionTop="260"
-            positionRight="8"
             focusable="true"
         />  
        
@@ -43,8 +42,7 @@
     <brls:Box
         id="arrow_right_box"
         axis="column"
-        marginRight="10"
-        positionLeft="-60"
+        paddingLeft="10"
         width="3%"
         height="100%"
         borderThickness="0"
@@ -68,12 +66,11 @@
     <brls:Box
         id="browse_menu_box"
         axis="row"
-        visibility="gone"
         positionTop="0"
         positionRight="0"
         height="630"
         width="7%"
-        borderThickness="5"
+        borderThickness="0"
         borderColor="#000000"
     >
 
@@ -91,18 +88,21 @@
             height="80"
             width="40"
             borderColor="#FFFFDD"
-            borderThickness="100"
-            positionRight="-100"
+            borderThickness="0"
         />
 
+    
         <brls:Box
-            id="browse_menu_layerview"
+            id="browse_menu_root"
             borderThickness="2"
+            visibility="gone"
             borderColor="#000000"
             positionRight="450"
             width="450"
             height="100%"
         />
+    
+      
         
 
     </brls:Box>

@@ -19,7 +19,7 @@ gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, const st
     json submissions = curl::DownloadJson(url.str());
     GbSubmissions* ret = new std::vector<gb::GbSubmission*>;
     if (!submissions.empty()) {
-        for (auto entry : submissions[gb::Fields::Records]) {
+        for (const auto& entry : submissions[gb::Fields::Records]) {
             gb::GbSubmission* tmp = new gb::GbSubmission { .submission_data = entry };
             ret->push_back(tmp);
         }
@@ -35,7 +35,7 @@ gb::GbSubmissions* gb::GetSubmissionsFromCategory(int page, int category, int nu
     json submissions = curl::DownloadJson(url.str());
     GbSubmissions* ret = new std::vector<gb::GbSubmission*>;
     if (!submissions.empty()) {
-        for (auto entry : submissions[gb::Fields::Records]) {
+        for (const auto& entry : submissions[gb::Fields::Records]) {
             gb::GbSubmission* tmp = new gb::GbSubmission { .submission_data = entry };
             ret->push_back(tmp);
         }

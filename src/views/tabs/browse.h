@@ -9,7 +9,12 @@ struct Category {
     int parentCatId;
     std::string iconUrl;
     std::vector<Category*> subcategories;
+    int childLayerIdx;
+    int parentLayerIdx;
 };
+
+typedef std::unordered_map<int, Category*> CategoryMap;
+
 /** 
  *      _______________________
  *      |  0   |   1   |   2  |
@@ -36,19 +41,17 @@ class Browse : public brls::Box
     const static int NUM_SUBMISSIONS_ROOT = 3;
     const int NUM_SUBMISSIONS_PER_PAGE = NUM_SUBMISSIONS_ROOT * NUM_SUBMISSIONS_ROOT;
 
-    std::map<int, Category*> categories = {};
+    CategoryMap categories = {};
 
     // loads the current page (based on current_page)
     bool loadPage(int page, int category = -1);
 
     void loadCategoryFilters();
 
+    void onClickCategoryFilterInner(brls::View* view);
+    void onSubmenuBackInner(brls::View* view);
+
     void toggleSubmenu();
-
-    bool show_submenu_category(brls::View* view, int curr_category);
-    void submenu_back_inner(brls::View* v);
-
-    void ResetPages();
 
     void getNewGbSubmissions(int page, int category);
 
@@ -63,5 +66,4 @@ class Browse : public brls::Box
     int current_page = 1;
 
     int current_category_filter = -1;
-    int curr_parent_category = 0;
 };

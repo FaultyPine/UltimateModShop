@@ -16,7 +16,7 @@
         positionType="absolute"
         height="5%"
         width="20%"
-        positionTop="600"
+        positionTop="580"
         positionRight="610"
         positionLeft="510"
         visibility="gone"
