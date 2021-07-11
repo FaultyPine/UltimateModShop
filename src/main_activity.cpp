@@ -24,7 +24,7 @@ void MainActivity::onContentAvailable() {
         false, brls::Sound::SOUND_CLICK_SIDEBAR);
 
     /* ------ actions for debugging ------- */
-    this->registerAction(
+    /*this->registerAction(
         "ResetJson", brls::ControllerButton::BUTTON_X, [installed_mods] (brls::View* v) {
             installed_mods->resetFile();
             brls::Application::quit();
@@ -40,7 +40,7 @@ void MainActivity::onContentAvailable() {
             brls::Application::pushActivity(new ModPage(_sub));
             return true;
         }, false, brls::Sound::SOUND_CLICK
-    );
+    );*/
     /* -------------------------------------- */
 
     if (!REDUCED_NET_REQUESTS) {

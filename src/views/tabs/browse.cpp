@@ -299,6 +299,7 @@ Category* recurseCatSearchHelper(CategoryMap* mapToSearch, int idToSearch) {
 
 brls::ActionListener onClickCategoryFilter = [](brls::View* v) { brls::Logger::warning("Blank onClickCategoryFilter action! {}", v->describe()); return false; };
 brls::ActionListener onSubmenuBack = [](brls::View* v) { brls::Logger::warning("Blank onSubmenuBack action! {}", v->describe()); return false; };
+brls::ActionListener onExpandSubmenu = [](brls::View* v) { brls::Logger::warning("Blank onExpandSubmenu action! {}", v->describe()); return false; };
 
 
 void Browse::onClickCategoryFilterInner(brls::View* view) {
@@ -308,26 +309,20 @@ void Browse::onClickCategoryFilterInner(brls::View* view) {
     Category* cat = recurseCatSearchHelper(&this->categories, category_id);
     brls::LayerView* l = (brls::LayerView*)this->getView("browse_submenu_content");
 
-    bool has_subcats = cat->childLayerIdx >= 0;
-    if (has_subcats) {
-        l->changeLayer(cat->childLayerIdx, true);
+    l->changeLayer(0, false);
+    this->current_page = 1;
+    this->current_category_filter = category_id;
+
+    for (gb::GbSubmission* sub : this->subs) {
+        delete sub;
     }
-    else {
-        l->changeLayer(0, false);
-        this->current_page = 1;
-        this->current_category_filter = category_id;
 
-        for (gb::GbSubmission* sub : this->subs) {
-            delete sub;
-        }
-        this->subs.clear();
-        this->pages->clearLayers();
+    this->subs.clear();
+    this->pages->clearLayers();
 
-        this->toggleSubmenu();
-        this->loadPage(this->current_page, this->current_category_filter);
-        setTopText("Category: " + cat->name);
-
-    }
+    this->toggleSubmenu();
+    this->loadPage(this->current_page, this->current_category_filter);
+    setTopText("Category: " + cat->name);
 
 }
 
@@ -340,6 +335,20 @@ void Browse::onSubmenuBackInner(brls::View* view) {
 
     l->changeLayer(cat->parentLayerIdx, true);
 }
+
+void Browse::onExpandSubmenuInner(brls::View* view) {
+    brls::Logger::debug("onExpandSubmenuInner: {}", view->describe());
+
+    int category_id = std::stoi(view->getID());
+    Category* cat = recurseCatSearchHelper(&this->categories, category_id);
+    brls::LayerView* l = (brls::LayerView*)this->getView("browse_submenu_content");
+
+    bool has_subcats = cat->childLayerIdx >= 0;
+    if (has_subcats) {
+        l->changeLayer(cat->childLayerIdx, true);
+    }
+}
+
 
 brls::Box* createViewFromCategory(Category* cat, CURL_builder* curl, bool is_root) {
     brls::Box* v = (brls::Box*)brls::View::createFromXMLResource("tabs/browse/browse_submenu_category.xml");
@@ -358,6 +367,7 @@ brls::Box* createViewFromCategory(Category* cat, CURL_builder* curl, bool is_roo
     v->setCustomNavigationRoute(brls::FocusDirection::LEFT, nullptr);
     v->setCustomNavigationRoute(brls::FocusDirection::RIGHT, nullptr);
     v->registerClickAction(onClickCategoryFilter);
+    v->registerAction("Expand Submenu", brls::ControllerButton::BUTTON_X, onExpandSubmenu, false, brls::Sound::SOUND_FOCUS_CHANGE);
     if (!is_root) {
         v->registerAction("Submenu back", brls::ControllerButton::BUTTON_B, onSubmenuBack, false, brls::Sound::SOUND_FOCUS_CHANGE);
     }
@@ -437,6 +447,17 @@ void Browse::loadCategoryFilters() {
         }
     }
 
+    // manually add category for going to the default 'newly posted mods' page
+    categories.emplace(std::make_pair(0, new Category {
+                .name = "New Mods",
+                .id = -1,
+                .parentCatId = 0,
+                .iconUrl = "",
+                .subcategories = {},
+                .childLayerIdx = -1,
+                .parentLayerIdx = 0,
+            }));
+
 
     //      ----- init views -----
 
@@ -455,7 +476,8 @@ void Browse::loadCategoryFilters() {
 
 
     onClickCategoryFilter = [this](brls::View* v) { this->onClickCategoryFilterInner(v); return false; };
-    onSubmenuBack =         [this](brls::View* v) { this->onSubmenuBackInner(v); return false; };
+    onSubmenuBack         = [this](brls::View* v) { this->onSubmenuBackInner(v);         return false; };
+    onExpandSubmenu       = [this](brls::View* v) { this->onExpandSubmenuInner(v);       return false; };
 
     // set up root/subcategory layerviews
     for (const auto &[key, value] : categories) {

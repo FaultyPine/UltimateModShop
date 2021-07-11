@@ -11,7 +11,8 @@
     <!-- TOP BOX -->
     <brls:Box
         id="browse_submenu_top_box"
-        height="6%"
+        axis="row"
+        height="8%"
         borderColor="#FFFFFF"
         borderThickness="0"
     >
@@ -20,9 +21,20 @@
             text="Category Filters"
             fontSize="22"
             textAlign="center"
-            height="75%"
-            width="450"
+            height="100%"
+            width="83%"
             textColor="#000000"
+            borderColor="#FFFFFF"
+            borderThickness="0"
+        />
+
+        <brls:Image
+            id="browse_submenu_category_filters_button_help"
+            image="@res/icon/category_filter_button_help.png"
+            height="100%"
+            width="auto"
+            borderColor="#FFFFFF"
+            borderThickness="0"
         />
 
     </brls:Box>

@@ -50,6 +50,7 @@ class Browse : public brls::Box
 
     void onClickCategoryFilterInner(brls::View* view);
     void onSubmenuBackInner(brls::View* view);
+    void onExpandSubmenuInner(brls::View* view);
 
     void toggleSubmenu();
 
