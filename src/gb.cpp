@@ -25,6 +25,7 @@ gb::GbSubmissions* createSubmissions(const std::string& url) {
 
 
 gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, const std::string& game) {
+    brls::Logger::debug("Gettings new submissions (page {})...", page);
     std::stringstream url;
     url << gb::NewSubsReq << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page) << "&" << gb::RequestArgs::GameIds << game;
 
@@ -32,7 +33,7 @@ gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, const st
 }
 
 gb::GbSubmissions* gb::GetSubmissionsFromCategory(int page, int category, int numItemsPerPage) {
-    brls::Logger::debug("Gettings new submissions (page {} category {})...", page, category);
+    brls::Logger::debug("Gettings submissions from category (page {} category {})...", page, category);
     std::stringstream url;
     url << gb::CategoryReq << std::to_string(category) << "&" << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page);
     

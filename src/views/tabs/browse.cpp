@@ -534,24 +534,24 @@ void Browse::toggleSubmenu() {
 void Browse::handleSearchBarInput(const std::string& s) {
     brls::Logger::debug("Searched for: {}", s);
 
-    if (!this->loadPage(1, -1, s)) {
+    for (gb::GbSubmission* sub : this->subs) {
+        delete sub;
+    }
+
+    this->subs.clear();
+    this->pages->clearLayers();
+
+    if (!this->loadPage(1, -1, s)) { // if there is no results for search, reload current page... kinda sucks to have to reload but its gotta be this way until I majorly restructure page loading
+        this->loadPage(this->current_page, this->current_category_filter, this->search_txt);
+        brls::Logger::warning("No results found for search: {}", s);
         setHintText("No results found!");
     }
     else {
         this->current_page = 1;
         this->current_category_filter = -1;
         this->search_txt = s;
-
-        for (gb::GbSubmission* sub : this->subs) {
-            delete sub;
-        }
-
-        this->subs.clear();
-        this->pages->clearLayers();
-
         setTopText("Search: " + s);
     }
-
 }
 
 bool Browse::onSearchBarClick(brls::View* view) {

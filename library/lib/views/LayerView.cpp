@@ -30,14 +30,12 @@ LayerView::~LayerView()
     this->layers.clear();
 }
 
-void LayerView::addLayer(brls::View* view, int idx)
+void LayerView::addLayer(brls::View* view)
 {
     if (view)
     {
-        if (idx < 0)
-            this->layers.push_back(view);
-        else
-            this->layers.insert(this->layers.begin() + idx, view);
+        this->layers.push_back(view);
+
         if (this->getLayersSize() == 1)
             this->changeLayer(0, true);
     }
@@ -91,6 +89,7 @@ void LayerView::clearLayers() {
         this->removeView(v);
     }
     this->layers.clear();
+    this->selectedIndex = 0;
     this->invalidate();
 }
 
