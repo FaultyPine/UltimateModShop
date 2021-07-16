@@ -25,7 +25,6 @@ gb::GbSubmissions* createSubmissions(const std::string& url) {
 
 
 gb::GbSubmissions* gb::GetNewSubmissions(int page, int numItemsPerPage, const std::string& game) {
-    brls::Logger::debug("Gettings new submissions (page {})...", page);
     std::stringstream url;
     url << gb::NewSubsReq << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page) << "&" << gb::RequestArgs::GameIds << game;
 
