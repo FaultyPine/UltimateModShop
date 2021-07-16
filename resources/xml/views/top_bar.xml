@@ -4,9 +4,9 @@
 
 <brls:Box
     id="top_bar"
-    width="50%"
+    width="55%"
     height="8%"
-    marginLeft="600"
+    marginLeft="550"
     marginBottom="8"
     axis="row"
     direction="leftToRight"
@@ -15,6 +15,13 @@
     borderThickness="1.5"
     backgroundColor="#C3C3C3"
     borderColor="#000000">
+
+    <brls:Image
+        image="@res/icon/LR.png"
+        height="85%"
+        width="80"
+        marginLeft="5"
+    />
 
     <!--  BarItem's get dynamically added in here  -->
 
