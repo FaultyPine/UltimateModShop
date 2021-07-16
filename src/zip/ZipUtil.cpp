@@ -1,79 +1,104 @@
 #include "ZipUtil.hpp"
 
-// https://github.com/libarchive/libarchive/wiki/Examples#A_Complete_Extractor
+#define PHYFSPP_IMPL
+#include "physfs.hpp"
 
-static int
-copy_data(struct archive *ar, struct archive *aw)
-{
-  int r;
-  const void *buff;
-  size_t size;
-  off_t offset;
+/**
+ *  So im using PhysFS rn for .zip & .7z
+ *  Still need something to handle .rar tho
+ *     Seems like zziplib *can* actually handle rars maybe??? Nx-Shell uses it and it claims rar extraction
+ *   Before I try zziplib tho I'd like to give libarchive another try possibly
+ */
 
-  for (;;) {
-    r = archive_read_data_block(ar, &buff, &size, &offset);
-    if (r == ARCHIVE_EOF)
-      return (ARCHIVE_OK);
-    if (r < ARCHIVE_OK)
-      return (r);
-    r = archive_write_data_block(aw, buff, size, offset);
-    if (r < ARCHIVE_OK) {
-      fprintf(stderr, "%s\n", archive_error_string(aw));
-      return (r);
+ 
+// ----------------------------------- PHYSFS --------------------------------------------
+void iterateDirsAndExtract(const std::string& dirname, const std::string& dest) {
+    std::vector<std::string> files = PhysFS::enumerateFiles(dirname);
+    for (std::string file_name : files) {
+        std::string path = dirname + file_name + "/";
+        if (PHYSFS_isDirectory(path.c_str())) {
+            iterateDirsAndExtract(path, dest);
+        }
+        else {
+            path.erase(0,1); // get rid of "/" at the beginning
+            if (path.back() == '/')
+                path.pop_back(); // get rid of "/" at the end
+
+            std::filesystem::path final_dest = dest + path;
+            std::filesystem::path final_dest_without_filename = std::filesystem::path(dest + path).remove_filename();
+            if (!std::filesystem::exists(final_dest_without_filename))
+                std::filesystem::create_directories(final_dest_without_filename);
+
+            std::fstream file;
+            file.open(final_dest, std::ios::out);
+
+            PHYSFS_File* phys_file = PhysFS::openWithMode(path.c_str(), PhysFS::mode::READ);
+            PHYSFS_sint64 phys_filesize = PHYSFS_fileLength(phys_file);
+
+            char* buf = new char[phys_filesize + 1];
+            int length_read = PHYSFS_read(phys_file, buf, 1, phys_filesize);
+            buf[phys_filesize+1] = 0; // null terminate...?
+            
+            file.write(buf, length_read+1);
+
+            file.close();
+            
+            PHYSFS_close(phys_file);
+            delete buf;
+            
+        }
     }
-  }
 }
 
-int UnZip::ArchiveExtract(std::string filename, std::string dest)
-{
-  struct archive *a;
-  struct archive *ext;
-  struct archive_entry *entry;
-  int flags;
-  int r;
+void PhysFSArchiveExtractInner(const std::string& filename, const std::string& dest) {
+    PHYSFS_mount(filename.c_str(), NULL, true);
 
-  /* Select which attributes we want to restore. */
-  flags = ARCHIVE_EXTRACT_TIME;
-  flags |= ARCHIVE_EXTRACT_PERM;
-  flags |= ARCHIVE_EXTRACT_ACL;
-  flags |= ARCHIVE_EXTRACT_FFLAGS;
+    iterateDirsAndExtract("/", dest);
 
-  a = archive_read_new();
-  archive_read_support_format_all(a);
-  ext = archive_write_disk_new();
-  archive_write_disk_set_options(ext, flags);
-  archive_write_disk_set_standard_lookup(ext);
-  if ((r = archive_read_open_filename(a, filename.c_str(), 10240)))
-    return 1;
-  for (;;) {
-    r = archive_read_next_header(a, &entry);
-    if (r == ARCHIVE_EOF)
-      break;
-    if (r < ARCHIVE_OK)
-      fprintf(stderr, "%s\n", archive_error_string(a));
-    if (r < ARCHIVE_WARN)
-      return 1;
-    archive_entry_set_pathname(entry, (dest + archive_entry_pathname(entry)).c_str());
-    r = archive_write_header(ext, entry);
-    if (r < ARCHIVE_OK)
-      fprintf(stderr, "%s\n", archive_error_string(ext));
-    else if (archive_entry_size(entry) > 0) {
-      r = copy_data(a, ext);
-      if (r < ARCHIVE_OK)
-        fprintf(stderr, "%s\n", archive_error_string(ext));
-      if (r < ARCHIVE_WARN)
-        return 1;
+    PHYSFS_unmount(filename.c_str());
+}
+// -------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+void UnZip::ArchiveExtract(const std::string& filename, const std::string& dest) {
+    if (!std::filesystem::exists(filename)) {
+        brls::Logger::error("File doesn't exist! Cannot extract.");
+        return;
     }
-    r = archive_write_finish_entry(ext);
-    if (r < ARCHIVE_OK)
-      fprintf(stderr, "%s\n", archive_error_string(ext));
-    if (r < ARCHIVE_WARN)
-      return 1;
-  }
-  archive_read_close(a);
-  archive_read_free(a);
-  archive_write_close(ext);
-  archive_write_free(ext);
-  brls::Logger::debug("Extracted {}...", filename);
-  return 0;
+
+    brls::Logger::debug("Extracting: {} -> {}", filename, dest);
+
+    std::filesystem::path p = std::filesystem::path(filename);
+    std::string extension = p.extension().string();
+
+    // Use PhysFS
+    if (extension == ".zip" || extension == ".7z") {
+        if (!std::filesystem::exists(dest))
+            std::filesystem::create_directories(dest);
+        PhysFSArchiveExtractInner(filename, dest);
+    }
+    // Use ???
+    else if (extension == ".rar") {
+        if (!std::filesystem::exists(dest))
+            std::filesystem::create_directories(dest);
+        // ???
+    }
+    else {
+        brls::Logger::error("Unsupported archive type! Cannot extract!");
+        return;
+    }
+
+} 
+
+void UnZip::PhysFSInit() {
+    PhysFS::init(nullptr);
+}
+void UnZip::PhysFSDeinit() {
+    PhysFS::deinit();
 }

@@ -109,4 +109,37 @@
 
 
 
+     
+    <!-- Search Bar/Icon -->
+    
+    <brls:Box
+        id="search_box"
+        justifyContent="spaceEvenly"
+        positionType="absolute"
+        positionTop="-65"
+        positionLeft="30%"
+        height="11%"
+        width="13%"
+        borderColor="#000000"
+        borderThickness="1"
+        focusable="true"
+    >
+
+        <brls:Image
+            id="search_icon"
+            image="@res/icon/search.png"
+            width="30%"
+            borderColor="#FFFFFF"
+            borderThickness="0"
+        />
+
+        <brls:Label
+            id="search_label"
+            text="Search"
+        />
+
+    </brls:Box>
+
+
+
 </brls:Box>

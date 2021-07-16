@@ -6,8 +6,12 @@
 namespace gb {
     static const char GB_APIV3_URL[] = "https://gamebanana.com/apiv3/";
     static const char GB_SMASH_GAMEID[] = "6498";
-    static const char NewSubsReq[] = "https://gamebanana.com/apiv3/Mod/ByGame?_aGameRowIds[]=6498&_sRecordSchema=FileDaddy&_bReturnMetadata=true&";
-    static const char CategoryReq[] = "https://gamebanana.com/apiv3/Mod/ByCategory?_sRecordSchema=FileDaddy&_bReturnMetadata=true&_aCategoryRowIds[]=";
+    static const char NewSubsReq[] = 
+        "https://gamebanana.com/apiv3/Mod/ByGame?_sRecordSchema=FileDaddy&_bReturnMetadata=true&";
+    static const char CategoryReq[] = 
+        "https://gamebanana.com/apiv3/Mod/ByCategory?_sRecordSchema=FileDaddy&_bReturnMetadata=true&_aCategoryRowIds[]=";
+    static const char SearchReq[] = 
+        "https://gamebanana.com/apiv5/Mod/ByName?_bReturnMetadata=true&_csvProperties=_idRow,_sName,_aFiles,_aPreviewMedia,_sText,_nViewCount,_nLikeCount,_nDownloadCount,_aSubmitter&_sName=*";
 
     namespace Endpoints {
         static const char ModByGame[] = "Mod/ByGame?";
@@ -98,5 +102,7 @@ namespace gb {
     /// Returns a vector of GbSubmission pointers of the newest submissions of the specified gameid.
     GbSubmissions* GetNewSubmissions(int page, int numItemsPerPage, const std::string& game = GB_SMASH_GAMEID);
 
-    GbSubmissions* GetSubmissionsFromCategory(int page, int category, int numItemsPerPage, const std::string& game = GB_SMASH_GAMEID);
+    GbSubmissions* GetSubmissionsFromCategory(int page, int category, int numItemsPerPage);
+
+    GbSubmissions* GetSubmissionsFromSearch(int page, const std::string& search, int numItemsPerPage, const std::string& game = GB_SMASH_GAMEID);
 }

@@ -44,17 +44,23 @@ class Browse : public brls::Box
     CategoryMap categories = {};
 
     // loads the current page (based on current_page)
-    bool loadPage(int page, int category = -1);
+    bool loadPage(int page, int category = -1, const std::string& search = "");
 
     void loadCategoryFilters();
 
+    // Category Filter Submenu Actions
     void onClickCategoryFilterInner(brls::View* view);
     void onSubmenuBackInner(brls::View* view);
     void onExpandSubmenuInner(brls::View* view);
 
     void toggleSubmenu();
 
-    void getNewGbSubmissions(int page, int category);
+    // Search Bar
+    bool onSearchBarClick(brls::View* view);
+    void handleSearchBarInput(const std::string& s);
+
+    // returns false when 0 submissions were found for that search query
+    bool getNewGbSubmissions(int page, int category, const std::string& search);
 
     // scroll left or right
     void scroll(brls::FocusDirection dir);
@@ -64,7 +70,11 @@ class Browse : public brls::Box
     // hold submission datas. Will be filled up NUM_SUBMISSIONS_PER_PAGE elements at a time. I.E. will always be divisible by that
     std::vector<gb::GbSubmission*> subs = {};
 
+
+    // properties that can influence `loadPage`
     int current_page = 1;
 
     int current_category_filter = -1;
+
+    std::string search_txt = "";
 };

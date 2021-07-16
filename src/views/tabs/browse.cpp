@@ -1,5 +1,7 @@
 #include "browse.h"
 
+#include "borealis/platforms/switch/swkbd.hpp"
+
 brls::Box* Browse::create() {
     return new Browse();
 }
@@ -51,6 +53,13 @@ Browse::Browse() {
             return true;
         },
         false, brls::Sound::SOUND_FOCUS_SIDEBAR);
+
+    brls::View* search_box = this->getView("search_box");
+    search_box->setCustomNavigationRoute(brls::FocusDirection::DOWN, "0");
+    search_box->setCustomNavigationRoute(brls::FocusDirection::LEFT, nullptr);
+    search_box->setCustomNavigationRoute(brls::FocusDirection::RIGHT, nullptr);
+    search_box->setCustomNavigationRoute(brls::FocusDirection::UP, nullptr);
+    search_box->registerClickAction([this](brls::View* v) { return this->onSearchBarClick(v); } );
 }
 
 Browse::~Browse() {
@@ -64,13 +73,17 @@ Browse::~Browse() {
     delete this->pages;
 }
 
-void Browse::getNewGbSubmissions(int page, int category) {
+bool Browse::getNewGbSubmissions(int page, int category, const std::string& search) {
     // vector of NUM_SUBMISSIONS_PER_PAGE elements
     gb::GbSubmissions* new_subs = nullptr;
     if (category != -1)
         new_subs = gb::GetSubmissionsFromCategory(page, category, NUM_SUBMISSIONS_PER_PAGE);
-    else
-        new_subs = gb::GetNewSubmissions(page, NUM_SUBMISSIONS_PER_PAGE);
+    else {
+        if (search.empty())
+            new_subs = gb::GetNewSubmissions(page, NUM_SUBMISSIONS_PER_PAGE);
+        else
+            new_subs = gb::GetSubmissionsFromSearch(page, search, NUM_SUBMISSIONS_PER_PAGE);
+    }
 
     if (!new_subs->empty()) {
         // push submission data onto vec
@@ -79,14 +92,18 @@ void Browse::getNewGbSubmissions(int page, int category) {
         }
     }
     else {
-        brls::Logger::error("Found 0 new submissions...");
+        brls::Logger::warning("Found 0 new submissions...");
+        return false;
     }
     delete new_subs;
+    return true;
 }
 
 
-bool Browse::loadPage(int page, int category) {
-    this->getNewGbSubmissions(page, category);
+bool Browse::loadPage(int page, int category, const std::string& search) {
+    if (!this->getNewGbSubmissions(page, category, search)) {
+        return false;
+    }
 
     int submission_index = 0;
     // start idx of the submissions vector to pull the submissions for this page from
@@ -120,8 +137,11 @@ bool Browse::loadPage(int page, int category) {
                 if (!sub->submission_data.empty()) {
                     brls::Image* submission_image = (brls::Image*)submission_node->getView("submission_image");
                     brls::Label* submission_label = (brls::Label*)submission_node->getView("submission_label");
-                    std::string itemid = gb::getItemIdFromProfileURL(sub->submission_data[gb::Fields::ProfileURL].get<std::string>());
-                    sub->submission_data[gb::Fields::idRow] = itemid;
+
+                    // if the submission doesn't have an idRow field but does have a profileURL field, we can grab the id from there.
+                    if (sub->submission_data.contains(gb::Fields::ProfileURL) && !sub->submission_data.contains(gb::Fields::idRow)) {
+                        sub->submission_data[gb::Fields::idRow] = gb::getItemIdFromProfileURL(sub->submission_data[gb::Fields::ProfileURL].get<std::string>());
+                    }
 
                     std::string submission_title = sub->submission_data[gb::Fields::Name].get<std::string>();
                     submission_label->setText(submission_title);
@@ -149,12 +169,13 @@ bool Browse::loadPage(int page, int category) {
             submission_node->setId( std::to_string( submission_index ) );
 
             int scroll_down_idx  =  (submission_index+NUM_SUBMISSIONS_ROOT) % NUM_SUBMISSIONS_PER_PAGE;
-            int scroll_up_idx    =  submission_index-NUM_SUBMISSIONS_ROOT < 0 ? NUM_SUBMISSIONS_PER_PAGE-(sqrt(NUM_SUBMISSIONS_PER_PAGE))+submission_index : submission_index-NUM_SUBMISSIONS_ROOT;
+            //int scroll_up_idx    =  submission_index-NUM_SUBMISSIONS_ROOT < 0 ? NUM_SUBMISSIONS_PER_PAGE-(sqrt(NUM_SUBMISSIONS_PER_PAGE))+submission_index : submission_index-NUM_SUBMISSIONS_ROOT;
             //int scroll_right_idx =  ((submission_index+1) % NUM_SUBMISSIONS_ROOT) == 0 ? (submission_index-(NUM_SUBMISSIONS_ROOT-1)) : submission_index+1;
             //int scroll_left_idx  =  (submission_index % NUM_SUBMISSIONS_ROOT) == 0 ? (submission_index+(NUM_SUBMISSIONS_ROOT-1)) : submission_index-1;
+            std::string scroll_up_idx = submission_index-NUM_SUBMISSIONS_ROOT < 0 ? "search_box" : std::to_string(submission_index-NUM_SUBMISSIONS_ROOT);
 
             submission_node->setCustomNavigationRoute(brls::FocusDirection::DOWN,  std::to_string( scroll_down_idx  ));
-            submission_node->setCustomNavigationRoute(brls::FocusDirection::UP,    std::to_string( scroll_up_idx    ));
+            submission_node->setCustomNavigationRoute(brls::FocusDirection::UP, scroll_up_idx);
             //submission_node->setCustomNavigationRoute(brls::FocusDirection::RIGHT, std::to_string( scroll_right_idx ));
             //submission_node->setCustomNavigationRoute(brls::FocusDirection::LEFT,  std::to_string( scroll_left_idx  ));
 
@@ -184,7 +205,7 @@ void Browse::scroll(brls::FocusDirection dir) {
 
             this->current_page += 1;
             if (this->current_page > this->pages->getLayersSize()) {
-                should_scroll = this->loadPage(this->current_page, this->current_category_filter);
+                should_scroll = this->loadPage(this->current_page, this->current_category_filter, this->search_txt);
             }
 
             if (should_scroll)
@@ -449,7 +470,7 @@ void Browse::loadCategoryFilters() {
 
     // manually add category for going to the default 'newly posted mods' page
     categories.emplace(std::make_pair(0, new Category {
-                .name = "New Mods",
+                .name = "New/Featured",
                 .id = -1,
                 .parentCatId = 0,
                 .iconUrl = "",
@@ -507,4 +528,33 @@ void Browse::toggleSubmenu() {
         brls::Application::giveFocus(this);
         browse_submenu_holder->setVisibility(brls::Visibility::INVISIBLE);
     }
+}
+
+
+void Browse::handleSearchBarInput(const std::string& s) {
+    brls::Logger::debug("Searched for: {}", s);
+
+    if (!this->loadPage(1, -1, s)) {
+        setHintText("No results found!");
+    }
+    else {
+        this->current_page = 1;
+        this->current_category_filter = -1;
+        this->search_txt = s;
+
+        for (gb::GbSubmission* sub : this->subs) {
+            delete sub;
+        }
+
+        this->subs.clear();
+        this->pages->clearLayers();
+
+        setTopText("Search: " + s);
+    }
+
+}
+
+bool Browse::onSearchBarClick(brls::View* view) {
+    brls::Swkbd::openForText([this](std::string s) { this->handleSearchBarInput(s); }, "Search", "Bruh Sub", 50, "Bruh Initial");
+    return false;
 }

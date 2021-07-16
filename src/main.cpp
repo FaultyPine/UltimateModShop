@@ -21,6 +21,8 @@
 #include "views/top_bar/top_bar.h"
 #include "views/main_window.h"
 
+#include "zip/ZipUtil.hpp"
+
 int main(int argc, char* argv[])
 {
 // init for pc/switch
@@ -42,6 +44,8 @@ int main(int argc, char* argv[])
 
     // Have the application register an action on every activity that will quit when you press BUTTON_START
     brls::Application::setGlobalQuit(true);
+    
+    UnZip::PhysFSInit();
 
     setup();
 
@@ -59,10 +63,18 @@ int main(int argc, char* argv[])
     //t.detach();
 
 
+    //UnZip::ArchiveExtract("pc_tmp/viwager.7z", "pc_tmp/");
+
+    //UnZip::ArchiveExtract("pc_tmp/zippy.zip", "pc_tmp/");
+
+    //UnZip::ArchiveExtract("pc_tmp/bee_mario.rar", "pc_tmp/");
+
+
     while (brls::Application::mainLoop()) {
 
     }
     delete installed_mods;
+    UnZip::PhysFSDeinit();
 
 // exit for pc/switch
 #ifdef __SWITCH__
