@@ -22,7 +22,7 @@ class ModPage : public brls::Activity {
     const int num_screenshot_dots_per_row = 10;
     int screenshot_idx = 0;
     SubmissionNode* submission; // don't free
-    brls::LayerView* screenshots_layers;
+    brls::LayerView* screenshots_layers; // don't free
     std::vector<PreviewMediaContainer*> medias;
 
     void setupModPage();

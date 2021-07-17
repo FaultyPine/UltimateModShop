@@ -51,7 +51,7 @@ ModPage::~ModPage() {
             delete p;
         }
     }
-    delete this->screenshots_layers;
+    //delete this->screenshots_layers;
 }
 
 #define GetChildView(type, id) brls::type* id = (brls::type*)this->getView(#id);
