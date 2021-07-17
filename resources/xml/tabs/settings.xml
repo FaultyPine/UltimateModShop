@@ -1,0 +1,23 @@
+<brls:Box
+    id="settings_box"
+    height="100%"
+    width="100%"
+
+    borderThickness="1"
+    borderColor="#FFFFFF"
+>
+
+
+    <brls:Button
+        id="update_check_button"
+        text="Check for updates"
+        height="8%"
+        width="20%"
+        backgroundColor="#69C4BB"
+    />
+
+
+
+
+
+</brls:Box>

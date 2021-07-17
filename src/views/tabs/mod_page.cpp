@@ -51,6 +51,7 @@ ModPage::~ModPage() {
             delete p;
         }
     }
+    delete this->screenshots_layers;
 }
 
 #define GetChildView(type, id) brls::type* id = (brls::type*)this->getView(#id);
@@ -250,6 +251,8 @@ void ModPage::setupModPage() {
 
 void ModPage::screenshotsScroll(brls::FocusDirection dir) {
     GetChildView(Box, scroll_dot_box)
+    if (scroll_dot_box->getChildren().size() == 0)
+        return;
 
     {   // prev scroll dot
         int row = this->screenshot_idx / 10;

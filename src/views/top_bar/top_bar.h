@@ -6,6 +6,7 @@
 
 #include "../tabs/browse.h"
 #include "../tabs/installed.h"
+#include "../tabs/settings.h"
 
 class TopBar : public brls::Box
 {
