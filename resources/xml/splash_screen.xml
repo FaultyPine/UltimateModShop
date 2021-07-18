@@ -3,13 +3,13 @@
     width="100%"
     height="100%"
     axis="column"
-    borderThickness="15"
-    borderColor="#d72323"
+    borderThickness="1"
+    borderColor="#000000"
     backgroundColor="#3a4750"
 >
 
     <brls:Label
-        text="Ultimate Mod Shop"
+        text="UltimateModShop"
         width="100%"
         textAlign="center"
         fontSize="50"
@@ -24,7 +24,14 @@
         marginLeft="50"
     />
 
-    
+    <brls:Button
+        id="splash_screen_continue_button"
+        text="Press A To Continue"
+        height="10%"
+        width="25%"
+        marginLeft="900"
+        marginBottom="50"
+    />
 
 
 </brls:Box>

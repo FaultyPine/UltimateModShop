@@ -74,12 +74,12 @@ std::string readable_fs(double bytes) {
     return std::string(buf);
 }
 
-void hint_text_wait(brls::Box* hint_box) {
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+void hint_text_wait(brls::Box* hint_box, int seconds) {
+    std::this_thread::sleep_for(std::chrono::seconds(seconds));
     hint_box->setVisibility(brls::Visibility::INVISIBLE);
 }
 
-void setHintText(std::string text) {
+void setHintText(std::string text, int seconds) {
     brls::Box* hint_box = (brls::Box*)main_box->getView("hint_box");
     if (hint_box != nullptr) {
         if (text.empty()) {
@@ -88,8 +88,8 @@ void setHintText(std::string text) {
         else {
             hint_box->setVisibility(brls::Visibility::VISIBLE);
             ((brls::Label*)hint_box->getView("hint_text"))->setText(text);
-            std::thread hint_thread([hint_box](){
-                hint_text_wait(hint_box);
+            std::thread hint_thread([hint_box, seconds](){
+                hint_text_wait(hint_box, seconds);
             });
             hint_thread.detach();
         }

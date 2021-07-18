@@ -14,4 +14,20 @@ Settings::Settings() {
 void Settings::onUpdateCheckClicked(brls::View* view) {
     brls::Logger::debug("onUpdateCheckClicked");
 
+    #ifdef __SWITCH__
+
+    curl::DownloadFile(stdstr(UMS_GITHUB_RELEASE_URL) + UMS_GITHUB_RELEASE_SW, UMS_NRO_PATH);
+
+    envSetNextLoad(UMS_NRO_PATH, UMS_NRO_PATH);
+
+    brls::Application::quit();
+
+    #else
+
+    curl::DownloadFile(stdstr(UMS_GITHUB_RELEASE_URL) + UMS_GITHUB_RELEASE_PC, UMS_NRO_PATH);
+
+    brls::Application::quit();
+
+    #endif
+
 }

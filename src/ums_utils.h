@@ -34,6 +34,9 @@ extern brls::Box* main_box;
 #define APP_VERSION "0.0.0"
 
 #define SKYLINE_EXEFS_URL "https://github.com/skyline-dev/skyline/releases/download/beta/skyline.zip"
+#define UMS_GITHUB_RELEASE_URL "https://github.com/FaultyPine/UltimateModShop/releases/latest/download/"
+#define UMS_GITHUB_RELEASE_SW "UltimateModShop.nro"
+#define UMS_GITHUB_RELEASE_PC "UltimateModShop"
 
 #define stdstr(x) std::string(x)
 
@@ -46,6 +49,7 @@ extern brls::Box* main_box;
 
 // this icky
 #define UMS_PATH                  stdstr(SD_ROOT)              + "switch/UltimateModShop/"
+#define UMS_NRO_PATH              stdstr(UMS_PATH)             + "UltimateModShop.nro"
 #define UMS_INSTALLED_JSON_PATH   stdstr(UMS_PATH)             + "installed_json.json"
 #define ULTIMATE_ARC_PATH         stdstr(SD_ROOT)              + "ultimate/"
 #define MODS_WORKSPACE_PATH       stdstr(ULTIMATE_ARC_PATH)    + "mods/"
@@ -77,7 +81,7 @@ bool strHasEnding (std::string const &fullString, std::string const &ending);
 
 std::string cleanGBDescriptionText(const std::string& str);
 
-void setHintText(std::string text = "");
+void setHintText(std::string text = "", int seconds = 2);
 
 void setTopText(std::string text = "");
 

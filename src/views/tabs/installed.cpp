@@ -93,13 +93,14 @@ void Installed::addInstalledItem(InstalledMod* mod) {
 
 
 void Installed::willAppear(bool resetState) {
-    setHintText("A -> Toggle | X -> Uninstall");
     Box::willAppear(resetState);
+    setTopText("A -> Toggle | X -> Uninstall");
 }
 
 void Installed::willDisappear(bool resetState) {
     setHintText();
     Box::willDisappear(resetState);
+    setTopText("UltimateModShop");
 } 
 
 

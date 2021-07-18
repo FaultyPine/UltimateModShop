@@ -16,10 +16,7 @@
 */
 
 #include "ums_utils.h"
-#include "main_activity.h"
 #include "splash_screen.h"
-#include "views/top_bar/top_bar.h"
-#include "views/main_window.h"
 
 #include "zip/ZipUtil.hpp"
 
@@ -53,11 +50,11 @@ int main(int argc, char* argv[])
     // In the future, brls will be, but for now I'll have to put this splash screen + load in background stuff on the backburner.
     // I'll definitely want to make some stuff async at some point - loading menus and such (although its pretty damn fast with multicalls so its not a huuuuuge deal).
 
-    //SplashScreen* s = new SplashScreen();
-    //brls::Application::pushActivity(s);
+    SplashScreen* s = new SplashScreen();
+    brls::Application::pushActivity(s);
     //std::thread t([](){
-        MainActivity* m = new MainActivity();
-        brls::Application::pushActivity(m);
+        //MainActivity* m = new MainActivity();
+        //brls::Application::pushActivity(m);
         //brls::Logger::debug("Loaded main activity!");
     //});
     //t.detach();
