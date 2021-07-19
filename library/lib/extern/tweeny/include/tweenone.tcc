@@ -204,7 +204,8 @@ namespace tweeny {
         float pointTotal = static_cast<float>(pointDuration) / static_cast<float>(p.duration());
         if (pointTotal > 1.0f) pointTotal = 1.0f;
         auto easing = std::get<0>(p.easings);
-        value = easing(pointTotal, std::get<0>(p.values), std::get<0>(points.at(point+1).values));
+        if (points.size() > point+1)
+            value = easing(pointTotal, std::get<0>(p.values), std::get<0>(points.at(point+1).values));
     }
 
     template<typename T>
