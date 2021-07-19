@@ -4,6 +4,7 @@ InstalledMods* installed_mods;
 
 void stub() { }
 
+/// when f is 1, value is b, when f is 0, value is a
 float lerp(float a, float b, float f) 
 {
     return (a * (1.0 - f)) + (b * f);

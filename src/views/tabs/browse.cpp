@@ -145,6 +145,8 @@ bool Browse::loadPage(int page, int category, const std::string& search) {
 
                     std::string submission_title = sub->submission_data[gb::Fields::Name].get<std::string>();
                     submission_label->setText(submission_title);
+                    float submission_label_text_size = lerp(submission_label->getFontSize() + 10.0, submission_label->getFontSize(), submission_title.size() / 50.0); // gb mod titles are 50 chars max
+                    submission_label->setFontSize(submission_label_text_size);
 
                     // download image to memory
                     if (!REDUCED_NET_REQUESTS) {

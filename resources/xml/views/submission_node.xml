@@ -11,7 +11,7 @@
     borderColor="#1CDB92"
     cornerRadius="15"
     focusable="true"
-    >
+>
 
 
     <brls:Image
@@ -28,13 +28,14 @@
         id="submission_label"
         singleLine="false"
         width="auto"
-        height="25%"
+        height="20%"
         text="???"
         textColor="#FFFFFF"
-        animated="true"
+        fontSize="10"
+        animated="false"
         autoAnimate="false"
         textAlign="center"
-        marginBottom="20px"
+        marginBottom="5"
     />
 
 

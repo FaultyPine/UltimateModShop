@@ -34,7 +34,7 @@
             <!-- Title/subtitle -->
             <brls:Box
                 height="50"
-                axis="row"
+                axis="column"
                 lineBottom="3"
                 lineColor="#000000"
                 marginBottom="5"
@@ -43,12 +43,13 @@
                 <brls:Label
                     id="title_label"
                     text="Mod Title Here"
-                    width="65%"
+                    width="100%"
                     fontSize="32"
                     textColor="#000000"
                 />
                 <brls:Label
                     id="subtitle_label"
+                    width="100%"
                     visibility="gone"
                     fontSize="15"
                     textAlign="right"
