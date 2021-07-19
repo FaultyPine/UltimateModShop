@@ -160,3 +160,17 @@ void setup() {
 
     installed_mods = new InstalledMods();
 }
+
+
+
+
+void setBrlsImageAsync(const std::string& thumbnail_url, brls::Image* image) {
+    std::thread t([thumbnail_url, image]() {
+        MemoryStruct s = curl::DownloadToMem(thumbnail_url);
+        if (s.memory != nullptr && s.size > 0) {
+            BgTask::pushCallbackToQueue([s, image]() {
+                image->setImageFromMem((unsigned char*)s.memory, s.size);
+            });
+        }
+    }); t.detach();
+}

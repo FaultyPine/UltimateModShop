@@ -315,7 +315,7 @@
             <!-- Download Count -->
             <brls:Box
                 id="download_count_box"
-                width="33%"
+                width="30%"
                 height="100%"
                 axis="row"
                 justifyContent="spaceEvenly"
@@ -339,7 +339,7 @@
             <!-- View Count -->
             <brls:Box
                 id="view_count_box"
-                width="33%"
+                width="45%"
                 height="100%"
                 axis="row"
                 justifyContent="spaceEvenly"
@@ -363,7 +363,7 @@
             <!-- Like Count -->
             <brls:Box
                 id="like_count_box"
-                width="33%"
+                width="25%"
                 height="100%"
                 axis="row"
                 justifyContent="spaceEvenly"

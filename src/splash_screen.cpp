@@ -33,6 +33,7 @@ ___||____;_--'___'/ (      ||
         brls::Application::pushActivity(new MainActivity());
         return false;
     });
+    BgTask::Begin();
 }
 
 SplashScreen::SplashScreen() {

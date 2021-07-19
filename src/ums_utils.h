@@ -15,6 +15,7 @@ struct MemoryStruct
 #include "curl.h"
 #include "installed_mods.h"
 #include "gb.h"
+#include "bg_task.h"
 
 using json = nlohmann::json;
 
@@ -62,6 +63,8 @@ extern brls::Box* main_box;
 #define TEMP_EXTRACTION_DIRNAME   "tmp_dir"
 #define TEMP_EXTRACTION_DIR       stdstr(SD_ROOT)     + TEMP_EXTRACTION_DIRNAME + "/"
 
+// TODO: namespace this stuff
+
 /// setup things that don't necessarily have to do with brls stuff
 void setup();
 
@@ -85,7 +88,7 @@ void setHintText(std::string text = "", int seconds = 2);
 
 void setTopText(std::string text = "");
 
-
+void setBrlsImageAsync(const std::string& thumbnail_url, brls::Image* image);
 
 // used to time entire functions
 struct Timer {

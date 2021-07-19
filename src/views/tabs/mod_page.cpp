@@ -51,7 +51,6 @@ ModPage::~ModPage() {
             delete p;
         }
     }
-    //delete this->screenshots_layers;
 }
 
 #define GetChildView(type, id) brls::type* id = (brls::type*)this->getView(#id);
@@ -117,21 +116,21 @@ void ModPage::setupModPage() {
             if (PreviewMedia.size() > 0)
                 screenshots_default_image->setVisibility(brls::Visibility::GONE);
 
-            CURL_builder curl;
             for (json img_json : PreviewMedia) {
                 // doesn't support videos/gifs and stuff
-                if (img_json[gb::Fields::Type].get<std::string>() == "image") {
-                    std::string img_url = gb::Fields::PreviewMedia::BaseURL + img_json[gb::Fields::Files::FileName].get<std::string>();
-                    // for some fucked up reason this block of code is preventing the install/close buttons from being focusable... what even
-                    MemoryStruct img = curl::DownloadToMem(img_url, &curl);
-                    if (img.memory != nullptr && img.size > 0) {
-                        brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
-                        new_img->setImageFromMem((unsigned char*)img.memory, img.size);
-                        this->screenshots_layers->addLayer(new_img);
+                std::string img_url = gb::Fields::PreviewMedia::BaseURL + img_json[gb::Fields::Files::FileName].get<std::string>();
+                if (img_json[gb::Fields::Type].get<std::string>() == "image" && !strHasEnding(img_url, ".webp")) {
+                    
+                    brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
+                    this->screenshots_layers->addLayer(new_img);
+                    setBrlsImageAsync(img_url, new_img);
 
-                        std::string caption = img_json.contains(gb::Fields::PreviewMedia::Caption) ? img_json[gb::Fields::PreviewMedia::Caption].get<std::string>() : "";
-                        this->medias.emplace_back(new PreviewMediaContainer({ .img = new_img, .caption = caption}));
-                    } // --
+                    std::string caption = img_json.contains(gb::Fields::PreviewMedia::Caption) ? img_json[gb::Fields::PreviewMedia::Caption].get<std::string>() : "";
+                    this->medias.emplace_back(new PreviewMediaContainer({ .img = new_img, .caption = caption}));
+
+                    // for some fucked up reason these images are preventing the install/close buttons from being focusable... what even
+                    // (even without the thread stuff)
+                    
                 }
             }
         }

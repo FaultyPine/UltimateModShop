@@ -12,8 +12,9 @@ const std::string horzHolder = R"xml(
         axis="row"
         width="100%"
         height="25%"
-        marginBottom="20"
+        marginBottom="10"
         marginTop="20"
+        
     />
 )xml";
 const std::string basicBox = R"xml(
@@ -21,6 +22,7 @@ const std::string basicBox = R"xml(
         width="100%"
         height="100%"
         axis="column"
+        justifyContent="spaceEvenly"
     />
 )xml";
 
@@ -114,8 +116,6 @@ bool Browse::loadPage(int page, int category, const std::string& search) {
     brls::Box* this_page = (brls::Box*)this->createFromXMLString(basicBox);
     this->pages->addLayer(this_page);
 
-    CURL_builder curl = CURL_builder();
-
     for (int i = 0; i < NUM_SUBMISSIONS_ROOT; i++) {
         brls::Box* horzHolderBox = (brls::Box*)this->createFromXMLString(horzHolder);
         this_page->addView(horzHolderBox);
@@ -151,10 +151,7 @@ bool Browse::loadPage(int page, int category, const std::string& search) {
                         std::string thumbnail_url = gb::Fields::PreviewMedia::BaseURL + sub->submission_data[gb::Fields::PreviewMedia::PreviewMedia][0][gb::Fields::PreviewMedia::File220].get<std::string>();
                         sub->submission_data[gb::Fields::Custom::ThumbnailURL] = thumbnail_url;
                         if (!thumbnail_url.empty() && !strHasEnding(thumbnail_url, ".webp")) {
-                            MemoryStruct s = curl::DownloadToMem(thumbnail_url, &curl);
-                            if (s.memory != nullptr && s.size > 0) {
-                                submission_image->setImageFromMem((unsigned char*)s.memory, s.size);
-                            }
+                            setBrlsImageAsync(thumbnail_url, submission_image);
                         }
                     }
                     

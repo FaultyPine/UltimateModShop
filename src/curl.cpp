@@ -3,7 +3,7 @@
 using json = nlohmann::json;
 
 MemoryStruct::~MemoryStruct() {
-    free(this->memory);
+    //free(this->memory); // DOES NOT FREE! Make sure to handle it elsewhere
 }
 MemoryStruct::MemoryStruct() {
     this->memory = nullptr;

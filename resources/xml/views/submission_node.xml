@@ -28,11 +28,11 @@
         id="submission_label"
         singleLine="false"
         width="auto"
-        height="15%"
+        height="25%"
         text="???"
         textColor="#FFFFFF"
         animated="true"
-        autoAnimate="true"
+        autoAnimate="false"
         textAlign="center"
         marginBottom="20px"
     />

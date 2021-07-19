@@ -3,8 +3,6 @@
     width="100%"
     height="100%"
     axis="row"
-    borderColor="#E3E830"
-    borderThickness="0"
 >
 
     <!-- LEFT ARROW -->
