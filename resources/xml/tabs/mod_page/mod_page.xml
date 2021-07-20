@@ -197,7 +197,7 @@
             paddingRight="30"
             borderThickness="3"
             borderColor="#000000"
-            focusable="true"
+            focusable="false"
         >
 
             <brls:Image
@@ -551,7 +551,7 @@
             paddingRight="30"
             borderThickness="3"
             borderColor="#000000"
-            focusable="true"
+            focusable="false"
         >
 
             <brls:Image
@@ -590,11 +590,14 @@
         paddingRight="5"
         borderThickness="2"
         borderColor="#000000"
+        focusable="true"
     >
 
         <brls:Label
+            id="download_progress_label"
             text="Downloading..."
             width="100%"
+            fontSize="17"
             lineBottom="2"
             lineColor="#000000"
         />

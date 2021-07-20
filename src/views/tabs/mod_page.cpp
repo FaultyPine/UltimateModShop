@@ -114,7 +114,7 @@ void ModPage::setupModPage() {
 
 
         /* Screenshots */
-        if (!REDUCED_NET_REQUESTS) {
+        if (!NO_IMAGES) {
             screenshots_box->addView(this->screenshots_layers);
 
             json PreviewMedia = mod[gb::Fields::PreviewMedia::PreviewMedia];
@@ -309,19 +309,36 @@ void ModPage::onContentAvailable() {
         false, brls::Sound::SOUND_FOCUS_CHANGE);
 
     brls::Box* download_progress_box = (brls::Box*)this->v->getView("download_progress_box");
-    this->registerAction(
-        "Install", brls::ControllerButton::BUTTON_X, [this, download_progress_box](brls::View* view) {
+    brls::Label* download_progress_label = (brls::Label*)download_progress_box->getView("download_progress_label");
 
+    // Download confirmation action
+    download_progress_box->registerClickAction([this, download_progress_box](brls::View* v){
+        download_progress_box->setVisibility(brls::Visibility::GONE);
+        brls::Application::giveFocus(this->v);
+        return false;
+    });
+    this->registerAction(
+        "Install", brls::ControllerButton::BUTTON_X, [this, download_progress_box, download_progress_label](brls::View* view) {
+            brls::Application::blockInputs();
+            //int num_files = this->submission->getSubmissionData()->submission_data[gb::Fields::Files::Files].size();
             download_progress_bar->setWidthPercentage(0.0);
+            download_progress_label->setText("Downloading...");
+            download_progress_label->setTextColor(nvgRGB(0, 0, 0));
             download_progress_box->setVisibility(brls::Visibility::VISIBLE);
-            
-            std::thread t([this, download_progress_box]() {
+
+            std::thread t([this, download_progress_box, download_progress_label, num_files]() {
                 InstalledMod* m = this->submission->downloadSubmission();
-                BgTask::pushCallbackToQueue([m]() {
-                    Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
-                    installed->addInstalledItem(m);
-                });
-                download_progress_box->setVisibility(brls::Visibility::GONE);
+                
+                if (m) {
+                    BgTask::pushCallbackToQueue([m]() {
+                        Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
+                        installed->addInstalledItem(m);
+                    });
+                }
+                download_progress_label->setText("Downloaded Successfully! Press A to confirm.");
+                download_progress_label->setTextColor(nvgRGB(56, 189, 32));
+                brls::Application::giveFocus(download_progress_box);
+                brls::Application::unblockInputs();
             }); t.detach();
 
             return true;
@@ -342,5 +359,5 @@ void ModPage::onContentAvailable() {
         },
         false, brls::Sound::SOUND_FOCUS_CHANGE);
 
-    brls::Application::giveFocus(this->getView("install_box"));
+    brls::Application::giveFocus(this->v);
 }

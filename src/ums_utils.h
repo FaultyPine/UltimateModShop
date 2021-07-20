@@ -30,7 +30,7 @@ extern brls::Box* main_box;
 #define START_BREAKABLE do {
 #define END_BREAKABLE   } while (false);
 
-#define REDUCED_NET_REQUESTS false
+#define NO_IMAGES false
 
 #define APP_VERSION "0.0.0"
 

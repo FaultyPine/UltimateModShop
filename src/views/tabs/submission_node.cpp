@@ -50,13 +50,9 @@ InstalledMod* SubmissionNode::downloadSubmission() {
         brls::Logger::debug("--------\nDownloading submission...");
         json sd = this->submission->submission_data;
 
-        std::vector<std::filesystem::path> paths = {};
-        if (!REDUCED_NET_REQUESTS) {
-            paths = Manager::InstallModFiles(sd[gb::Fields::Files::Files]);
-        }
+        std::vector<std::filesystem::path> paths = Manager::InstallModFiles(sd[gb::Fields::Files::Files]);
 
-        if (!paths.empty())
-            sd[gb::Fields::Custom::Paths] = paths;
+        sd[gb::Fields::Custom::Paths] = paths;
         
         sd[gb::Fields::Custom::Enabled] = true;
         

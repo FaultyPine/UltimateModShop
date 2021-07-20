@@ -67,12 +67,12 @@ void Installed::addInstalledItem(InstalledMod* mod) {
 
     // thumbnail
 
-    if (!REDUCED_NET_REQUESTS) {
+    if (!NO_IMAGES) {
         brls::Image* installed_item_thumbnail = (brls::Image*)installed_item->getView("installed_item_thumbnail");
         if (!mod->thumbnail_url.empty()) {
-            //MemoryStruct img = curl::DownloadToMem(mod->thumbnail_url);
-            setBrlsImageAsync(mod->thumbnail_url, installed_item_thumbnail);
-            //installed_item_thumbnail->setImageFromMem((unsigned char*)img.memory, img.size);
+            MemoryStruct img = curl::DownloadToMem(mod->thumbnail_url);
+            //setBrlsImageAsync(mod->thumbnail_url, installed_item_thumbnail);
+            installed_item_thumbnail->setImageFromMem((unsigned char*)img.memory, img.size);
         }
     }
 
@@ -87,20 +87,23 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     installed_item->setId(id);
     installed_mods->addInstalledMod(mod);
 
+    brls::Box* installed_box = (brls::Box*)(this->getView("installed_box"));
+
     installed_item->registerClickAction(toggleInstalledMod);
     installed_item->registerAction(
-        "Uninstall", brls::ControllerButton::BUTTON_X, [this, mod, installed_mods, installed_item] (brls::View* v) {
+        "Uninstall", brls::ControllerButton::BUTTON_X, [this, mod, installed_mods, installed_item, installed_box] (brls::View* v) {
             if (installed_item && mod) {
                 std::string name = mod->name;
-                Manager::UninstallMod(mod); // mod gets freed here
-                this->removeView(installed_item);
+                Manager::UninstallMod(mod); // 'mod' gets freed
+                installed_box->removeView(installed_item);
+                brls::Application::giveFocus(installed_box);
                 brls::Logger::debug("Uninstalled: {}", name);
             }
             return false;
         }, false, brls::Sound::SOUND_CLICK
     );
 
-    ((brls::Box*)(this->getView("installed_box")))->addView(installed_item);
+    installed_box->addView(installed_item);
 }
 
 

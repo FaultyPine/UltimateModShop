@@ -91,6 +91,7 @@ class Box : public View
 
     /**
      * Removes the given view from the Box. It will be freed by default.
+     * (NOTE: views are compared by pointer, not by id)
      */
     virtual void removeView(View* view, bool free = true);
 
