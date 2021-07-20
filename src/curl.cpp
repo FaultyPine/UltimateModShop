@@ -2,19 +2,21 @@
 
 using json = nlohmann::json;
 
-MemoryStruct::~MemoryStruct() {
-    //free(this->memory); // DOES NOT FREE! Make sure to handle it elsewhere
-}
 MemoryStruct::MemoryStruct() {
     this->memory = nullptr;
     this->size = 0;
 }
 
+extern brls::Box* download_progress_bar;
+
 int prev_percent_complete = -1;
 int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded) {
     int percent_complete = (int)((NowDownloaded/TotalToDownload)*100.0);
     if (percent_complete >= 0 && percent_complete <= 100 && percent_complete != prev_percent_complete) {
-        brls::Logger::debug("Downloading... {}%", percent_complete);
+        if (download_progress_bar) {
+            //brls::Logger::debug("Downloading... {}%", percent_complete);
+            download_progress_bar->setWidthPercentage(percent_complete);
+        }
         prev_percent_complete = percent_complete;
     }
 

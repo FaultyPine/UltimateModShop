@@ -27,6 +27,5 @@ class ModPage : public brls::Activity {
 
     void setupModPage();
     void screenshotsScroll(brls::FocusDirection dir);
-    bool onInstallButtonClicked(brls::View* v);
 
 };

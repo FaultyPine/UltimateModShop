@@ -4,12 +4,12 @@
 #include "ums_pch.h"
 #include "zip/ZipUtil.hpp"
 
+// a container for ptr + size  (does not free the mem)
 struct MemoryStruct
 {
   char *memory;
   size_t size;
   MemoryStruct();
-  ~MemoryStruct();
 };
 
 #include "curl.h"
@@ -88,7 +88,7 @@ void setHintText(std::string text = "", int seconds = 2);
 
 void setTopText(std::string text = "");
 
-void setBrlsImageAsync(const std::string& thumbnail_url, brls::Image* image);
+void setBrlsImageAsync(std::string thumbnail_url, brls::Image* image);
 
 // used to time entire functions
 struct Timer {

@@ -44,7 +44,8 @@ gb::GbSubmission* SubmissionNode::getSubmissionData() {
     return this->submission;
 }
 
-void SubmissionNode::downloadSubmission() {
+InstalledMod* SubmissionNode::downloadSubmission() {
+    InstalledMod* ret = nullptr;
     if (this->submission != nullptr && !this->submission->submission_data.empty()) {
         brls::Logger::debug("--------\nDownloading submission...");
         json sd = this->submission->submission_data;
@@ -75,13 +76,13 @@ void SubmissionNode::downloadSubmission() {
             sd[gb::Fields::Custom::ThumbnailURL].get<std::string>(), 
             paths
         });
-        
-        Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
-        installed->addInstalledItem(m);
+
+        ret = m;
 
         brls::Logger::debug("Successfully downloaded {}\n--------", sd[gb::Fields::Name].get<std::string>());
     }
     else {
         brls::Logger::debug("Attempted to download submission with invalid data... ignoring...");
     }
+    return ret;
 }

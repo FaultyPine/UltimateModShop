@@ -6,6 +6,14 @@ bool toggleInstalledMod(brls::View* mod_view) {
     Manager::ToggleMod(clicked_mod);
     float new_alpha = mod_view->getAlpha() > 0.5 ? 0.5 : 1.0;
     mod_view->setAlpha(new_alpha);
+
+    bool new_state = clicked_mod->enabled;
+    brls::Image* toggle_img = (brls::Image*)mod_view->getView("installed_item_toggle");
+    if (new_state) // toggled on
+        toggle_img->setImageFromRes("icon/toggle_on.png");
+    else // toggled off
+        toggle_img->setImageFromRes("icon/toggle_off.png");
+
     return true;
 }
 
@@ -57,13 +65,14 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     brls::Label* installed_item_ver = (brls::Label*)installed_item->getView("installed_item_ver");
     installed_item_ver->setText("Ver. " + mod->ver);
 
-    // thumbnail    ---- in the future when Tasks are a thing in brls, spin a thread here to load the thumbnail in the background.
+    // thumbnail
 
     if (!REDUCED_NET_REQUESTS) {
         brls::Image* installed_item_thumbnail = (brls::Image*)installed_item->getView("installed_item_thumbnail");
         if (!mod->thumbnail_url.empty()) {
-            MemoryStruct img = curl::DownloadToMem(mod->thumbnail_url);
-            installed_item_thumbnail->setImageFromMem((unsigned char*)img.memory, img.size);
+            //MemoryStruct img = curl::DownloadToMem(mod->thumbnail_url);
+            setBrlsImageAsync(mod->thumbnail_url, installed_item_thumbnail);
+            //installed_item_thumbnail->setImageFromMem((unsigned char*)img.memory, img.size);
         }
     }
 
@@ -81,10 +90,13 @@ void Installed::addInstalledItem(InstalledMod* mod) {
     installed_item->registerClickAction(toggleInstalledMod);
     installed_item->registerAction(
         "Uninstall", brls::ControllerButton::BUTTON_X, [this, mod, installed_mods, installed_item] (brls::View* v) {
-            Manager::UninstallMod(mod);
-            this->removeView(installed_item);
-            brls::Logger::debug("Uninstalled: {}", mod->name);
-            return true;
+            if (installed_item && mod) {
+                std::string name = mod->name;
+                Manager::UninstallMod(mod); // mod gets freed here
+                this->removeView(installed_item);
+                brls::Logger::debug("Uninstalled: {}", name);
+            }
+            return false;
         }, false, brls::Sound::SOUND_CLICK
     );
 

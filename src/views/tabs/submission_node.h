@@ -16,7 +16,7 @@ class SubmissionNode : public brls::Box
     void onFocusGained() override;
     void onFocusLost() override;
 
-    void downloadSubmission();
+    InstalledMod* downloadSubmission();
 
     private:
 

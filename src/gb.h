@@ -34,6 +34,7 @@ namespace gb {
     namespace Fields {
         static GbField Name = "_sName";
         static GbField DateAdded = "_tsDateAdded";
+        static GbField DateUpdated = "_tsDateUpdated";
         static GbField idRow = "_idRow";
         static GbField ViewCount = "_nViewCount";
         static GbField DownloadCount = "_nDownloadCount";

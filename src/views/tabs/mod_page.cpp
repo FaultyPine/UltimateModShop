@@ -1,11 +1,15 @@
 #include "mod_page.h"
 #include "../../installation/manager.h"
+#include "installed.h"
+#include "../main_window.h"
 
+brls::Box* download_progress_bar = nullptr;
 
 const std::string screenshotTemplate = R"xml(
     <brls:Image 
         scalingType="fit"
         imageAlign="center"
+        image="@res/icon/unknown_image.png"
     />
 )xml";
 const std::string scrollDotXML = R"xml(
@@ -44,6 +48,7 @@ ModPage::ModPage(SubmissionNode* sub) {
     this->screenshots_layers = new brls::LayerView();
     this->submission = sub;
     this->v = brls::View::createFromXMLResource("tabs/mod_page/mod_page.xml");
+    download_progress_bar = (brls::Box*)v->getView("download_progress_bar");
 }
 ModPage::~ModPage() {
     if (!this->medias.empty()) {
@@ -79,7 +84,7 @@ void ModPage::setupModPage() {
         /* ---------------- Right Side Prep ---------------- */
         GetChildView(Label, author_label)
         GetChildView(Image, author_image)
-        GetChildView(Label, version_label)
+        GetChildView(Label, updated_date_label)
         GetChildView(Label, date_label)
         GetChildView(Label, dlsize_label)
         GetChildView(Label, download_count_label)
@@ -184,15 +189,15 @@ void ModPage::setupModPage() {
         if (author_img_mem.memory != nullptr && author_img_mem.size > 0)
             author_image->setImageFromMem((unsigned char*)author_img_mem.memory, author_img_mem.size);
 
-        /* Version */
-        if (mod.contains(gb::Fields::AdditionalInfo::AdditionalInfo)) {
-            std::string version = mod[gb::Fields::AdditionalInfo::AdditionalInfo][gb::Fields::AdditionalInfo::Version].get<std::string>();
-            if (version.empty())
-                version = "Version: 0.0.0";
-            version_label->setText(version);
+        /* Updated Date */
+        if (mod.contains(gb::Fields::DateUpdated)) {
+            std::string updated_date_init = EpochToHumanReadable(mod[gb::Fields::DateUpdated].get<size_t>());
+            int first_space_idx = updated_date_init.find(" ");
+            std::string updated_date = updated_date_init.substr(first_space_idx, first_space_idx+8); 
+            updated_date_label->setText("Date Updated: " + updated_date);
         }
 
-        /* Date */
+        /* Uploaded Date */
         std::string full_date = EpochToHumanReadable(mod[gb::Fields::DateAdded].get<size_t>());
         int first_space_idx = full_date.find(" ");
         std::string date = full_date.substr(first_space_idx, first_space_idx+8); 
@@ -303,9 +308,22 @@ void ModPage::onContentAvailable() {
         },
         false, brls::Sound::SOUND_FOCUS_CHANGE);
 
+    brls::Box* download_progress_box = (brls::Box*)this->v->getView("download_progress_box");
     this->registerAction(
-        "Install", brls::ControllerButton::BUTTON_X, [this](brls::View* view) {
-            this->submission->downloadSubmission();
+        "Install", brls::ControllerButton::BUTTON_X, [this, download_progress_box](brls::View* view) {
+
+            download_progress_bar->setWidthPercentage(0.0);
+            download_progress_box->setVisibility(brls::Visibility::VISIBLE);
+            
+            std::thread t([this, download_progress_box]() {
+                InstalledMod* m = this->submission->downloadSubmission();
+                BgTask::pushCallbackToQueue([m]() {
+                    Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
+                    installed->addInstalledItem(m);
+                });
+                download_progress_box->setVisibility(brls::Visibility::GONE);
+            }); t.detach();
+
             return true;
         },
         false, brls::Sound::SOUND_FOCUS_CHANGE);
@@ -325,10 +343,4 @@ void ModPage::onContentAvailable() {
         false, brls::Sound::SOUND_FOCUS_CHANGE);
 
     brls::Application::giveFocus(this->getView("install_box"));
-}
-
-
-bool ModPage::onInstallButtonClicked(brls::View* v) {
-    brls::Logger::debug("install clicked");
-    return true;
 }

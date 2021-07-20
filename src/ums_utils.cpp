@@ -165,7 +165,7 @@ void setup() {
 
 
 
-void setBrlsImageAsync(const std::string& thumbnail_url, brls::Image* image) {
+void setBrlsImageAsync(std::string thumbnail_url, brls::Image* image) {
     std::thread t([thumbnail_url, image]() {
         MemoryStruct s = curl::DownloadToMem(thumbnail_url);
         if (s.memory != nullptr && s.size > 0) {
