@@ -21,8 +21,8 @@ class ModPage : public brls::Activity {
     private:
     const int num_screenshot_dots_per_row = 10;
     int screenshot_idx = 0;
-    SubmissionNode* submission; // don't free
-    brls::LayerView* screenshots_layers; // don't free
+    SubmissionNode* submission; // don't free, is used for browse menu.
+    brls::LayerView* screenshots_layers; // don't free, is freed by brls on remove.
     std::vector<PreviewMediaContainer*> medias;
 
     void setupModPage();

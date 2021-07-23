@@ -105,6 +105,9 @@ brls::View* LayerView::getLayer(std::string id) {
             return layer;
     }
 }
+brls::View* LayerView::getLayer(int idx) {
+    return this->layers.at(idx);
+}
 
 brls::View* LayerView::getDefaultFocus()
 {

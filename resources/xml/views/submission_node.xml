@@ -8,7 +8,7 @@
     justifyContent="center"
     alignItems="center"
     borderThickness="2"
-    borderColor="#1CDB92"
+    borderColor="#3A3434"
     cornerRadius="15"
     focusable="true"
 >

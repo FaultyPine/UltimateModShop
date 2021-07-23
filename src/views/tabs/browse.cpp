@@ -153,7 +153,7 @@ bool Browse::loadPage(int page, int category, const std::string& search) {
                         std::string thumbnail_url = gb::Fields::PreviewMedia::BaseURL + sub->submission_data[gb::Fields::PreviewMedia::PreviewMedia][0][gb::Fields::PreviewMedia::File220].get<std::string>();
                         sub->submission_data[gb::Fields::Custom::ThumbnailURL] = thumbnail_url;
                         if (!thumbnail_url.empty() && !strHasEnding(thumbnail_url, ".webp")) {
-                            setBrlsImageAsync(thumbnail_url, submission_image);
+                            brlsImageAsync(thumbnail_url, submission_image);
                         }
                     }
                     

@@ -20,6 +20,8 @@
 
 #include "zip/ZipUtil.hpp"
 
+#include "main_activity.h"
+
 int main(int argc, char* argv[])
 {
 // init for pc/switch
@@ -39,25 +41,19 @@ int main(int argc, char* argv[])
 
     brls::Application::createWindow(std::string("UltimateModShop \t\tVer. ") + APP_VERSION);
 
-    // Have the application register an action on every activity that will quit when you press BUTTON_START
     brls::Application::setGlobalQuit(true);
     
     UnZip::PhysFSInit();
 
     setup();
 
-    // OpenGL is a single-threaded state machine, b/c of this, brls is absolutely not thread-safe at the moment and stuff like this makes a lotta undefined behavior.
-    // In the future, brls will be, but for now I'll have to put this splash screen + load in background stuff on the backburner.
-    // I'll definitely want to make some stuff async at some point - loading menus and such (although its pretty damn fast with multicalls so its not a huuuuuge deal).
-
     SplashScreen* s = new SplashScreen();
     brls::Application::pushActivity(s);
-    //std::thread t([](){
-        //MainActivity* m = new MainActivity();
-        //brls::Application::pushActivity(m);
-        //brls::Logger::debug("Loaded main activity!");
-    //});
-    //t.detach();
+
+    BgTask::pushCallbackToQueue([]() {
+        brls::Application::popActivity();
+        brls::Application::pushActivity(new MainActivity());
+    });
 
 
     //UnZip::ArchiveExtract("pc_tmp/viwager.7z", "pc_tmp/");

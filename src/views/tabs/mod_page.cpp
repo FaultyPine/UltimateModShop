@@ -4,6 +4,7 @@
 #include "../main_window.h"
 
 brls::Box* download_progress_bar = nullptr;
+bool modpage_is_closing = false; // if a modpage is/has closed
 
 const std::string screenshotTemplate = R"xml(
     <brls:Image 
@@ -45,6 +46,7 @@ void setScrollDotUnselected(brls::Image* dot) {
 }
 
 ModPage::ModPage(SubmissionNode* sub) {
+    modpage_is_closing = false;
     this->screenshots_layers = new brls::LayerView();
     this->submission = sub;
     this->v = brls::View::createFromXMLResource("tabs/mod_page/mod_page.xml");
@@ -128,7 +130,7 @@ void ModPage::setupModPage() {
                     
                     brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
                     this->screenshots_layers->addLayer(new_img);
-                    setBrlsImageAsync(img_url, new_img);
+                    brlsImageAsync(img_url, new_img);
 
                     std::string caption = img_json.contains(gb::Fields::PreviewMedia::Caption) ? img_json[gb::Fields::PreviewMedia::Caption].get<std::string>() : "";
                     this->medias.emplace_back(new PreviewMediaContainer({ .img = new_img, .caption = caption}));
@@ -143,7 +145,10 @@ void ModPage::setupModPage() {
 
         /* Image Caption(s) */
         if (!this->medias.empty() && !this->medias.at(0)->caption.empty()) {
-            image_caption_label->setText(this->medias.at(0)->caption);
+            std::string caption_str = this->medias.at(0)->caption;
+            image_caption_label->setText(caption_str);
+            float text_size = lerp(25.0, 8.0, caption_str.size() / 100.0); // gb captions are 100 chars max.
+            image_caption_label->setFontSize(text_size);
         }
         else
             image_caption_label->setVisibility(brls::Visibility::GONE);
@@ -296,14 +301,14 @@ void ModPage::screenshotsScroll(brls::FocusDirection dir) {
         setScrollDotSelected((brls::Image*)scroll_dot_row_box->getChildren().at(this->screenshot_idx % 10));
     }
 }
-
 void ModPage::onContentAvailable() {
     this->setupModPage();
 
     this->registerAction(
-        "Close", brls::ControllerButton::BUTTON_B, [](brls::View* view) {
+        "Close", brls::ControllerButton::BUTTON_B, [this](brls::View* view) {
+            modpage_is_closing = true;
             brls::Application::popActivity();
-            brls::Application::giveFocus(main_box->getView("main_window_box"));
+            brls::Application::giveFocus(this->submission);
             return true;
         },
         false, brls::Sound::SOUND_FOCUS_CHANGE);
@@ -326,7 +331,7 @@ void ModPage::onContentAvailable() {
             download_progress_label->setTextColor(nvgRGB(0, 0, 0));
             download_progress_box->setVisibility(brls::Visibility::VISIBLE);
 
-            std::thread t([this, download_progress_box, download_progress_label, num_files]() {
+            std::thread t([this, download_progress_box, download_progress_label]() {
                 InstalledMod* m = this->submission->downloadSubmission();
                 
                 if (m) {

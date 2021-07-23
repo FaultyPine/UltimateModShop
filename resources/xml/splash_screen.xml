@@ -16,21 +16,29 @@
         textColor="#EEEEEE"
         marginTop="150"
     />
+    <brls:Label
+        text="By: PiNE"
+        fontSize="22"
+        textColor="#FFFFFF"
+        marginTop="50"
+        marginLeft="50"
+    />
 
     <brls:Label
         id="splash_screen_motd_text"
-        fontSize="15"
+        fontSize="12"
         textColor="#EEEEEE"
         marginLeft="50"
     />
 
-    <brls:Button
-        id="splash_screen_continue_button"
-        text="Press A To Continue"
+    <brls:Label
+        text="Now Loading..."
+        textColor="#FFFFFF"
+        fontSize="22"
         height="10%"
         width="25%"
-        marginLeft="900"
-        marginBottom="50"
+        marginLeft="1050"
+        marginBottom="40"
     />
 
 
