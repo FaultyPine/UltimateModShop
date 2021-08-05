@@ -1,6 +1,5 @@
 #include "installed.h"
 #include "installation/manager.h"
-#include "../popup.h"
 
 bool toggleInstalledMod(brls::View* mod_view) {
     InstalledMod* clicked_mod = installed_mods->getInstalledMod(std::stoi(mod_view->getID()));
@@ -18,12 +17,28 @@ bool toggleInstalledMod(brls::View* mod_view) {
     return true;
 }
 
+// This is definitely something that could be refactored. 
+//      I.E. Set this up for each added installed item, and when uninstalling, just change the navigation ptrs for the two items around the one installed.
+
+// iterate through the installed_box and set up/down navigation routes
+void refreshNavigationInfo(brls::Box* installed_box) {
+    //set up custom navigation because things totally break down with the default navigation logic for some reason
+    std::vector<brls::View*>& installed_box_children = installed_box->getChildren();
+    int installed_box_size = installed_box_children.size();
+    if (installed_box_size > 1) {
+        for (int i = 0; i < installed_box_size; i++) {
+            // set this installed item's up navigation to previous item
+            int up_idx = i-1 < 0 ? installed_box_size-1 : i-1;
+            installed_box_children[i]->setCustomNavigationRoute(brls::FocusDirection::UP, installed_box_children[up_idx]);
+            // set bottom installed item's down navigation to ourselves
+            int down_idx = (i+1) % installed_box_size;
+            installed_box_children[i]->setCustomNavigationRoute(brls::FocusDirection::DOWN, installed_box_children[down_idx]);
+        }
+    }
+}
+
 Installed::Installed() {
     this->inflateFromXMLRes("xml/tabs/installed.xml");
-
-    // set up uninstallation prompt/inner action
-    confirm_uninstall_popup = new Popup("Are you sure you want to uninstall?");
-    this->addView(confirm_uninstall_popup);
 
     // read from installed items json and populate based on that
     json mem_json_installed = installed_mods->GetMemJson();
@@ -50,11 +65,16 @@ Installed::Installed() {
             }
         }
     }
-
+    refreshNavigationInfo((brls::Box*)this->getView("installed_box"));
 }
 
 void Installed::addInstalledItem(InstalledMod* mod, CURL_builder* curl) {
     brls::Box* installed_item = (brls::Box*)brls::View::createFromXMLResource("views/installed_item.xml");
+    brls::Box* installed_box = (brls::Box*)(this->getView("installed_box"));
+
+    // no scrolling left/right
+    installed_item->setCustomNavigationRoute(brls::FocusDirection::LEFT, nullptr);
+    installed_item->setCustomNavigationRoute(brls::FocusDirection::RIGHT, nullptr);
 
     // text related elements
 
@@ -88,29 +108,55 @@ void Installed::addInstalledItem(InstalledMod* mod, CURL_builder* curl) {
     installed_item->setId(id);
     installed_mods->addInstalledMod(mod);
 
-    brls::Box* installed_box = (brls::Box*)(this->getView("installed_box"));
-
     installed_item->registerClickAction(toggleInstalledMod);
     installed_item->registerAction(
-        "Uninstall", brls::ControllerButton::BUTTON_X, [this, mod, installed_item, installed_box] (brls::View* v) {
-            if (installed_item && mod && this->confirm_uninstall_popup != nullptr) {
-                this->confirm_uninstall_popup->registerCustomCallback(
-                    [mod, installed_item, installed_box] () {
-                        std::string name = mod->name;
-                        Manager::UninstallMod(mod); // 'mod' gets freed
-                        installed_box->removeView(installed_item);
-                        brls::Application::giveFocus(installed_box);
-                        brls::Logger::debug("Uninstalled: {}", name);
-                    }
-                );
-                this->confirm_uninstall_popup->setVisibility(brls::Visibility::VISIBLE);
-                brls::Application::giveFocus(confirm_uninstall_popup);
-            }
+        "Uninstall", brls::ControllerButton::BUTTON_X, [this] (brls::View* v) {
+            this->onUninstallPrompt(v);
             return false;
         }, false, brls::Sound::SOUND_CLICK
     );
 
     installed_box->addView(installed_item);
+}
+
+void Installed::afterUninstallPrompt(brls::View* popup, brls::Box* installed_box) {
+    if (popup && installed_box) {
+        brls::Application::giveFocus(nullptr);
+        this->removeView(popup);
+        brls::Application::giveFocus(installed_box);
+    }
+    else 
+        brls::Logger::warning("Popup/Installed box nullptr!");
+}
+
+
+void Installed::onUninstallPrompt(brls::View* installed_item) {
+    InstalledMod* mod = installed_mods->getInstalledMod(std::stoi(installed_item->getID()));
+    brls::Box* installed_box = (brls::Box*)(this->getView("installed_box"));
+
+    brls::View* popup = brls::View::createFromXMLResource("views/popup.xml");
+    this->addView(popup);
+    brls::Label* popup_title_label = (brls::Label*)popup->getView("popup_title_label");
+    popup_title_label->setText("Uninstall?");
+
+    popup->getView("popup_confirm")->registerClickAction(
+        [this, popup, mod, installed_item, installed_box] (brls::View* v) {
+            brls::Application::giveFocus(nullptr);
+            brls::Logger::debug("Uninstalling: {}", mod->name);
+            Manager::UninstallMod(mod); // 'mod' gets freed
+            installed_box->removeView(installed_item);
+            refreshNavigationInfo(installed_box);
+            this->afterUninstallPrompt(popup, installed_box);
+            return false;
+        }
+    );
+    popup->getView("popup_deny")->registerClickAction(
+        [this, popup, installed_box] (brls::View* v) {
+            this->afterUninstallPrompt(popup, installed_box);
+            return false;
+        }
+    );
+    brls::Application::giveFocus(popup);
 }
 
 
@@ -121,8 +167,8 @@ void Installed::willAppear(bool resetState) {
 }
 
 void Installed::willDisappear(bool resetState) {
-    setHintText();
     Box::willDisappear(resetState);
+    setHintText();
     setTopText("UltimateModShop");
 } 
 

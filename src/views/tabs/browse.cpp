@@ -557,3 +557,11 @@ bool Browse::onSearchBarClick(brls::View* view) {
     brls::Swkbd::openForText([this](std::string s) { this->handleSearchBarInput(s); }, "Search", "Bruh Sub", 50, "Bruh Initial");
     return false;
 }
+
+
+brls::View* Browse::getDefaultFocus() {
+    if (this->current_page != 1) {
+        return this->getView("0"); // idk why this works but it does. When going back to browse menu it puts you on the page you were on last
+    } 
+    return Box::getDefaultFocus();
+}

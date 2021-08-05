@@ -177,21 +177,21 @@ std::vector<fs::path> Manager::InstallModFile(std::string url, std::string filen
 }
 
 // takes in gb::Fields::Files::Files
-std::vector<std::filesystem::path> Manager::InstallModFiles(const json &files) {
+std::vector<std::filesystem::path> Manager::InstallModFiles(const json &files, const std::vector<bool>& dl_idxs) {
     std::vector<fs::path> paths = {};
 
-    json files_to_install;
-    if (files.size() > 1) {
-        // TODO: let users choose which files they want to install
-    }
-
-    for (json file : files) { // iterate through each uploaded file in the submission... will probably end up prompting the user somehow or having them select which files in the submission they want
-        brls::Logger::debug("Downloading file ({} files total)). Size = {} bytes", files.size(), file[gb::Fields::Files::FileSize].get<unsigned long>());
-        std::string url = file[gb::Fields::Files::DownloadURL].get<std::string>();
-        std::string filename = file[gb::Fields::Files::FileName].get<std::string>();
-        std::vector<fs::path> modfile = Manager::InstallModFile(url, filename);
-        // append contents of modfile vec to paths vec
-        paths.insert(paths.end(), modfile.begin(), modfile.end());
+    // iterate through each uploaded file in the submission, 
+    // and if the corresponding idx is true, or the dl_idxs vec is empty or doesn't have that idx, install that file.
+    for (int i = 0; i < files.size(); i++) { 
+        if (dl_idxs.empty() || i >= dl_idxs.size() || dl_idxs[i]) {
+            const json& file = files[i];
+            brls::Logger::debug("Downloading file ({} files total)). Size = {} bytes", files.size(), file[gb::Fields::Files::FileSize].get<unsigned long>());
+            std::string url = file[gb::Fields::Files::DownloadURL].get<std::string>();
+            std::string filename = file[gb::Fields::Files::FileName].get<std::string>();
+            std::vector<fs::path> modfile = Manager::InstallModFile(url, filename);
+            // append contents of modfile vec to paths vec
+            paths.insert(paths.end(), modfile.begin(), modfile.end());
+        }
     }
 
     return paths;

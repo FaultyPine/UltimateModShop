@@ -236,7 +236,7 @@ class Application
      * the given button
      * Returns true if at least one action has been fired
      */
-    static bool handleAction(char button);
+    static bool handleAction(enum ControllerButton button);
 
     static void registerBuiltInXMLViews();
 

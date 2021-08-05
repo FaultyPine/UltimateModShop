@@ -83,11 +83,18 @@ void InstalledMods::addInstalledMod(InstalledMod* m) {
 }
 
 void InstalledMods::removeInstalledMod(InstalledMod* m) {
-    auto idx = std::find(this->mods.begin(), this->mods.end(), m);
-    this->mods.erase(idx);
-    this->installed_json["Installed"].erase(m->itemid);
-    this->OverwriteFileFromMem();
-    delete m;
+    auto idx_itr = std::find(this->mods.begin(), this->mods.end(), m);
+    if (idx_itr != this->mods.end()) {
+        int idx = idx_itr - this->mods.begin();
+        //this->mods.erase(idx);
+        this->mods.at(idx) = nullptr; // setting this to null to preserve indicies
+        this->installed_json["Installed"].erase(m->itemid);
+        this->OverwriteFileFromMem();
+        delete m;
+    }
+    else {
+        brls::Logger::warning("Tried to remove installed mod that doesn't exist!");
+    }
 }
 
 InstalledMod* InstalledMods::getInstalledMod(int idx) {
@@ -96,4 +103,12 @@ InstalledMod* InstalledMods::getInstalledMod(int idx) {
 
 size_t InstalledMods::getInstalledModsSize() {
     return this->mods.size();
+}
+
+bool InstalledMods::isItemIDPresent(std::string itemid) {
+    for (InstalledMod* mod : this->mods) {
+        if (mod && mod->itemid == itemid)
+            return true;
+    }
+    return false;
 }

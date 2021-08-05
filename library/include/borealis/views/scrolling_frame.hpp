@@ -50,6 +50,7 @@ class ScrollingFrame : public Box
     void willAppear(bool resetState) override;
     void willDisappear(bool resetState) override;
     View* getDefaultFocus() override;
+    View* getNextFocus(FocusDirection direction, View* currentView) override;
     void addView(View* view) override;
     void removeView(View* view, bool free = true) override;
     void onLayout() override;

@@ -88,7 +88,7 @@ void setHintText(std::string text = "", int seconds = 2);
 
 void setTopText(std::string text = "");
 
-void brlsImageAsync(std::string thumbnail_url, brls::Image* image);
+void brlsImageAsync(std::string thumbnail_url, brls::Image* image, bool is_modpage = false);
 
 // used to time entire functions
 struct Timer {

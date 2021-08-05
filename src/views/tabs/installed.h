@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ums_utils.h"
-#include "../popup.h"
 
 class Installed : public brls::Box
 {
@@ -14,5 +13,6 @@ class Installed : public brls::Box
 
     private:
 
-    Popup* confirm_uninstall_popup = nullptr;
+    void onUninstallPrompt(brls::View* v);
+    void afterUninstallPrompt(brls::View* popup, brls::Box* installed_box);
 };

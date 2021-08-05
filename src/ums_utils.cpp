@@ -166,13 +166,14 @@ void setup() {
 // ensures images don't try to load when modpage no longer exists (if user backs out of modpage before all images load in)
 extern bool modpage_is_closing;
 
-void brlsImageAsync(std::string thumbnail_url, brls::Image* image) {
-    std::thread t([thumbnail_url, image]() {
+void brlsImageAsync(std::string thumbnail_url, brls::Image* image, bool is_modpage) {
+    std::thread t([thumbnail_url, image, is_modpage]() {
         MemoryStruct s = curl::DownloadToMem(thumbnail_url);
         if (s.memory != nullptr && s.size > 0 && image) {
-            BgTask::pushCallbackToQueue([s, image]() {
-                if (!modpage_is_closing)
+            BgTask::pushCallbackToQueue([s, image, is_modpage]() {
+                if ((is_modpage && !modpage_is_closing) || !is_modpage) {
                     image->setImageFromMem((unsigned char*)s.memory, s.size);
+                }
             });
         }
     }); t.detach();

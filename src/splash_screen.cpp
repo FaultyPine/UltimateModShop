@@ -25,7 +25,7 @@ ___||____;_--'___'/ (      ||
 )"""";
     ((brls::Label*)this->getView("splash_screen_motd_text"))->setText(motds);
 
-    BgTask::Begin();
+    BgTask::Begin(3000);
 }
 
 SplashScreen::SplashScreen() {

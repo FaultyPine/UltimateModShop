@@ -44,13 +44,13 @@ gb::GbSubmission* SubmissionNode::getSubmissionData() {
     return this->submission;
 }
 
-InstalledMod* SubmissionNode::downloadSubmission() {
+InstalledMod* SubmissionNode::downloadSubmission(const std::vector<bool>& dl_idxs) {
     InstalledMod* ret = nullptr;
     if (this->submission != nullptr && !this->submission->submission_data.empty()) {
         brls::Logger::debug("--------\nDownloading submission...");
         json sd = this->submission->submission_data;
 
-        std::vector<std::filesystem::path> paths = Manager::InstallModFiles(sd[gb::Fields::Files::Files]);
+        std::vector<std::filesystem::path> paths = Manager::InstallModFiles(sd[gb::Fields::Files::Files], dl_idxs);
 
         sd[gb::Fields::Custom::Paths] = paths;
         

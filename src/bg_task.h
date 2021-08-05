@@ -5,7 +5,7 @@
 
 namespace BgTask {
 
-    void Begin();
+    void Begin(brls::Time period);
     void Destroy();
 
     void addViewToQueue(brls::Box* parent, brls::View* toAdd);
@@ -17,7 +17,7 @@ namespace BgTask {
 
 class BgTaskInner : public brls::RepeatingTask {
     public:
-    BgTaskInner(brls::Time period = 2000);
+    BgTaskInner(brls::Time period);
     ~BgTaskInner();
     void run() override;
 };

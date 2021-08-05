@@ -321,7 +321,7 @@ View* Application::getCurrentFocus()
     return Application::currentFocus;
 }
 
-bool Application::handleAction(char button)
+bool Application::handleAction(enum ControllerButton button)
 {
     if (Application::activitiesStack.empty())
         return false;
@@ -334,7 +334,7 @@ bool Application::handleAction(char button)
 
     while (hintParent)
     {
-        for (const brls::Action& action : hintParent->getActions())
+        for (auto& action : hintParent->getActions())
         {
             if (action.button != static_cast<enum ControllerButton>(button))
                 continue;

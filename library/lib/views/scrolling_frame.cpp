@@ -139,6 +139,11 @@ View* ScrollingFrame::getDefaultFocus() {
         return Box::getDefaultFocus();
 }
 
+View* ScrollingFrame::getNextFocus(FocusDirection direction, View* currentView)
+{
+    return this->contentView->getNextFocus(direction, currentView);
+}
+
 void ScrollingFrame::prebakeScrolling()
 {
     // Prebaked values for scrolling

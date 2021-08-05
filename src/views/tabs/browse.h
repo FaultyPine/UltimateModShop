@@ -33,6 +33,7 @@ class Browse : public brls::Box
     ~Browse();
 
     void onChildFocusGained(View* directChild, View* focusedView) override;
+    View* getDefaultFocus() override;
 
     static brls::Box* create();
 

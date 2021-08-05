@@ -49,7 +49,7 @@ ModPage::ModPage(SubmissionNode* sub) {
     modpage_is_closing = false;
     this->screenshots_layers = new brls::LayerView();
     this->submission = sub;
-    this->v = brls::View::createFromXMLResource("tabs/mod_page/mod_page.xml");
+    this->v = (brls::Box*)brls::View::createFromXMLResource("tabs/mod_page/mod_page.xml");
     download_progress_bar = (brls::Box*)v->getView("download_progress_bar");
 }
 ModPage::~ModPage() {
@@ -97,6 +97,10 @@ void ModPage::setupModPage() {
         GetChildView(Label, subcategory_label)
         GetChildView(Image, subcategory_image)
 
+        /* --------------- Misc Prep ------------------------ */
+
+        GetChildView(Box, install_box)
+
         /* ---------------- Left Side Setting ---------------- */
 
         /* Title */
@@ -130,7 +134,7 @@ void ModPage::setupModPage() {
                     
                     brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
                     this->screenshots_layers->addLayer(new_img);
-                    brlsImageAsync(img_url, new_img);
+                    brlsImageAsync(img_url, new_img, true);
 
                     std::string caption = img_json.contains(gb::Fields::PreviewMedia::Caption) ? img_json[gb::Fields::PreviewMedia::Caption].get<std::string>() : "";
                     this->medias.emplace_back(new PreviewMediaContainer({ .img = new_img, .caption = caption}));
@@ -255,6 +259,14 @@ void ModPage::setupModPage() {
                 subcategory_image->setVisibility(brls::Visibility::GONE);
         }
 
+        if (mod.contains(gb::Fields::idRow)) {
+            std::string this_itemid = mod[gb::Fields::idRow].get<std::string>();
+            if ( installed_mods->isItemIDPresent(this_itemid) ) {
+                install_box->setAlpha(0.2);
+                this->can_install = false;
+            }
+        }
+
     }
 }
 
@@ -301,6 +313,11 @@ void ModPage::screenshotsScroll(brls::FocusDirection dir) {
         setScrollDotSelected((brls::Image*)scroll_dot_row_box->getChildren().at(this->screenshot_idx % 10));
     }
 }
+
+
+std::function<void()> install_action;
+
+
 void ModPage::onContentAvailable() {
     this->setupModPage();
 
@@ -315,6 +332,31 @@ void ModPage::onContentAvailable() {
 
     brls::Box* download_progress_box = (brls::Box*)this->v->getView("download_progress_box");
     brls::Label* download_progress_label = (brls::Label*)download_progress_box->getView("download_progress_label");
+    brls::Box* install_button_box = (brls::Box*)this->v->getView("install_box");
+
+    install_action = [this, download_progress_box, download_progress_label, install_button_box] () {
+        download_progress_box->setVisibility(brls::Visibility::VISIBLE);
+        download_progress_bar->setWidthPercentage(0.0);
+        download_progress_label->setText("Downloading...");
+        download_progress_label->setTextColor(nvgRGB(0, 0, 0));
+
+        std::thread t([this, download_progress_box, download_progress_label, install_button_box]() {
+            InstalledMod* m = this->submission->downloadSubmission();
+            
+            if (m) {
+                BgTask::pushCallbackToQueue([m]() {
+                    Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
+                    installed->addInstalledItem(m);
+                });
+            }
+            download_progress_label->setText("Downloaded Successfully! Press A to confirm.");
+            download_progress_label->setTextColor(nvgRGB(56, 189, 32));
+            brls::Application::giveFocus(download_progress_box);
+            install_button_box->setAlpha(0.2);
+            this->can_install = false;
+            brls::Application::unblockInputs();
+        }); t.detach();
+    };
 
     // Download confirmation action
     download_progress_box->registerClickAction([this, download_progress_box](brls::View* v){
@@ -323,29 +365,21 @@ void ModPage::onContentAvailable() {
         return false;
     });
     this->registerAction(
-        "Install", brls::ControllerButton::BUTTON_X, [this, download_progress_box, download_progress_label](brls::View* view) {
-            brls::Application::blockInputs();
-            //int num_files = this->submission->getSubmissionData()->submission_data[gb::Fields::Files::Files].size();
-            download_progress_bar->setWidthPercentage(0.0);
-            download_progress_label->setText("Downloading...");
-            download_progress_label->setTextColor(nvgRGB(0, 0, 0));
-            download_progress_box->setVisibility(brls::Visibility::VISIBLE);
-
-            std::thread t([this, download_progress_box, download_progress_label]() {
-                InstalledMod* m = this->submission->downloadSubmission();
-                
-                if (m) {
-                    BgTask::pushCallbackToQueue([m]() {
-                        Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
-                        installed->addInstalledItem(m);
-                    });
+        "Install", brls::ControllerButton::BUTTON_X, [this, download_progress_box, download_progress_label, install_action](brls::View* view) {
+            if (this->can_install) {
+                brls::Application::blockInputs();
+                /*int num_files = this->submission->getSubmissionData()->submission_data[gb::Fields::Files::Files].size();
+                if (num_files > 1) {
+                    ConfirmFiles* confirm_files_window = new ConfirmFiles(install_action);
+                    this->v->addView(confirm_files_window);
                 }
-                download_progress_label->setText("Downloaded Successfully! Press A to confirm.");
-                download_progress_label->setTextColor(nvgRGB(56, 189, 32));
-                brls::Application::giveFocus(download_progress_box);
-                brls::Application::unblockInputs();
-            }); t.detach();
-
+                else {
+                    install_action();
+                }*/
+                install_action();
+            }
+            else 
+                brls::Logger::debug("Already installed mod!");
             return true;
         },
         false, brls::Sound::SOUND_FOCUS_CHANGE);

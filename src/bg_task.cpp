@@ -12,8 +12,8 @@ namespace {
     BgTaskInner* bg_task_inner;
 }
 
-void BgTask::Begin() {
-    bg_task_inner = new BgTaskInner();
+void BgTask::Begin(brls::Time period) {
+    bg_task_inner = new BgTaskInner(period);
     bg_task_inner->start();
 }
 void BgTask::Destroy() {

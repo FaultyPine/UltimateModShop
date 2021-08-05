@@ -54,6 +54,8 @@ class InstalledMods {
     /// size of mods
     size_t getInstalledModsSize();
 
+    bool isItemIDPresent(std::string itemid);
+
     /* ---------------------------------------------- */
 
     /// Init json for installed mods

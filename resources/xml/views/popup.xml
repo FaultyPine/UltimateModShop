@@ -1,12 +1,11 @@
 <brls:Box
         id="popup_box"
-        visibility="gone"
         axis="column"
         positionType="absolute"
-        positionTop="40%"
-        positionLeft="33%"
-        height="20%"
-        width="50%"
+        positionTop="220"
+        positionLeft="450"
+        height="120"
+        width="400"
         backgroundColor="#CDCDCD"
         justifyContent="spaceEvenly"
         paddingLeft="5"
@@ -31,21 +30,24 @@
             justifyContent="spaceEvenly"
             paddingLeft="10"
             paddingRight="10"
-            backgroundColor="#FFFFFF"
+            paddingTop="10"
+            paddingBottom="10"
         >
 
 
             <brls:Button
                 id="popup_confirm"
                 text="Yes"
-                borderThickness="1"
+                fontSize="20"
+                borderThickness="2"
                 borderColor="#000000"
             />
 
             <brls:Button
                 id="popup_deny"
                 text="No"
-                borderThickness="1"
+                fontSize="20"
+                borderThickness="2"
                 borderColor="#000000"
             />
 
