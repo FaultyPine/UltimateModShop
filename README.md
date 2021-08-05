@@ -3,6 +3,8 @@
 A Nintendo Switch homebrew project that (will) manage user's installations of mods, and allow users to browse/install mods from Gamebanana.
 Built using Natinusala's [Borealis](https://github.com/natinusala/borealis). Huge thanks to them!
 
+(UI is very WIP. Contact me if you are interested in helping beautify this app. As you might be able to tell, I am no UI expert)
+
 ![Capture](https://user-images.githubusercontent.com/53064235/128274662-91c9b01a-98c9-4d73-95e9-59a07ae486db.PNG)
 ![Capture2](https://user-images.githubusercontent.com/53064235/128274673-184bde39-057c-4242-b8b7-af00c067eb7e.PNG)
 ![Capture33](https://user-images.githubusercontent.com/53064235/128274678-c3fc75d2-681f-4e1b-bb88-07f5b20d8dab.PNG)
