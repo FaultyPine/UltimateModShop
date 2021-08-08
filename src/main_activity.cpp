@@ -33,11 +33,8 @@ void MainActivity::onContentAvailable() {
     );*/
     this->registerAction( // F1
         "modpage", brls::ControllerButton::BUTTON_BACK, [] (brls::View* v) {
-            std::string mod_id = "174653";
-            json _j = curl::DownloadJson("https://gamebanana.com/apiv3/Mod/" + mod_id);
-            gb::GbSubmission* _g = new gb::GbSubmission {.submission_data = _j};
-            SubmissionNode* _sub = new SubmissionNode(_g);
-            brls::Application::pushActivity(new ModPage(_sub));
+            std::string mod_id = "38834";
+            brls::Application::pushActivity(new ModPage(new SubmissionNode(gb::GetSingleSubmission(mod_id))));
             return true;
         }, false, brls::Sound::SOUND_CLICK
     );

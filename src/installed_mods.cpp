@@ -62,7 +62,7 @@ void InstalledMods::AppendToMem(json j) {
     this->installed_json += j;
 }
 
-json InstalledMods::GetMemJson() {
+json& InstalledMods::GetMemJson() {
     return this->installed_json;
 }
 

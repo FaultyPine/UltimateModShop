@@ -16,7 +16,9 @@ class ModPage : public brls::Activity {
 
     void onContentAvailable() override;
     brls::View* createContentView() override { return v; }
-    brls::Box* v;
+
+    SubmissionNode* getSubmissionNode();
+    bool can_install = true;
 
     private:
     const int num_screenshot_dots_per_row = 10;
@@ -28,6 +30,6 @@ class ModPage : public brls::Activity {
     void setupModPage();
     void screenshotsScroll(brls::FocusDirection dir);
 
-    bool can_install = true;
+    brls::Box* v;
 
 };

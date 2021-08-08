@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 namespace curl {
 
-    CURLcode DownloadFile(std::string url, std::string path);
+    CURLcode DownloadFile(std::string url, std::string path, CURL_builder* curl = nullptr);
 
     json DownloadJson(std::string url, CURL_builder* curl = nullptr);
 

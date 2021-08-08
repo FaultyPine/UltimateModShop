@@ -16,8 +16,6 @@ class SubmissionNode : public brls::Box
     void onFocusGained() override;
     void onFocusLost() override;
 
-    InstalledMod* downloadSubmission(const std::vector<bool>& dl_idxs = {});
-
     private:
 
     gb::GbSubmission* submission;

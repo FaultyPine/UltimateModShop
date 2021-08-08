@@ -14,7 +14,6 @@ int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, d
     int percent_complete = (int)((NowDownloaded/TotalToDownload)*100.0);
     if (percent_complete >= 0 && percent_complete <= 100 && percent_complete != prev_percent_complete) {
         if (download_progress_bar) {
-            //brls::Logger::debug("Downloading... {}%", percent_complete);
             download_progress_bar->setWidthPercentage(percent_complete);
         }
         prev_percent_complete = percent_complete;
@@ -25,8 +24,12 @@ int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, d
 }
 
 /// 'path' is a relative path to wherever the project is being run from.
-CURLcode curl::DownloadFile(std::string url, std::string path) {
-    CURL_builder curl;
+CURLcode curl::DownloadFile(std::string url, std::string path, CURL_builder* curl) {
+    bool is_tmp_curl = false;
+    if (curl == nullptr) {
+        is_tmp_curl = true;
+        curl = new CURL_builder;
+    }
     CURLcode result = CURLE_GOT_NOTHING;
 
     std::vector<std::string> headers;
@@ -35,7 +38,7 @@ CURLcode curl::DownloadFile(std::string url, std::string path) {
     if (curl) {
         FILE* file = fopen(path.c_str(), "wb");
         result =
-        curl.SetHeaders(headers)
+        curl->SetHeaders(headers)
             .SetURL(url)
             .SetOPT(CURLOPT_WRITEDATA, file)
             .SetOPT(CURLOPT_USERAGENT, "UMS-User")
@@ -52,6 +55,8 @@ CURLcode curl::DownloadFile(std::string url, std::string path) {
                 std::filesystem::remove(path);
         }
     }
+    if (is_tmp_curl)
+        delete curl;
     return result;
 }
 

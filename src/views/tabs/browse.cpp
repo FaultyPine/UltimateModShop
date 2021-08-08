@@ -138,11 +138,6 @@ bool Browse::loadPage(int page, int category, const std::string& search) {
                     brls::Image* submission_image = (brls::Image*)submission_node->getView("submission_image");
                     brls::Label* submission_label = (brls::Label*)submission_node->getView("submission_label");
 
-                    // if the submission doesn't have an idRow field but does have a profileURL field, we can grab the id from there.
-                    if (sub->submission_data.contains(gb::Fields::ProfileURL) && !sub->submission_data.contains(gb::Fields::idRow)) {
-                        sub->submission_data[gb::Fields::idRow] = gb::getItemIdFromProfileURL(sub->submission_data[gb::Fields::ProfileURL].get<std::string>());
-                    }
-
                     std::string submission_title = sub->submission_data[gb::Fields::Name].get<std::string>();
                     submission_label->setText(submission_title);
                     float submission_label_text_size = lerp(submission_label->getFontSize() + 10.0, submission_label->getFontSize(), submission_title.size() / 50.0); // gb mod titles are 50 chars max
@@ -150,8 +145,7 @@ bool Browse::loadPage(int page, int category, const std::string& search) {
 
                     // download image to memory
                     if (!NO_IMAGES) {
-                        std::string thumbnail_url = gb::Fields::PreviewMedia::BaseURL + sub->submission_data[gb::Fields::PreviewMedia::PreviewMedia][0][gb::Fields::PreviewMedia::File220].get<std::string>();
-                        sub->submission_data[gb::Fields::Custom::ThumbnailURL] = thumbnail_url;
+                        std::string thumbnail_url = sub->submission_data[gb::Fields::Custom::ThumbnailURL].get<std::string>();
                         if (!thumbnail_url.empty() && !strHasEnding(thumbnail_url, ".webp")) {
                             brlsImageAsync(thumbnail_url, submission_image);
                         }

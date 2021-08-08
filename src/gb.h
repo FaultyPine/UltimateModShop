@@ -100,6 +100,8 @@ namespace gb {
 
     typedef std::vector<GbSubmission*> GbSubmissions;
 
+    GbSubmission* GetSingleSubmission(std::string itemid);
+
     /// Returns a vector of GbSubmission pointers of the newest submissions of the specified gameid.
     GbSubmissions* GetNewSubmissions(int page, int numItemsPerPage, const std::string& game = GB_SMASH_GAMEID);
 

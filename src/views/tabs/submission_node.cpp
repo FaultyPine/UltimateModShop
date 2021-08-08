@@ -1,7 +1,4 @@
 #include "submission_node.h"
-#include "../main_window.h"
-#include "installed.h"
-#include "installation/manager.h"
 #include "mod_page.h"
 
 SubmissionNode::SubmissionNode(gb::GbSubmission* _submission) {
@@ -42,38 +39,4 @@ void SubmissionNode::setSubmissionData(gb::GbSubmission* s) {
 
 gb::GbSubmission* SubmissionNode::getSubmissionData() {
     return this->submission;
-}
-
-InstalledMod* SubmissionNode::downloadSubmission(const std::vector<bool>& dl_idxs) {
-    InstalledMod* ret = nullptr;
-    if (this->submission != nullptr && !this->submission->submission_data.empty()) {
-        brls::Logger::debug("--------\nDownloading submission...");
-        json sd = this->submission->submission_data;
-
-        std::vector<std::filesystem::path> paths = Manager::InstallModFiles(sd[gb::Fields::Files::Files], dl_idxs);
-
-        sd[gb::Fields::Custom::Paths] = paths;
-        
-        sd[gb::Fields::Custom::Enabled] = true;
-        
-        installed_mods->GetMemJsonPtr()->at("Installed")[sd[gb::Fields::idRow].get<std::string>()] = sd;
-        installed_mods->OverwriteFileFromMem();
-
-        InstalledMod* m = new InstalledMod({
-            sd[gb::Fields::Name].get<std::string>(), 
-            sd[gb::Fields::Submitter::Submitter][gb::Fields::Name].get<std::string>(), 
-            true,
-            sd[gb::Fields::idRow].get<std::string>(), 
-            sd[gb::Fields::Custom::ThumbnailURL].get<std::string>(), 
-            paths
-        });
-
-        ret = m;
-
-        brls::Logger::debug("Successfully downloaded {}\n--------", sd[gb::Fields::Name].get<std::string>());
-    }
-    else {
-        brls::Logger::debug("Attempted to download submission with invalid data... ignoring...");
-    }
-    return ret;
 }

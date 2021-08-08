@@ -1,0 +1,105 @@
+<brls:Box
+    height="100%"
+    width="100%"
+    axis="row"
+    backgroundColor="#909090"
+>
+   
+   <!-- File Selection -->
+    
+    <brls:Box
+        axis="column"
+        width="80%"
+        height="100%"
+        paddingLeft="20"
+        paddingRight="20"
+        paddingTop="10"
+        paddingBottom="10"
+        lineRight="2"
+        lineColor="#000000"
+    >
+
+        <brls:Label
+            id="download_file_selection_title"
+            text="Choose files to download:"
+            textAlign="center"
+            height="10%"
+            width="100%"
+        />
+
+        <brls:ScrollingFrame
+            width="100%"
+            height="90%"
+        >
+
+            <brls:Box
+                id="download_file_selection_list"
+                axis="column"
+                justifyContent="spaceEvenly"
+                paddingLeft="35"
+                paddingTop="110"
+                backgroundColor="#D1D1D1"
+            />
+
+        </brls:ScrollingFrame>
+
+
+
+    </brls:Box>
+
+
+    <!-- Installation Process Selection -->
+
+    <brls:Box
+        id="installation_process_selection_box"
+        axis="column"
+        justifyContent="spaceEvenly"
+        width="20%"
+        alignItems="center"
+    >
+
+        <brls:Label
+            text="Select installation type:"
+            lineBottom="1"
+            lineColor="#000000"
+        />
+
+        <brls:Label
+            id="installation_process_status"
+            visibility="gone"
+            borderThickness="1"
+            borderColor="#000000"
+            marginLeft="5"
+            marginRight="5"
+            fontSize="15"
+        />
+
+        <brls:Button
+            id="installation_process_automatic"
+            text="Automatic"
+            height="20%"
+            width="80%"
+            backgroundColor="#FFFFFF"
+        />
+
+        <brls:Button
+            id="installation_process_manual"
+            text="Manual"
+            height="20%"
+            width="80%"
+            backgroundColor="#FFFFFF"
+        />
+
+        <brls:Button
+            id="installation_process_go"
+            text="Install"
+            height="20%"
+            width="80%"
+            backgroundColor="#5BD13E"
+            visibility="invisible"
+        />
+
+    </brls:Box>
+
+
+</brls:Box>

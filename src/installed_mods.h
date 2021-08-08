@@ -34,7 +34,7 @@ class InstalledMods {
     json GetFileJson();
 
     /// returns this json obj
-    json GetMemJson();
+    json& GetMemJson();
 
     /// returns a pointer to this json obj for direct manipulation
     json* GetMemJsonPtr();
@@ -59,7 +59,7 @@ class InstalledMods {
     /* ---------------------------------------------- */
 
     /// Init json for installed mods
-    InstalledMods(json default_json = json(  { { "Installed", {} } }   ));
+    InstalledMods(json default_json = json(  { { "Installed", {} }, { "Settings", {} } }   ));
     ~InstalledMods();
 
 

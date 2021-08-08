@@ -66,16 +66,16 @@ void PhysFSArchiveExtractInner(const std::string& filename, const std::string& d
 
 
 
-void UnZip::ArchiveExtract(const std::string& filename, const std::string& dest) {
+int UnZip::ArchiveExtract(const std::string& filename, const std::string& dest) {
     if (!std::filesystem::exists(filename)) {
         brls::Logger::error("File doesn't exist! Cannot extract.");
-        return;
+        return 0;
     }
-
-    brls::Logger::debug("Extracting: {} -> {}", filename, dest);
 
     std::filesystem::path p = std::filesystem::path(filename);
     std::string extension = p.extension().string();
+
+    brls::Logger::debug("Extracting: {} -> {}   [extension: {}]", filename, dest, extension);
 
     // Use PhysFS
     if (extension == ".zip" || extension == ".7z") {
@@ -87,13 +87,15 @@ void UnZip::ArchiveExtract(const std::string& filename, const std::string& dest)
     else if (extension == ".rar") {
         if (!std::filesystem::exists(dest))
             std::filesystem::create_directories(dest);
+        brls::Logger::warning(".rar archive extraction not supported yet");
         // ???
+        return 0;
     }
     else {
         brls::Logger::error("Unsupported archive type! Cannot extract!");
-        return;
+        return 0;
     }
-
+    return 1;
 } 
 
 void UnZip::PhysFSInit() {

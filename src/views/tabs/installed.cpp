@@ -41,10 +41,10 @@ Installed::Installed() {
     this->inflateFromXMLRes("xml/tabs/installed.xml");
 
     // read from installed items json and populate based on that
-    json mem_json_installed = installed_mods->GetMemJson();
+    json& mem_json_installed = installed_mods->GetMemJson();
     if (mem_json_installed.contains("Installed") && mem_json_installed["Installed"].size() > 0) {
         CURL_builder curl = CURL_builder();
-        for (json entry : mem_json_installed["Installed"]) {
+        for (json& entry : mem_json_installed["Installed"]) {
             if (!entry.is_null()) {
 
                 std::vector<std::filesystem::path> paths = {};

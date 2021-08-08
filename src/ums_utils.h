@@ -24,7 +24,8 @@ using json = nlohmann::json;
 class InstalledMods;
 extern InstalledMods* installed_mods;
 
-// The main parent of all views. Used for inter-view communication when they don't have parents set up, like in ctors (kinda icky, but is the only way I could think of)
+// The main parent of all views. 
+// Used for inter-view communication when they don't have parents set up yet
 extern brls::Box* main_box;
 
 #define START_BREAKABLE do {
@@ -90,7 +91,7 @@ void setTopText(std::string text = "");
 
 void brlsImageAsync(std::string thumbnail_url, brls::Image* image, bool is_modpage = false);
 
-// used to time entire functions
+// used to time entire functions. Create stack-allocated struct at beginning of func, and it will stop timer when it gets destroyed
 struct Timer {
     std::chrono::time_point<std::chrono::system_clock> start, end;
     std::chrono::duration<float> duration;

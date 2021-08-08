@@ -16,6 +16,14 @@
         backgroundColor="#69C4BB"
     />
 
+    <brls:Button
+        id="prefer_auto_install_toggle"
+        text="Toggle Prefer Automatic Installation"
+        width="30%"
+        height="8%"
+        backgroundColor="#69C4BB"
+    />
+
 
 
 

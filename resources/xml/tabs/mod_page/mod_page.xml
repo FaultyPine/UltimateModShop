@@ -574,44 +574,5 @@
 
     <!-- END RIGHT SIDE -->
 
-    <!-- DOWNLOAD PROGRESS BAR -->
-    <brls:Box
-        id="download_progress_box"
-        visibility="gone"
-        axis="column"
-        positionType="absolute"
-        positionTop="40%"
-        positionLeft="33%"
-        height="10%"
-        width="35%"
-        backgroundColor="#CDCDCD"
-        justifyContent="spaceEvenly"
-        paddingLeft="5"
-        paddingRight="5"
-        borderThickness="2"
-        borderColor="#000000"
-        focusable="true"
-    >
-
-        <brls:Label
-            id="download_progress_label"
-            text="Downloading..."
-            width="100%"
-            fontSize="17"
-            lineBottom="2"
-            lineColor="#000000"
-        />
-
-        <brls:Box
-            id="download_progress_bar"
-            backgroundColor="#24ED1B"
-            borderThickness="1"
-            borderColor="#000000"
-            height="40%"
-            width="0%"
-        />
-
-    </brls:Box>
-
 
 </brls:Box>
