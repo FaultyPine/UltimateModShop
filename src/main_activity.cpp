@@ -33,7 +33,7 @@ void MainActivity::onContentAvailable() {
     );*/
     this->registerAction( // F1
         "modpage", brls::ControllerButton::BUTTON_BACK, [] (brls::View* v) {
-            std::string mod_id = "38834";
+            std::string mod_id = "315503";
             brls::Application::pushActivity(new ModPage(new SubmissionNode(gb::GetSingleSubmission(mod_id))));
             return true;
         }, false, brls::Sound::SOUND_CLICK

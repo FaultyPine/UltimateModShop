@@ -32,7 +32,7 @@
     />
 
     <brls:Label
-        text="Now Loading..."
+        text="Loading..."
         textColor="#FFFFFF"
         fontSize="22"
         height="10%"

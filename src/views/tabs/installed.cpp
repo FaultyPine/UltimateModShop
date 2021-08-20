@@ -112,7 +112,7 @@ void Installed::addInstalledItem(InstalledMod* mod, CURL_builder* curl) {
     installed_item->registerAction(
         "Uninstall", brls::ControllerButton::BUTTON_X, [this] (brls::View* v) {
             this->onUninstallPrompt(v);
-            return false;
+            return true;
         }, false, brls::Sound::SOUND_CLICK
     );
 
@@ -147,13 +147,13 @@ void Installed::onUninstallPrompt(brls::View* installed_item) {
             installed_box->removeView(installed_item);
             refreshNavigationInfo(installed_box);
             this->afterUninstallPrompt(popup, installed_box);
-            return false;
+            return true;
         }
     );
     popup->getView("popup_deny")->registerClickAction(
         [this, popup, installed_box] (brls::View* v) {
             this->afterUninstallPrompt(popup, installed_box);
-            return false;
+            return true;
         }
     );
     brls::Application::giveFocus(popup);

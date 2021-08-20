@@ -2,18 +2,14 @@
 
 #include "ums_utils.h"
 #include "mod_page.h"
+#include "../progress_bar.h"
 
 enum InstallationProcessType {
     MANUAL,
     AUTOMATIC
 };
 
-/**
- * First, prompt for which files they want to download.
- * Then download those files
- * Then prompt for automatic/manual installation of those downloaded files (<- 'files' here means the archives)
- * extract/install based on previous choice, or if the 'Prefer automatic installation' setting is toggled
- */
+
 
 class DownloadHandler : public brls::Activity {
     public:
@@ -28,15 +24,17 @@ class DownloadHandler : public brls::Activity {
 
     private:
 
-    void initDownload();
+    void activateDownloadAuto();
     void fileSelectionPrompt(const json& files);
-    void handleInstallationProcesses(CURL_builder* curl = nullptr);
+    void handleInstallationProcesses(json& files);
 
-    InstalledMod* downloadSubmissionAuto(const std::vector<bool>& dl_idxs, CURL_builder* curl = nullptr);
+    InstalledMod* downloadSubmissionAuto(InstallationProcessType type, const std::vector<bool>& dl_idxs, CURL_builder* curl = nullptr);
 
 
     ModPage* modpage = nullptr;
     std::vector<bool> dl_idxs = {};
     InstallationProcessType install_type = InstallationProcessType::MANUAL;
+
+    ProgressBar* progress_bar = nullptr;
 
 };

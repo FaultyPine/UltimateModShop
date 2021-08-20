@@ -38,7 +38,7 @@ Browse::Browse() {
     this->registerAction(
         "Submenu", brls::ControllerButton::BUTTON_Y, [this](brls::View* view) {
             this->toggleSubmenu();
-            return false;
+            return true;
         },
         false, brls::Sound::SOUND_FOCUS_SIDEBAR);
 
@@ -311,9 +311,9 @@ Category* recurseCatSearchHelper(CategoryMap* mapToSearch, int idToSearch) {
 // ----------------------------------------------------------------------
 
 
-brls::ActionListener onClickCategoryFilter = [](brls::View* v) { brls::Logger::warning("Blank onClickCategoryFilter action! {}", v->describe()); return false; };
-brls::ActionListener onSubmenuBack = [](brls::View* v) { brls::Logger::warning("Blank onSubmenuBack action! {}", v->describe()); return false; };
-brls::ActionListener onExpandSubmenu = [](brls::View* v) { brls::Logger::warning("Blank onExpandSubmenu action! {}", v->describe()); return false; };
+brls::ActionListener onClickCategoryFilter = [](brls::View* v) { brls::Logger::warning("Blank onClickCategoryFilter action! {}", v->describe()); return true; };
+brls::ActionListener onSubmenuBack = [](brls::View* v) { brls::Logger::warning("Blank onSubmenuBack action! {}", v->describe()); return true; };
+brls::ActionListener onExpandSubmenu = [](brls::View* v) { brls::Logger::warning("Blank onExpandSubmenu action! {}", v->describe()); return true; };
 
 
 void Browse::onClickCategoryFilterInner(brls::View* view) {
@@ -489,9 +489,9 @@ void Browse::loadCategoryFilters() {
     browse_submenu_layerview->addLayer(browse_submenu_container);
 
 
-    onClickCategoryFilter = [this](brls::View* v) { this->onClickCategoryFilterInner(v); return false; };
-    onSubmenuBack         = [this](brls::View* v) { this->onSubmenuBackInner(v);         return false; };
-    onExpandSubmenu       = [this](brls::View* v) { this->onExpandSubmenuInner(v);       return false; };
+    onClickCategoryFilter = [this](brls::View* v) { this->onClickCategoryFilterInner(v); return true; };
+    onSubmenuBack         = [this](brls::View* v) { this->onSubmenuBackInner(v);         return true; };
+    onExpandSubmenu       = [this](brls::View* v) { this->onExpandSubmenuInner(v);       return true; };
 
     // set up root/subcategory layerviews
     for (const auto &[key, value] : categories) {

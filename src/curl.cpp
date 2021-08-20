@@ -1,4 +1,5 @@
 #include "curl.h"
+#include "views/progress_bar.h"
 
 using json = nlohmann::json;
 
@@ -6,8 +7,6 @@ MemoryStruct::MemoryStruct() {
     this->memory = nullptr;
     this->size = 0;
 }
-
-extern brls::Box* download_progress_bar;
 
 int prev_percent_complete = -1;
 int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded) {

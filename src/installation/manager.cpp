@@ -149,10 +149,6 @@ std::vector<fs::path> handleModFiles(const std::string& tmp_extraction_dir, cons
 std::vector<fs::path> Manager::InstallModFileAuto(std::string url, std::string filename, CURL_builder* curl) {
     std::vector<fs::path> paths = {};
     std::string tmp_extraction_dir = TEMP_EXTRACTION_DIR;
-    if (strHasEnding(filename, ".7z")) {
-        brls::Logger::error("Installing .7z archives is currently unsupported.");
-        return paths;
-    }
     std::string root_file = stdstr(SD_ROOT) + filename;
 
     // create temp directory to allow us to easily read the folder structure
@@ -240,10 +236,60 @@ void Manager::UninstallMod(InstalledMod* mod) {
     installed_mods->removeInstalledMod(mod);
 }
 
-
+// determines based off archive file structure if an automatic installation is possible
 bool Manager::canUseAutomaticInstallation(const std::string& itemid, CURL_builder* curl) {
     //const std::string api_req = "https://api.gamebanana.com/Core/Item/Data?itemtype=File&itemid=" + itemid + "&fields=Metadata().aArchiveFilesList()";
     //json archiveFiles = curl::DownloadJson(api_req, curl);
 
     return true;
+}
+
+
+std::vector<fs::path> Manager::InstallModFilesManual(const json &files, const std::vector<bool>& dl_idxs, ManualInstallInfo& info, CURL_builder* curl) {
+    assert(files.size() == dl_idxs.size());
+    // before this is called, make sure there is something in the tmp extraction dir... 
+    // I.E. the ManualInstall class should've already downloaded/extracted the files
+    assert(std::filesystem::exists(TEMP_EXTRACTION_DIR));
+    assert(!std::filesystem::is_empty(TEMP_EXTRACTION_DIR));
+    std::vector<fs::path> paths = {};
+
+    // iterate through each uploaded file in the submission, 
+    // and if the corresponding idx is true, install that file.
+    for (int i = 0; i < files.size(); i++) { 
+        if (dl_idxs[i]) {
+            const json& file = files[i];
+            brls::Logger::debug("Downloading file {}. Size = {} bytes", file[gb::Fields::Files::FileName].get<std::string>(), file[gb::Fields::Files::FileSize].get<unsigned long>());
+            std::string url = file[gb::Fields::Files::DownloadURL].get<std::string>();
+            std::string filename = file[gb::Fields::Files::FileName].get<std::string>();
+            std::vector<fs::path> modfile = Manager::InstallModFileManual(url, filename, info, curl);
+            // append contents of modfile vec to paths vec
+            paths.insert(paths.end(), modfile.begin(), modfile.end());
+        }
+    }
+    return paths;
+}
+
+std::vector<fs::path> Manager::InstallModFileManual(std::string url, std::string filename, ManualInstallInfo& info, CURL_builder* curl) {
+    std::vector<fs::path> paths = {};
+    std::string tmp_extraction_dir = TEMP_EXTRACTION_DIR;
+    std::string root_file = stdstr(SD_ROOT) + filename;
+
+    // create temp directory to allow us to easily read the folder structure
+    //fs::create_directory(tmp_extraction_dir);
+
+    //curl::DownloadFile(url, root_file, curl);
+    
+    //if (UnZip::ArchiveExtract(root_file, tmp_extraction_dir)) {
+        std::vector<fs::path> tmp_dir_paths = {};
+        for (const auto& dirEntry : fs::recursive_directory_iterator(tmp_extraction_dir)) {
+            tmp_dir_paths.push_back(dirEntry);
+        }
+        //paths = handleModFiles(tmp_extraction_dir, tmp_dir_paths, filename.substr(0, filename.find_last_of(".")));
+    //}
+
+    // cleanup
+    fs::remove(root_file);
+    fs::remove_all(tmp_extraction_dir);
+
+    return paths;
 }

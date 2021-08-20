@@ -30,8 +30,8 @@ brls::Box* Settings::create() {
 Settings::Settings() {
     this->inflateFromXMLRes("xml/tabs/settings.xml");
 
-    this->getView("update_check_button")->registerClickAction([this](brls::View* v) { this->onUpdateCheckClicked(v); return false; });
-    this->getView("prefer_auto_install_toggle")->registerClickAction([this](brls::View* v) { this->onTogglePreferredInstallation(v); return false; });
+    this->getView("update_check_button")->registerClickAction([this](brls::View* v) { this->onUpdateCheckClicked(v); return true; });
+    this->getView("prefer_auto_install_toggle")->registerClickAction([this](brls::View* v) { this->onTogglePreferredInstallation(v); return true; });
 
     if (!installed_mods->GetMemJson().at("Settings").empty()) {
         this->readSettings();
@@ -67,6 +67,7 @@ void Settings::onTogglePreferredInstallation(brls::View* view) {
     SettingsInfo* s = this->getSettings();
     s->preferAutomaticInstallation = !s->preferAutomaticInstallation;
     this->serializeSettings();
+    brls::Logger::debug("Preferred Installation automatic: {}", s->preferAutomaticInstallation);
 }
 
 SettingsInfo* Settings::getSettings() {

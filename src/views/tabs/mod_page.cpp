@@ -319,7 +319,11 @@ void ModPage::onContentAvailable() {
         "Close", brls::ControllerButton::BUTTON_B, [this](brls::View* view) {
             modpage_is_closing = true;
             brls::Application::popActivity();
-            brls::Application::giveFocus(this->submission);
+            if (this->submission->hasParent())
+                brls::Application::giveFocus(this->submission);
+            else
+                brls::Logger::debug("exited modpage without submission parent, cannot focus");
+            
             return true;
         },
         false, brls::Sound::SOUND_FOCUS_CHANGE);
