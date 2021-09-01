@@ -4,11 +4,6 @@
 #include "mod_page.h"
 #include "../progress_bar.h"
 
-enum InstallationProcessType {
-    MANUAL,
-    AUTOMATIC
-};
-
 
 
 class DownloadHandler : public brls::Activity {
@@ -28,12 +23,11 @@ class DownloadHandler : public brls::Activity {
     void fileSelectionPrompt(const json& files);
     void handleInstallationProcesses(json& files);
 
-    InstalledMod* downloadSubmissionAuto(InstallationProcessType type, const std::vector<bool>& dl_idxs, CURL_builder* curl = nullptr);
+    InstalledMod* downloadSubmissionAuto(const std::vector<bool>& dl_idxs, CURL_builder* curl = nullptr);
 
 
     ModPage* modpage = nullptr;
     std::vector<bool> dl_idxs = {};
-    InstallationProcessType install_type = InstallationProcessType::MANUAL;
 
     ProgressBar* progress_bar = nullptr;
 

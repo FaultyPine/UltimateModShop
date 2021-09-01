@@ -15,6 +15,7 @@ int download_progress(void* ptr, double TotalToDownload, double NowDownloaded, d
         if (download_progress_bar) {
             download_progress_bar->setWidthPercentage(percent_complete);
         }
+        brls::Logger::debug("Download: {}%", percent_complete);
         prev_percent_complete = percent_complete;
     }
 

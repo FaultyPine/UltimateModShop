@@ -15,9 +15,17 @@ void touchupJsonSubmission(json& entry) {
     if (entry.contains(gb::Fields::ProfileURL) && !entry.contains(gb::Fields::idRow)) {
         entry[gb::Fields::idRow] = gb::getItemIdFromProfileURL(entry[gb::Fields::ProfileURL].get<std::string>());
     }
+
     // construct our thumbnail url asap
     if (entry.contains(gb::Fields::PreviewMedia::PreviewMedia)) {
-        std::string thumbnail_url = gb::Fields::PreviewMedia::BaseURL + entry[gb::Fields::PreviewMedia::PreviewMedia][0][gb::Fields::PreviewMedia::File220].get<std::string>();
+        const json& preview_media = entry[gb::Fields::PreviewMedia::PreviewMedia][0];
+        std::string image_file = gb::Fields::PreviewMedia::File220;
+        if (!preview_media.contains(image_file))
+            image_file = gb::Fields::PreviewMedia::File100;
+        if (!preview_media.contains(image_file))
+            image_file = gb::Fields::Files::FileName;
+
+        std::string thumbnail_url = gb::Fields::PreviewMedia::BaseURL + preview_media[image_file].get<std::string>();
         entry[gb::Fields::Custom::ThumbnailURL] = thumbnail_url;
     }
 }

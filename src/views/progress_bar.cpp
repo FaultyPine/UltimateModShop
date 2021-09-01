@@ -24,6 +24,7 @@ void ProgressBar::setTitle(std::string txt) {
 }
 
 void ProgressBar::start(std::string title) {
+    BIND_PROGRESS_BAR;
     brls::Label* download_progress_label = (brls::Label*)this->getView("download_progress_label");
     this->setVisibility(brls::Visibility::VISIBLE);
 
@@ -42,8 +43,30 @@ void ProgressBar::finish(std::string title, NVGcolor color, std::function<bool(b
     this->registerClickAction(cb);
 }
 
+void ProgressBar::finish(std::string title, NVGcolor color) {
+    brls::Label* download_progress_label = (brls::Label*)this->getView("download_progress_label");
+    download_progress_label->setTextColor(color);
+    download_progress_label->setText(title);
+    brls::Application::giveFocus(this);
+    this->registerClickAction([this](brls::View* v){
+        this->defaultFinish();
+        return true;
+    });
+}
+
+void ProgressBar::finishImmediate(std::string title, NVGcolor color, std::function<bool(brls::View*)> cb) {
+    brls::Label* download_progress_label = (brls::Label*)this->getView("download_progress_label");
+    download_progress_label->setTextColor(color);
+    download_progress_label->setText(title);
+    brls::Application::giveFocus(this);
+    cb(this);
+}
+
+
 void ProgressBar::defaultFinish() {
+    if (this->hasParent())
+        brls::Application::giveFocus(this->getParent());
+    else
+        brls::Application::giveFocus(nullptr);
     this->setVisibility(brls::Visibility::GONE);
-    brls::Application::giveFocus(nullptr);
-    brls::Application::popActivity();
 }

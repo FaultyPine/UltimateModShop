@@ -3,7 +3,6 @@
 #include "../../installation/manager.h"
 #include "installed.h"
 #include "../main_window.h"
-#include "manual_install.h"
 
 
 const std::string fileSelectionItemTemplate = R"item(
@@ -18,6 +17,8 @@ const std::string fileSelectionItemTemplate = R"item(
         borderThickness="3"
         borderColor="#000000"
         focusable="true"
+        paddingTop="5"
+        paddingBottom="5"
     >
 
         <brls:Label
@@ -110,7 +111,7 @@ void DownloadHandler::activateDownloadAuto() {
 
     this->progress_bar->start();
 
-    InstalledMod* m = this->downloadSubmissionAuto(this->install_type, this->dl_idxs);
+    InstalledMod* m = this->downloadSubmissionAuto(this->dl_idxs);
 
     this->progress_bar->setTitle("Installing...");
 
@@ -122,6 +123,7 @@ void DownloadHandler::activateDownloadAuto() {
         this->progress_bar->finish("Downloaded Successfully! Press A to confirm.", nvgRGB(56, 189, 32), 
         [this](brls::View* v) {
             this->progress_bar->defaultFinish();
+            brls::Application::popActivity();
             return true;
         });
         install_button_box->setAlpha(0.2);
@@ -132,6 +134,7 @@ void DownloadHandler::activateDownloadAuto() {
         this->progress_bar->finish("Download failed! Press A to confirm.", nvgRGB(255, 0, 0), 
         [this](brls::View* v) {
             this->progress_bar->defaultFinish();
+            brls::Application::popActivity();
             return true;
         });
     }
@@ -142,85 +145,18 @@ void DownloadHandler::activateDownloadAuto() {
 void DownloadHandler::handleInstallationProcesses(json& files) {
     brls::Box* installation_process_selection_box = (brls::Box*)this->getView("installation_process_selection_box");
 
-    brls::Button* installation_process_automatic = (brls::Button*)installation_process_selection_box->getView("installation_process_automatic");
-    brls::Button* installation_process_manual = (brls::Button*)installation_process_selection_box->getView("installation_process_manual");
     brls::Button* installation_process_go = (brls::Button*)installation_process_selection_box->getView("installation_process_go");
     brls::Label* installation_process_status = (brls::Label*)installation_process_selection_box->getView("installation_process_status");
-
-    // handle alpha for default option
-    if (this->install_type == InstallationProcessType::MANUAL) {
-        installation_process_automatic->setAlpha(0.5);
-    }
-    else {
-        installation_process_manual->setAlpha(0.5);
-    }
 
     SettingsInfo* settings = Settings::getSettings();
     std::string itemid = this->modpage->getSubmissionNode()->getSubmissionData()->submission_data[gb::Fields::idRow].get<std::string>();
     
-    bool canUseAutoInstall = Manager::canUseAutomaticInstallation(itemid);
-
-    if (!canUseAutoInstall) { // if can't auto install...
-        // disable auto button
-        installation_process_automatic->setVisibility(brls::Visibility::GONE);
-        // mark install as manual
-        this->install_type = InstallationProcessType::MANUAL;
-        // "select" & disable manual toggle
-        installation_process_manual->setFocusable(false);
-        installation_process_manual->setAlpha(0.5);
-        installation_process_status->setText("Unable to auto-install. Defaulted to manual.");
-        installation_process_status->setVisibility(brls::Visibility::VISIBLE);
-        installation_process_go->setVisibility(brls::Visibility::VISIBLE);
-    }
-    else if (canUseAutoInstall) {
-        if (settings->preferAutomaticInstallation) {
-            // if we prefer auto install, and can do it, get rid of the other options entirely
-            installation_process_manual->setVisibility(brls::Visibility::GONE);
-            installation_process_automatic->setVisibility(brls::Visibility::GONE);
-            installation_process_status->setText("Using Automatic Installation.");
-            installation_process_status->setVisibility(brls::Visibility::VISIBLE);
-            this->install_type = InstallationProcessType::AUTOMATIC;
-            installation_process_go->setVisibility(brls::Visibility::VISIBLE);
-        }
-        else {
-            // automatic install toggle
-            installation_process_automatic->registerClickAction([this, installation_process_automatic, installation_process_manual](brls::View* v){
-                if (this->install_type == InstallationProcessType::MANUAL) {
-                    brls::Logger::debug("Install type changed to automatic");
-                    this->install_type = InstallationProcessType::AUTOMATIC;
-                    installation_process_automatic->setAlpha(1.0);
-                    installation_process_manual->setAlpha(0.5);
-                }
-                return true;
-            });
-
-            // manual install toggle
-            installation_process_manual->registerClickAction([this, installation_process_manual, installation_process_automatic](brls::View* v){
-                if (this->install_type == InstallationProcessType::AUTOMATIC) {
-                    brls::Logger::debug("Install type changed to manual");
-                    this->install_type = InstallationProcessType::MANUAL;
-                    installation_process_manual->setAlpha(1.0);
-                    installation_process_automatic->setAlpha(0.5);
-                }
-                return true;
-            });
-            installation_process_go->setVisibility(brls::Visibility::VISIBLE);
-        }
-    }
-
-
+    //bool canUseAutoInstall = Manager::canUseAutomaticInstallation(itemid);
 
     // start installation
     installation_process_go->registerClickAction([this, files](brls::View* v){
-        if (this->install_type == InstallationProcessType::AUTOMATIC) {
-            std::thread dl (&DownloadHandler::activateDownloadAuto, this);
-            dl.detach();
-        }
-        else {
-            brls::Application::giveFocus(nullptr);
-            //brls::Application::popActivity();
-            brls::Application::pushActivity(new ManualInstall(files, this->dl_idxs));
-        }
+        std::thread dl (&DownloadHandler::activateDownloadAuto, this);
+        dl.detach();
         return true;
     });
 
@@ -229,7 +165,7 @@ void DownloadHandler::handleInstallationProcesses(json& files) {
 
 
 
-InstalledMod* DownloadHandler::downloadSubmissionAuto(InstallationProcessType type, const std::vector<bool>& dl_idxs, CURL_builder* curl) {
+InstalledMod* DownloadHandler::downloadSubmissionAuto(const std::vector<bool>& dl_idxs, CURL_builder* curl) {
     InstalledMod* ret = nullptr;
     SubmissionNode* submission = this->modpage->getSubmissionNode();
     if (submission != nullptr && !submission->getSubmissionData()->submission_data.empty()) {
@@ -302,14 +238,23 @@ void DownloadHandler::fileSelectionPrompt(const json& files) {
             "Filesize: " + readable_fs(file[gb::Fields::Files::FileSize].get<float>())  + "                     Download Count: " + std::to_string(file[gb::Fields::DownloadCount].get<size_t>());
         file_selection_item_fileinfo->setText(fileinfo);
 
+        brls::View* installation_process_go = this->contentView->getView("installation_process_go");
+
         // file selection toggle
-        fileSelectionItem->registerClickAction([this, fileSelectionItem, i](brls::View* v) {
+        fileSelectionItem->registerClickAction([this, fileSelectionItem, i, installation_process_go](brls::View* v) {
             this->dl_idxs[i] = !this->dl_idxs[i];
             if (this->dl_idxs[i]) {
                 fileSelectionItem->setAlpha(1.0);
             }
             else {
                 fileSelectionItem->setAlpha(0.5);
+            }
+            // if there are no selected files, disable installation --- must have at least one file selected for installation
+            if (std::count(this->dl_idxs.begin(), this->dl_idxs.end(), true) == 0) {
+                installation_process_go->setVisibility(brls::Visibility::INVISIBLE);
+            }
+            else {
+                installation_process_go->setVisibility(brls::Visibility::VISIBLE);
             }
             return true;
         });
