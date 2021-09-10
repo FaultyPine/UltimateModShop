@@ -105,7 +105,7 @@ json curl::DownloadJson(std::string url, CURL_builder* curl) {
             }
         }
         else {
-            brls::Logger::error("Failed to perform curl operation. CURLcode = {}", curl_easy_strerror(result));
+            brls::Logger::error("Failed to perform curl operation. CURLcode = {}. URL = ", curl_easy_strerror(result), url);
         }
     }
     else {

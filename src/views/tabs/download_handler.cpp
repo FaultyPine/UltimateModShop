@@ -151,8 +151,6 @@ void DownloadHandler::handleInstallationProcesses(json& files) {
     SettingsInfo* settings = Settings::getSettings();
     std::string itemid = this->modpage->getSubmissionNode()->getSubmissionData()->submission_data[gb::Fields::idRow].get<std::string>();
     
-    //bool canUseAutoInstall = Manager::canUseAutomaticInstallation(itemid);
-
     // start installation
     installation_process_go->registerClickAction([this, files](brls::View* v){
         std::thread dl (&DownloadHandler::activateDownloadAuto, this);

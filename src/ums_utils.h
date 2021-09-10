@@ -3,6 +3,8 @@
 #include <borealis.hpp>
 #include "ums_pch.h"
 #include "zip/ZipUtil.hpp"
+#define TOML_HEADER_ONLY 0
+#include "toml.hpp"
 
 // a container for ptr + size  (does not free the mem)
 struct MemoryStruct

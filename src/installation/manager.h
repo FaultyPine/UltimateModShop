@@ -1,5 +1,6 @@
 #pragma once
 
+#define TOML_IMPLEMENTATION
 #include "ums_utils.h"
 
 namespace fs = std::filesystem;
