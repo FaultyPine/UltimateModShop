@@ -411,6 +411,10 @@ void Browse::loadCategoryFilters() {
     // dl first page of categories
     std::string init_category_url = "https://gamebanana.com/apiv3/ModCategory/ByGame?_aGameRowIds[]=6498&_sRecordSchema=Custom&_csvProperties=_idRow,_sName,_sIconUrl,_idParentCategoryRow&_nPerpage=50&_bReturnMetadata=true&_nPage=1";
     json categories_json = curl::DownloadJson(init_category_url);
+    if (categories_json.empty()) {
+        brls::Logger::warning("Cannot load subcategories menu - fetched json is empty!");
+        return;
+    }
 
     std::string subsequent_category_url = "https://gamebanana.com/apiv3/ModCategory/ByGame?_aGameRowIds[]=6498&_sRecordSchema=Custom&_csvProperties=_idRow,_sName,_sIconUrl,_idParentCategoryRow&_nPerpage=50&_nPage=";
     CURL_builder curl = CURL_builder();

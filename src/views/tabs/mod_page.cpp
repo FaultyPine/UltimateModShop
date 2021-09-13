@@ -39,10 +39,10 @@ const std::string scrollDotHorzHolder = R"xml(
 )xml";
 
 void setScrollDotSelected(brls::Image* dot) {
-    dot->setBorderThickness(8);
+    dot->setImageFromRes("icon/dot_w.png");
 }
 void setScrollDotUnselected(brls::Image* dot) {
-    dot->setBorderThickness(0);
+    dot->setImageFromRes("icon/dot.png");
 }
 
 ModPage::ModPage(SubmissionNode* sub) {
@@ -93,10 +93,6 @@ void ModPage::setupModPage() {
         GetChildView(Label, subcategory_label)
         GetChildView(Image, subcategory_image)
 
-        /* --------------- Misc Prep ------------------------ */
-
-        GetChildView(Box, install_box)
-
         /* ---------------- Left Side Setting ---------------- */
 
         /* Title */
@@ -129,14 +125,12 @@ void ModPage::setupModPage() {
                 if (img_json[gb::Fields::Type].get<std::string>() == "image" && !strHasEnding(img_url, ".webp")) {
                     
                     brls::Image* new_img = (brls::Image*)brls::View::createFromXMLString(screenshotTemplate);
-                    this->screenshots_layers->addLayer(new_img);
+                    this->screenshots_layers->addLayer(new_img, false);
+                    
                     brlsImageAsync(img_url, new_img, true);
 
                     std::string caption = img_json.contains(gb::Fields::PreviewMedia::Caption) ? img_json[gb::Fields::PreviewMedia::Caption].get<std::string>() : "";
                     this->medias.emplace_back(new PreviewMediaContainer({ .img = new_img, .caption = caption}));
-
-                    // for some fucked up reason these images are preventing the install/close buttons from being focusable... what even
-                    // (even without the thread stuff)
                     
                 }
             }
@@ -258,7 +252,7 @@ void ModPage::setupModPage() {
         if (mod.contains(gb::Fields::idRow)) {
             std::string this_itemid = mod[gb::Fields::idRow].get<std::string>();
             if ( installed_mods->isItemIDPresent(this_itemid) ) {
-                install_box->setAlpha(0.2);
+                this->getView("install_box")->setAlpha(0.2);
                 this->can_install = false;
             }
         }
@@ -315,30 +309,34 @@ void ModPage::screenshotsScroll(brls::FocusDirection dir) {
 void ModPage::onContentAvailable() {
     this->setupModPage();
 
-    this->registerAction(
-        "Close", brls::ControllerButton::BUTTON_B, [this](brls::View* view) {
-            modpage_is_closing = true;
-            brls::Application::popActivity();
-            if (this->submission->hasParent())
-                brls::Application::giveFocus(this->submission);
-            else
-                brls::Logger::debug("exited modpage without submission parent, cannot focus");
-            
-            return true;
-        },
-        false, brls::Sound::SOUND_FOCUS_CHANGE);
+    brls::ActionListener close_action = [this](brls::View* view) {
+        modpage_is_closing = true;
+        if (this->submission->hasParent())
+            brls::Application::giveFocus(this->submission);
+        else
+            brls::Logger::debug("exited modpage without submission parent, cannot focus");
+        brls::Application::popActivity();
+        
+        return true;
+    };
 
+    brls::ActionListener install_action = [this](brls::View* view) {
+        if (this->can_install) {
+            brls::Application::pushActivity(new DownloadHandler(this));
+        }
+        else 
+            brls::Logger::debug("Already installed mod!");
+        return true;
+    };
 
-    this->registerAction(
-        "Install", brls::ControllerButton::BUTTON_X, [this](brls::View* view) {
-            if (this->can_install) {
-                brls::Application::pushActivity(new DownloadHandler(this));
-            }
-            else 
-                brls::Logger::debug("Already installed mod!");
-            return true;
-        },
-        false, brls::Sound::SOUND_FOCUS_CHANGE);
+    this->registerAction("Close", brls::ControllerButton::BUTTON_B, close_action, false, brls::Sound::SOUND_FOCUS_CHANGE);
+    this->registerAction("Install", brls::ControllerButton::BUTTON_X, install_action, false, brls::Sound::SOUND_FOCUS_CHANGE);
+
+    GetChildView(Box, install_box)
+    GetChildView(Box, close_box)
+
+    install_box->registerClickAction(install_action);
+    close_box->registerClickAction(close_action);
 
     this->registerAction(
         "Scroll Right", brls::ControllerButton::BUTTON_RB, [this](brls::View* view) {

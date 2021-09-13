@@ -28,7 +28,7 @@ class LayerView : public brls::Box
     LayerView();
     ~LayerView();
 
-    void addLayer(brls::View* view);
+    void addLayer(brls::View* view, bool focusIfFirst = true);
     void changeLayer(int index, bool focus = false);
     void removeLayer(int index, bool should_free);
     void clearLayers();

@@ -197,7 +197,7 @@
             paddingRight="30"
             borderThickness="3"
             borderColor="#000000"
-            focusable="false"
+            focusable="true"
         >
 
             <brls:Image
@@ -396,13 +396,13 @@
             justifyContent="spaceBetween"
             paddingBottom="5"
             paddingRight="10"
-            paddingLeft="10"
+            paddingLeft="5"
         >
 
             <!-- CATEGORY -->
             <brls:Box
                 height="100%"
-                width="35%"
+                width="45%"
                 paddingTop="5"
                 backgroundColor="#A49F9F"
                 cornerRadius="15"
@@ -415,7 +415,7 @@
                 >
 
                     <brls:Label
-                        width="35%"
+                        width="45%"
                         text="Category:"
                         fontSize="16"
                         textAlign="center"
@@ -424,7 +424,7 @@
 
                     <brls:Box
                        axis="row"
-                       width="35%"
+                       width="45%"
                        height="75%"
                        justifyContent="spaceEvenly"
                     >
@@ -551,7 +551,7 @@
             paddingRight="30"
             borderThickness="3"
             borderColor="#000000"
-            focusable="false"
+            focusable="true"
         >
 
             <brls:Image

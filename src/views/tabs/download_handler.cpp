@@ -5,67 +5,11 @@
 #include "../main_window.h"
 
 
-const std::string fileSelectionItemTemplate = R"item(
-    <brls:Box
-        axis="column"
-        height="200"
-        width="100%"
-        justifyContent="spaceEvenly"
-        marginTop="5"
-        marginBottom="5"
-        paddingLeft="10"
-        borderThickness="3"
-        borderColor="#000000"
-        focusable="true"
-        paddingTop="5"
-        paddingBottom="5"
-    >
-
-        <brls:Label
-            text="File name:"
-        />
-        <brls:Label
-            id="file_selection_item_title"
-            fontSize="17"
-            lineBottom="1"
-            lineColor="#000000"
-            marginBottom="5"
-            marginLeft="10"
-            textAlign="center"
-        />
-
-        <brls:Label
-            text="Description:"
-        />
-        <brls:Label
-            id="file_selection_item_description"
-            fontSize="17"
-            marginBottom="5"
-            lineBottom="1"
-            lineColor="#000000"
-            marginLeft="10"
-            textAlign="center"
-        />
-
-        <brls:Label
-            text="File Info:"
-        />
-        <brls:Label
-            id="file_selection_item_fileinfo"
-            fontSize="17"
-            marginBottom="5"
-            marginLeft="10"
-            textAlign="center"
-        />
-
-    </brls:Box>
-)item";
-
-
 DownloadHandler::~DownloadHandler() {
-    if (this->contentView->getView(this->progress_bar->getID())) {
-        this->contentView->removeView(this->progress_bar);
-    }
+    //if (this->contentView->getView(this->progress_bar->getID())) {
+    //    this->contentView->removeView(this->progress_bar);
+    //}
+    brls::Application::giveFocus(this->modpage->getContentView());
 }
 
 DownloadHandler::DownloadHandler(ModPage* mpage) {
@@ -117,7 +61,7 @@ void DownloadHandler::activateDownloadAuto() {
 
     if (m) {
         BgTask::pushCallbackToQueue([m]() {
-            Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_box");
+            Installed* installed = (Installed*)((MainWindow*)main_box->getView("main_window"))->getLayerView()->getLayer("installed_root_box");
             installed->addInstalledItem(m);
         });
         this->progress_bar->finish("Downloaded Successfully! Press A to confirm.", nvgRGB(56, 189, 32), 
@@ -207,6 +151,15 @@ InstalledMod* DownloadHandler::downloadSubmissionAuto(const std::vector<bool>& d
     return ret;
 }
 
+void toggleInstallButton(const std::vector<bool>& dl_idxs, brls::View* view) {
+    // if there are no selected files, disable installation --- must have at least one file selected for installation
+    if (std::count(dl_idxs.begin(), dl_idxs.end(), true) == 0) {
+        view->setVisibility(brls::Visibility::INVISIBLE);
+    }
+    else {
+        view->setVisibility(brls::Visibility::VISIBLE);
+    }
+}
 
 void DownloadHandler::fileSelectionPrompt(const json& files) {
     brls::Box* download_file_selection_box = (brls::Box*)this->getView("download_file_selection_box");
@@ -220,7 +173,7 @@ void DownloadHandler::fileSelectionPrompt(const json& files) {
     for (int i = 0; i < files.size(); i++) {
         const json& file = files[i];
 
-        brls::Box* fileSelectionItem = (brls::Box*)brls::View::createFromXMLString(fileSelectionItemTemplate);
+        brls::Box* fileSelectionItem = (brls::Box*)brls::View::createFromXMLResource("tabs/mod_page/download_file_selection_template.xml");
         download_file_selection_list->addView(fileSelectionItem);
 
         if (!dl_idxs[i])
@@ -231,12 +184,24 @@ void DownloadHandler::fileSelectionPrompt(const json& files) {
         brls::Label* file_selection_item_fileinfo = (brls::Label*)fileSelectionItem->getView("file_selection_item_fileinfo");
 
         file_selection_item_title->setText(file[gb::Fields::Files::FileName].get<std::string>());
-        file_selection_item_description->setText(file[gb::Fields::Subtitle].get<std::string>());
+        
+        std::string description = file[gb::Fields::Subtitle].get<std::string>();
+        if (!description.empty())
+            file_selection_item_description->setText(description);
+        else {
+            fileSelectionItem->removeView(file_selection_item_description);
+            fileSelectionItem->removeView(fileSelectionItem->getView("file_selection_item_description_title"));
+            fileSelectionItem->setWidth(fileSelectionItem->getWidth() * 0.6);
+            fileSelectionItem->setHeight(fileSelectionItem->getHeight() * 0.8);
+        }
+            
         std::string fileinfo = 
             "Filesize: " + readable_fs(file[gb::Fields::Files::FileSize].get<float>())  + "                     Download Count: " + std::to_string(file[gb::Fields::DownloadCount].get<size_t>());
         file_selection_item_fileinfo->setText(fileinfo);
 
         brls::View* installation_process_go = this->contentView->getView("installation_process_go");
+
+        toggleInstallButton(this->dl_idxs, installation_process_go);
 
         // file selection toggle
         fileSelectionItem->registerClickAction([this, fileSelectionItem, i, installation_process_go](brls::View* v) {
@@ -247,13 +212,7 @@ void DownloadHandler::fileSelectionPrompt(const json& files) {
             else {
                 fileSelectionItem->setAlpha(0.5);
             }
-            // if there are no selected files, disable installation --- must have at least one file selected for installation
-            if (std::count(this->dl_idxs.begin(), this->dl_idxs.end(), true) == 0) {
-                installation_process_go->setVisibility(brls::Visibility::INVISIBLE);
-            }
-            else {
-                installation_process_go->setVisibility(brls::Visibility::VISIBLE);
-            }
+            toggleInstallButton(this->dl_idxs, installation_process_go);
             return true;
         });
     }

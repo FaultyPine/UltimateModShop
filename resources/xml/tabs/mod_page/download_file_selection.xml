@@ -5,7 +5,7 @@
     backgroundColor="#909090"
 >
    
-   <!-- File Selection -->
+   <!-- File Selection (Left) -->
     
     <brls:Box
         axis="column"
@@ -23,6 +23,8 @@
             id="download_file_selection_title"
             text="Choose files to download:"
             textAlign="center"
+            lineBottom="3"
+            lineColor="#000000"
             height="10%"
             width="100%"
         />
@@ -48,7 +50,7 @@
     </brls:Box>
 
 
-    <!-- Installation Process Selection -->
+    <!-- Install Button & etc (Right) -->
 
     <brls:Box
         id="installation_process_selection_box"

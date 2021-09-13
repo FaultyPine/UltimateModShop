@@ -66,6 +66,10 @@ Installed::Installed() {
         }
     }
     refreshNavigationInfo((brls::Box*)this->getView("installed_box"));
+
+    brls::View* popup = brls::View::createFromXMLResource("views/popup.xml");
+    this->addView(popup);
+    popup->setVisibility(brls::Visibility::INVISIBLE);
 }
 
 void Installed::addInstalledItem(InstalledMod* mod, CURL_builder* curl) {
@@ -121,9 +125,8 @@ void Installed::addInstalledItem(InstalledMod* mod, CURL_builder* curl) {
 
 void Installed::afterUninstallPrompt(brls::View* popup, brls::Box* installed_box) {
     if (popup && installed_box) {
-        brls::Application::giveFocus(nullptr);
-        this->removeView(popup);
         brls::Application::giveFocus(installed_box);
+        popup->setVisibility(brls::Visibility::INVISIBLE);
     }
     else 
         brls::Logger::warning("Popup/Installed box nullptr!");
@@ -131,16 +134,17 @@ void Installed::afterUninstallPrompt(brls::View* popup, brls::Box* installed_box
 
 
 void Installed::onUninstallPrompt(brls::View* installed_item) {
-    InstalledMod* mod = installed_mods->getInstalledMod(std::stoi(installed_item->getID()));
     brls::Box* installed_box = (brls::Box*)(this->getView("installed_box"));
 
-    brls::View* popup = brls::View::createFromXMLResource("views/popup.xml");
-    this->addView(popup);
+    brls::Box* popup = (brls::Box*)this->getView("popup_box");
+
+    popup->setVisibility(brls::Visibility::VISIBLE);
     brls::Label* popup_title_label = (brls::Label*)popup->getView("popup_title_label");
     popup_title_label->setText("Uninstall?");
 
     popup->getView("popup_confirm")->registerClickAction(
-        [this, popup, mod, installed_item, installed_box] (brls::View* v) {
+        [this, popup, installed_item, installed_box, installed_mods] (brls::View* v) {
+            InstalledMod* mod = installed_mods->getInstalledMod(std::stoi(installed_item->getID()));
             brls::Application::giveFocus(nullptr);
             brls::Logger::debug("Uninstalling: {}", mod->name);
             Manager::UninstallMod(mod); // 'mod' gets freed

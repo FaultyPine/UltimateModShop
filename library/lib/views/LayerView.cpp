@@ -30,14 +30,14 @@ LayerView::~LayerView()
     this->layers.clear();
 }
 
-void LayerView::addLayer(brls::View* view)
+void LayerView::addLayer(brls::View* view, bool focusIfFirst)
 {
     if (view)
     {
         this->layers.push_back(view);
 
         if (this->getLayersSize() == 1)
-            this->changeLayer(0, true);
+            this->changeLayer(0, focusIfFirst);
     }
 }
 

@@ -1,4 +1,5 @@
 <brls:Box
+    id="installed_root_box"
     width="100%"
     height="100%"
 >
@@ -9,7 +10,6 @@
         width="100%"
         height="100%"
     >
-    
     
         <brls:Box
             id="installed_box"

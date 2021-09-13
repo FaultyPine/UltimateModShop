@@ -29,6 +29,6 @@ class DownloadHandler : public brls::Activity {
     ModPage* modpage = nullptr;
     std::vector<bool> dl_idxs = {};
 
-    ProgressBar* progress_bar = nullptr;
+    ProgressBar* progress_bar = nullptr; // gets added to main view and freed by brls
 
 };

@@ -542,12 +542,12 @@ void Application::popActivity(TransitionAnimation animation, std::function<void(
     // Focus
     if (Application::focusStack.size() > 0)
     {
-        View* newFocus = Application::focusStack[Application::focusStack.size() - 1];
+        //View* newFocus = Application::focusStack[Application::focusStack.size() - 1];
 
-        Logger::debug("Giving focus to {}, and removing it from the focus stack", newFocus->describe());
+        //Logger::debug("Giving focus to {}, and removing it from the focus stack", newFocus->describe());
 
-        Application::giveFocus(newFocus);
-        Application::focusStack.pop_back();
+        //Application::giveFocus(newFocus);
+        //Application::focusStack.pop_back();
     }
 }
 
@@ -610,8 +610,8 @@ void Application::pushActivity(Activity* activity, TransitionAnimation animation
     // Focus
     if (Application::activitiesStack.size() > 0 && Application::currentFocus != nullptr)
     {
-        Logger::debug("Pushing {} to the focus stack", Application::currentFocus->describe());
-        Application::focusStack.push_back(Application::currentFocus);
+        //Logger::debug("Pushing {} to the focus stack", Application::currentFocus->describe());
+        //Application::focusStack.push_back(Application::currentFocus);
     }
 
     // Layout and prepare activity

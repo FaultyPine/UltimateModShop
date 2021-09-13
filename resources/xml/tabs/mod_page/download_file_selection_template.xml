@@ -1,0 +1,57 @@
+<brls:Box
+    axis="column"
+    height="200"
+    width="100%"
+    justifyContent="spaceEvenly"
+    marginTop="5"
+    marginBottom="5"
+    paddingLeft="10"
+    borderThickness="3"
+    borderColor="#000000"
+    focusable="true"
+    paddingTop="5"
+    paddingBottom="5"
+>
+
+    <brls:Label
+        text="File name:"
+        fontSize="12"
+    />
+    <brls:Label
+        id="file_selection_item_title"
+        fontSize="20"
+        lineBottom="1"
+        lineColor="#000000"
+        marginBottom="5"
+        marginLeft="10"
+        textAlign="center"
+    />
+
+    <brls:Label
+        id="file_selection_item_description_title"
+        text="Description:"
+        fontSize="12"
+    />
+    <brls:Label
+        id="file_selection_item_description"
+        fontSize="17"
+        marginBottom="5"
+        lineBottom="1"
+        lineColor="#000000"
+        marginLeft="10"
+        textAlign="center"
+    />
+
+    <brls:Label
+        text="File Info:"
+        fontSize="12"
+    />
+    <brls:Label
+        id="file_selection_item_fileinfo"
+        fontSize="18"
+        marginBottom="5"
+        marginLeft="10"
+        textAlign="center"
+    />
+
+</brls:Box>
