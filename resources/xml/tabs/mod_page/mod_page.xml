@@ -146,20 +146,6 @@
             </brls:ScrollingFrame>
 
 
-            <brls:Box
-                justifyContent="flexEnd"
-            >
-                <brls:Button
-                    marginTop="10"
-                    id="description_read_more_button"
-                    visibility="gone"
-                    height="40"
-                    width="20%"
-                    text="Read More"
-                    backgroundColor="#D6D6D6"
-                />
-            </brls:Box>
-
 
         </brls:Box>
     </brls:Box>
