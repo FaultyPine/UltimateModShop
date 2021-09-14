@@ -70,13 +70,13 @@ CXXFLAGS	:= $(CFLAGS) -std=gnu++1z -O2 -Wno-volatile -w
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx `curl-config --libs` -lpthread -lphysfs
+LIBS	:= -lnx `curl-config --libs` -lpthread -lphysfs -larchive
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(LIBNX)
+LIBDIRS	:= $(PORTLIBS) $(LIBNX) $(CURDIR)/library/prebuilt/switch
 
 include $(TOPDIR)/library/borealis.mk
 

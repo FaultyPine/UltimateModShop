@@ -168,7 +168,7 @@ void ModPage::setupModPage() {
 
         /* Description */
         if (mod.contains(gb::Fields::Text)) {
-            std::string description_full_text = cleanGBDescriptionText(mod[gb::Fields::Text].get<std::string>());
+            std::string description_full_text = gb::cleanGBDescriptionText(mod[gb::Fields::Text].get<std::string>());
             description_label->setText(description_full_text);
             description_label->setIsWrapping(true);
             description_label->setGrow(1.0);

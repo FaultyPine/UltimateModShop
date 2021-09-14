@@ -6,7 +6,7 @@
 #define TOML_HEADER_ONLY 0
 #include "toml.hpp"
 
-// a container for ptr + size  (does not free the mem)
+// buffer struct
 struct MemoryStruct
 {
   char *memory;
@@ -18,6 +18,13 @@ struct MemoryStruct
 #include "installed_mods.h"
 #include "gb.h"
 #include "bg_task.h"
+
+#ifdef __SWITCH__
+#include <switch.h>
+#define SD_ROOT "sdmc:/"
+#else
+#define SD_ROOT "pc_tmp/"
+#endif
 
 using json = nlohmann::json;
 
@@ -44,12 +51,6 @@ extern brls::Box* main_box;
 
 #define stdstr(x) std::string(x)
 
-#ifdef __SWITCH__
-#include <switch.h>
-#define SD_ROOT "sdmc:/"
-#else
-#define SD_ROOT "pc_tmp/"
-#endif
 
 // this icky
 #define UMS_PATH                  stdstr(SD_ROOT)              + "switch/UltimateModShop/"
@@ -84,8 +85,6 @@ std::string readable_fs(double bytes);
 bool str_contains(std::string data, std::string toSearch, size_t pos = 0);
 
 bool strHasEnding (std::string const &fullString, std::string const &ending);
-
-std::string cleanGBDescriptionText(const std::string& str);
 
 void setHintText(std::string text = "", int seconds = 2);
 

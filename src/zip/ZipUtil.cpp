@@ -3,12 +3,7 @@
 #define PHYFSPP_IMPL
 #include "physfs.hpp"
 
-/**
- *  So im using PhysFS rn for .zip & .7z
- *  Still need something to handle .rar tho
- *     Seems like zziplib *can* actually handle rars maybe??? Nx-Shell uses it and it claims rar extraction
- *   Before I try zziplib tho I'd like to give libarchive another try possibly
- */
+#include "archive/archive_extractor.h"
 
  
 // ----------------------------------- PHYSFS --------------------------------------------
@@ -75,7 +70,7 @@ int UnZip::ArchiveExtract(const std::string& filename, const std::string& dest) 
     std::filesystem::path p = std::filesystem::path(filename);
     std::string extension = p.extension().string();
 
-    brls::Logger::debug("Extracting: {} -> {}   [extension: {}]", filename, dest, extension);
+    brls::Logger::debug("Extracting::  src: {} -> dst: {}   [extension: {}]", filename, dest, extension);
 
     // Use PhysFS
     if (extension == ".zip" || extension == ".7z") {
@@ -83,13 +78,11 @@ int UnZip::ArchiveExtract(const std::string& filename, const std::string& dest) 
             std::filesystem::create_directories(dest);
         PhysFSArchiveExtractInner(filename, dest);
     }
-    // Use ???
+    // Use libarchive
     else if (extension == ".rar") {
         if (!std::filesystem::exists(dest))
             std::filesystem::create_directories(dest);
-        brls::Logger::warning(".rar archive extraction not supported yet");
-        // ???
-        return 0;
+        Archive_ExtractArchive(filename.c_str(), dest.c_str());
     }
     else {
         brls::Logger::error("Unsupported archive type! Cannot extract!");

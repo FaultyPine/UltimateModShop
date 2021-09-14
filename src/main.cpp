@@ -56,13 +56,6 @@ int main(int argc, char* argv[])
     });
 
 
-    //UnZip::ArchiveExtract("pc_tmp/viwager.7z", "pc_tmp/");
-
-    //UnZip::ArchiveExtract("pc_tmp/zippy.zip", "pc_tmp/");
-
-    //UnZip::ArchiveExtract("pc_tmp/bee_mario.rar", "pc_tmp/");
-
-
     while (brls::Application::mainLoop()) {
 
     }

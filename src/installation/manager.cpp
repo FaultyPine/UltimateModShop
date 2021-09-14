@@ -266,6 +266,9 @@ std::vector<fs::path> Manager::InstallModFileAuto(std::string url, std::string f
         std::vector<fs::path> mod_files = handleModFiles(tmp_extraction_dir, tmp_dir_paths, filename.substr(0, filename.find_last_of(".")));
         appendVector(paths, mod_files);
     }
+    else {
+        brls::Logger::warning("Failed to extract!");
+    }
 
     // cleanup
     fs::remove(root_file);

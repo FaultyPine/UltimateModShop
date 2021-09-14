@@ -95,6 +95,8 @@ namespace gb {
         std::string ConstructEmbeddableImageUrl(const std::string& itemid, const std::string& variant, bool is_sound);
     }
 
+    std::string cleanGBDescriptionText(const std::string& str);
+
     // return itemid from the url of the mod page. Using this since idRow isn't included in the FileDaddy recordschema
     std::string getItemIdFromProfileURL(const std::string& profileURL);
 

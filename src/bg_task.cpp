@@ -1,5 +1,5 @@
 #include "bg_task.h"
-
+#include <mutex>
 namespace {
     std::vector<brls::Activity*> activitiesToAdd;
     std::vector<std::pair<brls::Box*, brls::View*>> viewsToAdd;

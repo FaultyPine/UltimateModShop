@@ -1,5 +1,5 @@
 #include "gb.h"
-
+#include <regex>
 
 std::string gb::Embeddables::ConstructEmbeddableImageUrl(const std::string& itemid, const std::string& variant, bool is_sound) {
     std::string url = gb::Embeddables::EmbeddableModBaseURL;
@@ -28,6 +28,33 @@ void touchupJsonSubmission(json& entry) {
         std::string thumbnail_url = gb::Fields::PreviewMedia::BaseURL + preview_media[image_file].get<std::string>();
         entry[gb::Fields::Custom::ThumbnailURL] = thumbnail_url;
     }
+}
+
+// parsing html with regex ;))))))
+std::string RemoveHTMLTags(std::string s)
+{
+  const std::regex pattern("\\<.*?\\>");
+  s = regex_replace(s, pattern, "");
+  return s;
+}
+
+const std::unordered_map<std::string, std::string> htmlSpecials = {
+    {"<br>", "\n"},
+    {"&amp;", "&"},
+    {"&aquot;", "\""},
+    {"&apos;", "'"}
+};
+
+std::string gb::cleanGBDescriptionText(const std::string& str) {
+    std::string html = str;
+    // replace special chars with proper ones before parsing
+    for (const auto& [key, value] : htmlSpecials) {
+        if (html.find(key) != std::string::npos) {
+            replaceAll(html, key, value);
+        }
+    }
+    html = RemoveHTMLTags(html);
+    return html;
 }
 
 gb::GbSubmissions* createSubmissions(const std::string& url) {

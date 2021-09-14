@@ -49,7 +49,7 @@ void Settings::onUpdateCheckClicked(brls::View* view) {
 
     curl::DownloadFile(stdstr(UMS_GITHUB_RELEASE_URL) + UMS_GITHUB_RELEASE_SW, UMS_NRO_PATH);
 
-    envSetNextLoad(UMS_NRO_PATH, UMS_NRO_PATH);
+    envSetNextLoad((UMS_NRO_PATH).c_str(), (UMS_NRO_PATH).c_str());
 
     brls::Application::quit();
 

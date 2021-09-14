@@ -1,5 +1,4 @@
 #include "ums_utils.h"
-#include <regex>
 
 InstalledMods* installed_mods;
 
@@ -40,33 +39,6 @@ bool str_contains(std::string data, std::string toSearch, size_t pos)
     std::transform(toSearch.begin(), toSearch.end(), toSearch.begin(), ::tolower);
     // Find sub string in given string
     return data.find(toSearch, pos) != std::string::npos;
-}
-
-// parsing html with regex ;))))))
-std::string RemoveHTMLTags(std::string s)
-{
-  const std::regex pattern("\\<.*?\\>");
-  s = regex_replace(s, pattern, "");
-  return s;
-}
-
-const std::unordered_map<std::string, std::string> htmlSpecials = {
-    {"<br>", "\n"},
-    {"&amp;", "&"},
-    {"&aquot;", "\""},
-    {"&apos;", "'"}
-};
-
-std::string cleanGBDescriptionText(const std::string& str) {
-    std::string html = str;
-    // replace special chars with proper ones before parsing
-    for (const auto& [key, value] : htmlSpecials) {
-        if (html.find(key) != std::string::npos) {
-            replaceAll(html, key, value);
-        }
-    }
-    html = RemoveHTMLTags(html);
-    return html;
 }
 
 
