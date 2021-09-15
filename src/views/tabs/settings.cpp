@@ -3,11 +3,11 @@
 
 void to_json(json& j, const SettingsInfo& s) {
     j = json {
-         { "preferAutomaticInstallation", s.preferAutomaticInstallation },
+         //{ "preferAutomaticInstallation", s.preferAutomaticInstallation },
     };
 }
 void from_json(const json& j, SettingsInfo& s) {
-    j.at("preferAutomaticInstallation").get_to(s.preferAutomaticInstallation);
+    //j.at("preferAutomaticInstallation").get_to(s.preferAutomaticInstallation);
 }
 
 
@@ -31,7 +31,6 @@ Settings::Settings() {
     this->inflateFromXMLRes("xml/tabs/settings.xml");
 
     this->getView("update_check_button")->registerClickAction([this](brls::View* v) { this->onUpdateCheckClicked(v); return true; });
-    this->getView("prefer_auto_install_toggle")->registerClickAction([this](brls::View* v) { this->onTogglePreferredInstallation(v); return true; });
 
     if (!installed_mods->GetMemJson().at("Settings").empty()) {
         this->readSettings();
@@ -61,13 +60,6 @@ void Settings::onUpdateCheckClicked(brls::View* view) {
 
     #endif
 
-}
-
-void Settings::onTogglePreferredInstallation(brls::View* view) {
-    SettingsInfo* s = this->getSettings();
-    s->preferAutomaticInstallation = !s->preferAutomaticInstallation;
-    this->serializeSettings();
-    brls::Logger::debug("Preferred Installation automatic: {}", s->preferAutomaticInstallation);
 }
 
 SettingsInfo* Settings::getSettings() {

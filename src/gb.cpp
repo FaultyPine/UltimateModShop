@@ -50,7 +50,7 @@ std::string gb::cleanGBDescriptionText(const std::string& str) {
     // replace special chars with proper ones before parsing
     for (const auto& [key, value] : htmlSpecials) {
         if (html.find(key) != std::string::npos) {
-            replaceAll(html, key, value);
+            html = replaceAll(html, key, value);
         }
     }
     html = RemoveHTMLTags(html);

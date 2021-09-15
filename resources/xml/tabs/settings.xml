@@ -3,6 +3,11 @@
     height="100%"
     width="100%"
 
+    paddingLeft="10"
+    paddingRight="10"
+    paddingTop="10"
+    paddingBottom="10"
+
     borderThickness="1"
     borderColor="#FFFFFF"
 >
@@ -11,18 +16,11 @@
     <brls:Button
         id="update_check_button"
         text="Check for updates"
-        height="8%"
+        height="10%"
         width="20%"
         backgroundColor="#69C4BB"
     />
 
-    <brls:Button
-        id="prefer_auto_install_toggle"
-        text="Toggle Prefer Automatic Installation"
-        width="30%"
-        height="8%"
-        backgroundColor="#69C4BB"
-    />
 
 
 
