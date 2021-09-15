@@ -12,6 +12,8 @@ Built using Natinusala's [Borealis](https://github.com/natinusala/borealis). Hug
 
 
 ## Building
+You'll want to change the paths in both `build.sh`, and in the `EXTRA_LIBPATHS` variable in the makefile.
+
 See instructions for building from the borealis readme [here](https://github.com/natinusala/borealis).
 
     The important part there is the parts under `Building the demo for Switch` and `Building the demo for PC`.

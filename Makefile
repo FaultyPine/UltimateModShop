@@ -44,6 +44,7 @@ SOURCES		:=	src $(filter-out %.,$(wildcard src/* src/*/* src/*/*/* src/*/*/*/*))
 DATA		:=	data
 ICON		:=	resources/icon/icon.jpg
 INCLUDES	:=	src $(filter-out %.,$(wildcard src/* src/*/* src/*/*/* src/*/*/*/*))
+EXTRA_LIBPATHS := $(CURDIR)/library/prebuilt/switch /opt/devkitpro/portlibs/switch
 
 APP_TITLE	:=	UltimateModShop
 APP_AUTHOR	:=	PiNE / natinusala
@@ -70,13 +71,13 @@ CXXFLAGS	:= $(CFLAGS) -std=gnu++1z -O2 -Wno-volatile -w
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx `curl-config --libs` -lpthread -lphysfs -larchive
+LIBS	:= -lnx `curl-config --libs` -lpthread -lphysfs -larchive -lbz2 -llzma -lz
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(LIBNX) $(CURDIR)/library/prebuilt/switch
+LIBDIRS	:= $(PORTLIBS) $(LIBNX) $(EXTRA_LIBPATHS)
 
 include $(TOPDIR)/library/borealis.mk
 
