@@ -42,7 +42,8 @@ const std::unordered_map<std::string, std::string> htmlSpecials = {
     {"<br>", "\n"},
     {"&amp;", "&"},
     {"&aquot;", "\""},
-    {"&apos;", "'"}
+    {"&apos;", "'"},
+    {"&nbsp;", " "}
 };
 
 std::string gb::cleanGBDescriptionText(const std::string& str) {
@@ -96,9 +97,7 @@ gb::GbSubmissions* gb::GetSubmissionsFromCategory(int page, int category, int nu
 gb::GbSubmissions* gb::GetSubmissionsFromSearch(int page, const std::string& search, int numItemsPerPage, const std::string& game) {
     brls::Logger::debug("Gettings submissions from search: (Search: {})...", search);
     std::stringstream url;
-    // NOTE: Still need to filter this by game... api doesn't support that rn but tom is working on it      ----> --------------------------------------------------------------- here
-    url << gb::SearchReq << search << "*&" << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page) << /* doesnt do anything but hopefully will soon */ "&" << gb::RequestArgs::GameIds << game;
-    
+    url << gb::SearchReq << search << "*&" << gb::RequestArgs::NumPerPage << std::to_string(numItemsPerPage) << "&" << gb::RequestArgs::PageNum << std::to_string(page) << "&" << gb::RequestArgs::GameID << game;
     return createSubmissions(url.str());
 }
 

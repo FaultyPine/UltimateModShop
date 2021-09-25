@@ -11,7 +11,7 @@ namespace gb {
     static const char CategoryReq[] = 
         "https://gamebanana.com/apiv3/Mod/ByCategory?_sRecordSchema=FileDaddy&_bReturnMetadata=true&_aCategoryRowIds[]=";
     static const char SearchReq[] = 
-        "https://gamebanana.com/apiv5/Mod/ByName?_bReturnMetadata=true&_csvProperties=_idRow,_sName,_aFiles,_aPreviewMedia,_sText,_nViewCount,_nLikeCount,_nDownloadCount,_aSubmitter&_sName=*";
+        "https://gamebanana.com/apiv6/Mod/ByName?_bReturnMetadata=true&_csvProperties=_idRow,_sName,_aFiles,_aPreviewMedia,_sText,_nViewCount,_nLikeCount,_nDownloadCount,_aSubmitter&_sName=*";
 
     namespace Endpoints {
         static const char ModByGame[] = "Mod/ByGame?";
@@ -20,6 +20,7 @@ namespace gb {
     }
     namespace RequestArgs {
         static const char GameIds[] = "_aGameRowIds[]=";
+        static const char GameID[] = "_idGameRow=";
         static const char RecordSchema[] = "_sRecordSchema=";
         static const char PageNum[] = "_nPage=";
         static const char NumPerPage[] = "_nPerpage=";
