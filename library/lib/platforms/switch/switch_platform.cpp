@@ -116,7 +116,8 @@ FontLoader* SwitchPlatform::getFontLoader()
 
 ThemeVariant SwitchPlatform::getThemeVariant()
 {
-    return this->themeVariant;
+    //return this->themeVariant;
+    return ThemeVariant::LIGHT;
 }
 
 SwitchPlatform::~SwitchPlatform()
